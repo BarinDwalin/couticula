@@ -29,7 +29,7 @@ export class ShopService {
   choosenAbilities: { pageType: ShopPageType; ability: AbilitySettings }[] = [];
   choosenItem: { itemType: ItemType; item: { value: number; cost: number } };
   choosenHitpoints: { value: number; cost: number };
-  choosenPageType: ShopPageType;
+  choosenPageType: ShopPageType = ShopPageType.Items;
   isSelectedAvailable$: Observable<boolean>;
 
   private isSelectedAvailableSource: Subject<boolean> = new Subject<boolean>();

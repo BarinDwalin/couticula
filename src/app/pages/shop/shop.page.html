@@ -1,6 +1,6 @@
 
-<ion-content class="shop" forceOverscroll="false">
-  <ion-toolbar class="shop__title">
+<ion-content class="content" forceOverscroll="false">
+  <ion-toolbar class="title">
     <ion-buttons slot="start">
       <gold></gold>
     </ion-buttons>
@@ -15,35 +15,68 @@
     </ion-buttons>
   </ion-toolbar>
 
-  <ion-tabs #shopTabs (ionChange)="onTabsChange()">
-    <ion-tab-bar slot="top">
-      <ion-tab-button tab="tabEquipment">
-        <ion-icon name="contact"></ion-icon>
-        <ion-label>Снаряжение</ion-label>
-      </ion-tab-button>
 
-      <ion-tab-button *ngFor="let page of shopAbilitiesPages.pages"
-                       [tab]="page.title">
-        <ion-icon name="flame"></ion-icon>
-        <ion-label>{{page.title}}</ion-label>
-      </ion-tab-button>
-    </ion-tab-bar>
-  </ion-tabs>
+  <div class="shop">
+    <ul class="shop__menu">
+      <li class="shop__menu__button"
+          [ngClass]="{'shop__menu__button_active': equipmentPage.typePage === shopService.choosenPageType }"
+          (click)="selectTab(equipmentPage.typePage)">
+        <div class="shop__menu__button__text">Снаряжение</div>
+      </li>
+      <li *ngFor="let page of shopAbilitiesPages.pages"
+          class="shop__menu__button"
+          [ngClass]="{'shop__menu__button_active': page.typePage === shopService.choosenPageType }"
+          (click)="selectTab(page.typePage)">
+        <div class="shop__menu__button__text">{{page.title}}</div>
+      </li>
+    </ul>
 
-  <div class="shop__footer">
-    <div *ngIf="selectedHero" class="shop__footer__buy-section">
-      <button ion-button small block icon-left
-              class="buy-button" [ngClass]="{'buy-button_available': isSelectedAvailable }"
-              (click)="buy()">
-        Купить
-      </button>
-    </div>
+    <main class="shop__content">
+      TODO
+    </main>
+    <!-- <main [ngSwitch]="" class="shop__content">
+      <p *ngSwitchCase="true">
 
-    <div class="shop__footer__heroes">
-      <heroes-info-short [heroes]="heroes"
-                         [isNewHeroAvailable]="isNewHeroAvailable"
-                         (addedHero)="addHero($event)"
-                         (selectedHero)="choseHero($event)"></heroes-info-short>
+      </p>
+      <p *ngSwitchDefault>
+
+      </p>
+    </main> -->
+
+    <!-- <ion-tabs #shopTabs (ionChange)="onTabsChange()">
+      <ion-tab-bar slot="top">
+        <ion-tab-button tab="tabEquipment">
+          <ion-icon name="contact"></ion-icon>
+          <ion-label>Снаряжение</ion-label>
+        </ion-tab-button>
+
+        <ion-tab-button *ngFor="let page of shopAbilitiesPages.pages"
+                        [tab]="page.title">
+          <ion-icon name="flame"></ion-icon>
+          <ion-label>{{page.title}}</ion-label>
+        </ion-tab-button>
+      </ion-tab-bar>
+    </ion-tabs> -->
+
+    <div class="shop__footer">
+      <div *ngIf="selectedHero || true" class="shop__footer__buy-section">
+        <ion-button fill="solid"
+                    expand="block"
+                    size="small"
+                    class="buy-button"
+                    [color]="isSelectedAvailable ? 'success' : 'light'"
+                    [ngClass]="{'buy-button_available': isSelectedAvailable }"
+                    (click)="buy()">
+          Купить
+        </ion-button>
+      </div>
+
+      <div class="shop__footer__heroes">
+        <heroes-info-short [heroes]="heroes"
+                          [isNewHeroAvailable]="isNewHeroAvailable"
+                          (addedHero)="addHero($event)"
+                          (selectedHero)="choseHero($event)"></heroes-info-short>
+      </div>
     </div>
   </div>
 </ion-content>

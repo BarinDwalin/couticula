@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
 import { AlertController, NavController } from '@ionic/angular';
 import { Subscription } from 'rxjs';
 
@@ -17,8 +17,8 @@ const maxHeroCount = 3;
   styleUrls: ['shop.page.scss'],
 })
 export class ShopPage implements OnInit, OnDestroy {
-  @ViewChild('shopTabs', { static: true })
-  tabRef: any; // TODO: route
+  @ViewChild('container', { static: true })
+  container: ViewContainerRef;
 
   shopAbilitiesPages: ShopAbilitiesPages;
   tabEquipment: any = EquipmentComponent;
@@ -129,9 +129,8 @@ export class ShopPage implements OnInit, OnDestroy {
     });
   }
 
-  onTabsChange() {
-    const selectedTab = this.tabRef.getSelected();
-    this.shopService.selectPage(selectedTab.rootParams.typePage);
-    console.log(selectedTab.index + ' - ' + selectedTab.tabTitle);
+  selectTab(pageType: ShopPageType) {
+    this.shopService.selectPage(pageType);
+    console.log('pageType', pageType);
   }
 }

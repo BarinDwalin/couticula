@@ -1,53 +1,81 @@
-.shop {
+.content {
   --background: url('assets/img/backgrounds/todo.jpg') no-repeat center center fixed;
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
   background-size: cover;
 
-  &__title {
+  .title {
     min-height: 15vh;
     max-height: 15vh;
-    --background: transparent;
     color: white;
+    --background: transparent;
   }
 
-  ion-tabs {
-    position: initial;
-    .tab-button {
+  .shop {
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    min-height: 85vh;
+    max-height: 85vh;
+
+    &__menu {
       height: 10vh;
       min-height: 10vh;
       max-height: 10vh;
-
-      ion-icon {
-        font-size: 1.5em;
-      }
-    }
-  }
-
-  .shop__footer {
-    display: grid;
-    grid-template-columns: 1fr auto;
-
-    &__buy-section {
-      justify-self: center;
-      align-self: center;
-      width: 40vh;
+      margin: auto;
+      padding: 0;
+      font-size: 5vh;
       color: white;
-      .buy-button {
-        color: white;
-        border-color: white;
-        background-color: gray;
-        border-radius: 1rem;
-        opacity: .6;
+      list-style: none;
 
-        &_available {
-          background-color: green;
+      &__button {
+        display: inline-block;
+        padding: 1.5vh 3vh;
+        transform: skewX(-30deg);
+        background-color: gray;
+        border: 2px solid black;
+
+        &_active {
+          background-color: gold;
+          color: black;
         }
 
-        &.activated {
-          color: black;
-          background-color: white;
+        &__text {
+          transform: skewX(30deg);
+        }
+      }
+    }
+
+    &__content {
+      height: 10vh;
+      min-height: 10vh;
+      max-height: 10vh;
+    }
+
+    &__footer {
+      display: grid;
+      grid-template-columns: 1fr auto;
+
+      &__buy-section {
+        justify-self: center;
+        align-self: center;
+        width: 40vh;
+        color: white;
+        .buy-button {
+          color: white;
+          border-color: white;
+          background-color: gray;
+          border-radius: 1rem;
+          opacity: .6;
+
+          &_available {
+            background-color: green;
+          }
+
+          &.activated {
+            color: black;
+            background-color: white;
+          }
         }
       }
     }
