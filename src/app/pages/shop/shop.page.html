@@ -32,31 +32,8 @@
     </ul>
 
     <main class="shop__content">
-      TODO
+      <ng-template #container></ng-template>
     </main>
-    <!-- <main [ngSwitch]="" class="shop__content">
-      <p *ngSwitchCase="true">
-
-      </p>
-      <p *ngSwitchDefault>
-
-      </p>
-    </main> -->
-
-    <!-- <ion-tabs #shopTabs (ionChange)="onTabsChange()">
-      <ion-tab-bar slot="top">
-        <ion-tab-button tab="tabEquipment">
-          <ion-icon name="contact"></ion-icon>
-          <ion-label>Снаряжение</ion-label>
-        </ion-tab-button>
-
-        <ion-tab-button *ngFor="let page of shopAbilitiesPages.pages"
-                        [tab]="page.title">
-          <ion-icon name="flame"></ion-icon>
-          <ion-label>{{page.title}}</ion-label>
-        </ion-tab-button>
-      </ion-tab-bar>
-    </ion-tabs> -->
 
     <div class="shop__footer">
       <div *ngIf="selectedHero || true" class="shop__footer__buy-section">

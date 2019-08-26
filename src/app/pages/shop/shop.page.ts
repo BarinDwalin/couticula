@@ -1,4 +1,12 @@
-import { Component, OnDestroy, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
+import {
+  Component,
+  ComponentFactoryResolver,
+  OnDestroy,
+  OnInit,
+  Type,
+  ViewChild,
+  ViewContainerRef,
+} from '@angular/core';
 import { AlertController, NavController } from '@ionic/angular';
 import { Subscription } from 'rxjs';
 
@@ -17,9 +25,8 @@ const maxHeroCount = 3;
   styleUrls: ['shop.page.scss'],
 })
 export class ShopPage implements OnInit, OnDestroy {
-  @ViewChild('container', { static: true })
+  @ViewChild('container', { read: ViewContainerRef, static: true })
   container: ViewContainerRef;
-
   shopAbilitiesPages: ShopAbilitiesPages;
   tabEquipment: any = EquipmentComponent;
   tabAbilityList: any = AbilityListComponent;
@@ -41,6 +48,7 @@ export class ShopPage implements OnInit, OnDestroy {
   constructor(
     public alertCtrl: AlertController,
     public navCtrl: NavController,
+    private componentFactoryResolver: ComponentFactoryResolver,
     private heroService: HeroService,
     private playerService: PlayerService,
     private shopService: ShopService
@@ -63,6 +71,7 @@ export class ShopPage implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.selectTab(ShopPageType.Items);
     this.shopService.isNewHeroAvailable().then(success => (this.isNewHeroAvailable = success));
     this.shopService.selectHero(this.heroes[0]);
   }
@@ -78,8 +87,8 @@ export class ShopPage implements OnInit, OnDestroy {
     this.navCtrl.pop();
   }
   buy() {
-    const selectedTab = this.tabRef.getSelected();
-    if (selectedTab.tabTitle === 'Снаряжение') {
+    const pageType = this.shopService.choosenPageType;
+    if (pageType === ShopPageType.Items) {
       this.shopService.buyEquipment();
     } else {
       this.shopService.buyAbility();
@@ -91,7 +100,7 @@ export class ShopPage implements OnInit, OnDestroy {
   }
   openPage(page) {
     console.log('openPage ' + page.title);
-    //this.navCtrl.push(page.component);
+    // this.navCtrl.push(page.component);
   }
   addHero() {
     this.shopService.getHeroPrice().then(price => {
@@ -131,6 +140,24 @@ export class ShopPage implements OnInit, OnDestroy {
 
   selectTab(pageType: ShopPageType) {
     this.shopService.selectPage(pageType);
-    console.log('pageType', pageType);
+    this.container.clear();
+
+    const component = this.getPageComponent(pageType);
+    const componentFactory = this.componentFactoryResolver.resolveComponentFactory(component);
+    const componentRef = this.container.createComponent(componentFactory);
+    if (pageType !== ShopPageType.Items) {
+      (componentRef.instance as AbilityListComponent).shopAbilitiesPage = this.shopAbilitiesPages.getPage(
+        pageType
+      );
+    }
+  }
+
+  getPageComponent(pageType: ShopPageType): Type<AbilityListComponent | EquipmentComponent> {
+    switch (pageType) {
+      case ShopPageType.Items:
+        return EquipmentComponent;
+      default:
+        return AbilityListComponent;
+    }
   }
 }
