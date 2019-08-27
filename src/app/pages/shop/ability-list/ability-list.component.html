@@ -1,29 +1,34 @@
-<div class="shop__ability-list__grid">
-  <ion-list ion-scroll class="shop__ability-list">
+  <ion-list class="ability-list">
     <ion-item *ngFor="let ability of availableAbilities"
-              class="shop__ability-list__ability"
+              class="ability-list__ability"
+              [color]="isSelectedAbility(ability) ? 'medium' : 'dark'"
               [ngClass]="{
-                'shop__ability-list__ability_not-available-price': !isAvailablePrice(ability.cost),
-                'shop__ability-list__ability_selected': isSelectedAbility(ability)
+                'ability-list__ability_not-available-price': !isAvailablePrice(ability.cost),
+                'ability-list__ability_selected': isSelectedAbility(ability)
               }"
               (click)="selectAbility(ability)">
-      <ion-thumbnail item-left class="shop__ability-list__ability__img">
+      <ion-thumbnail class="ability-list__ability__img"
+                    slot="start">
         <img src="{{ability.image}}">
       </ion-thumbnail>
-      <p class="shop__ability-list__ability__name">{{ability.name}}</p>
-      <div item-right class="shop__ability-list__ability__cost">
+
+      <ion-label class="ability-list__ability__name" text-wrap>
+        <p>{{ability.name}}</p>
+      </ion-label>
+
+      <div class="ability-list__ability__cost"
+          slot="end">
         {{ability.cost}}
-        <img src="assets/img/gold.png" alt="" title="" />
+        <img src="assets/img/gold.png" alt="монета" title="" />
       </div>
     </ion-item>
   </ion-list>
 
-  <div class="shop__ability-list__info">
+  <div class="ability-info">
     <ng-container *ngIf="choosenAbility">
-      <div class="shop__ability-list__info__title">{{choosenAbility.name}}</div>
-      <div class="shop__ability-list__info__property"
-            *ngFor="let prop of propertiesDescription">{{prop}}</div>
-      <div class="shop__ability-list__info__description">{{choosenAbility.description}}</div>
+      <div class="ability-info__title">{{choosenAbility.name}}</div>
+      <div class="ability-info__property"
+          *ngFor="let prop of propertiesDescription">{{prop}}</div>
+      <div class="ability-info__description">{{choosenAbility.description}}</div>
     </ng-container>
   </div>
-</div>

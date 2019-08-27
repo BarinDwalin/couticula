@@ -1,40 +1,29 @@
-ability-list {
-  .shop__ability-list__grid {
-    height: 62vh;
-    margin-top: 10vh;
-    padding: 0;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-  }
+:host {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  padding: 0;
+}
 
-  .shop__ability-list {
-    max-height: 58vh; // 62vh - 2vh * 2 (margin)
-    min-height: 58vh;
-    margin: 2vh;
-    overflow:scroll !important;
-    background-color:rgba(0, 0, 0, 0.4);
-    border-radius: 5vh;
-  }
+.ability-list {
+  max-height: 51vh;
+  min-height: 51vh;
+  overflow: auto;
+  margin: 2vh;
+  background-color: rgba(0, 0, 0, 0.4);
 
-  .shop__ability-list__ability {
-    min-height: 15vh;
-    max-height: 15vh;
-    background-color: transparent;
-
+  &__ability {
     &__img {
       min-height: 10vh;
       min-width: 10vh;
-      img {
-        height: 10vh;
-        width: 10vh;
-      }
+      max-height: 10vh;
+      max-width: 10vh;
     }
+
     &__name {
       white-space: normal;
-      color: white;
     }
+
     &__cost {
-      color: white;
       img {
         height: 5vh;
         width: 5vh;
@@ -42,45 +31,39 @@ ability-list {
     }
 
     &_not-available-price {
-        opacity: .3;
+      opacity: .3;
     }
+
     &_selected {
-      font-weight: bold;
-      background-color: rgba(255, 217, 0, 0.6);
-      .name {
-        color: green;
+      .ability-list__ability__name, .ability-list__ability__cost {
+        color: black;
+        font-weight: bold;
       }
     }
+  }
+}
 
-    &:first-child {
-      border-radius: 5vh 5vh 0vh 0vh;
-    }
-    &:last-child {
-      border-radius: 0vh 0vh 5vh 5vh;
-    }
+.ability-info {
+  margin: 2vh;
+  padding: 2vh;
+  background-color:rgba(0, 0, 0, 0.4);
+
+  &__title {
+    text-align: center;
+    font-size: 5.5vh;
+    font-weight: bold;
+    color: lightsteelblue;
   }
 
-  .shop__ability-list__info {
-    max-height: 58vh;
-    min-height: 58vh;
-    margin: 2vh;
-    background-color:rgba(0, 0, 0, 0.4);
-    border-radius: 5vh;
+  &__property {
+    text-align: center;
+    font-size: 4.0vh;
+    color: lightskyblue;
+  }
 
-    &__title {
-      text-align: center;
-      font-size: 5.5vh;
-      font-weight: bold;
-      color: lightsteelblue;
-    }
-    &__property {
-      text-align: center;
-      font-size: 4.0vh;
-      color: lightskyblue;
-    }
-    &__description {
-      text-align: justify;
-      color: white;
-    }
+  &__description {
+    margin-top: 2vh;
+    text-align: justify;
+    color: white;
   }
 }
