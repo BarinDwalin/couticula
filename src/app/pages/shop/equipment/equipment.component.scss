@@ -25,8 +25,10 @@
     align-content: space-between;
 
     &__value {
+      display: flex;
+      position: relative;
       margin: auto;
-      padding: .5vh 2vh;
+      padding: .5vh 3.5vh;
       color: white;
       font-size: 4.5vh;
       img {
@@ -39,8 +41,9 @@
         font-weight: bold;
       }
       &__item-count {
-        position: fixed;
-        padding-left: 5px;
+        position: absolute;
+        top: 0;
+        right: 0;
         font-size: 3vh;
       }
 

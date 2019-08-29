@@ -30,8 +30,7 @@
                     }"
           (click)="selectItem(e.itemType, item)">
       {{item.cost}}
-      <img src="assets/img/gold.png" alt="" title="" />
-      <span *ngIf="!isSelectedItem(e.itemType, item.value)"
+      <span *ngIf="!!item.countExists() && !isSelectedItem(e.itemType, item.value)"
             class="values__value__item-count">
         {{item.countExists() | itemCount}}
       </span>
@@ -47,7 +46,6 @@
                     }"
           (click)="selectHitpoints(item)">
       {{item.cost}}
-      <img src="assets/img/gold.png" alt="" title="" />
       (<span class="values__value__hitpoints-value">
         +{{item.value}}
       </span>)
