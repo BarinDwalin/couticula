@@ -1,57 +1,56 @@
+<ng-container *ngIf="shopEquipment">
+  <div class="type-equipment">
+    <img item-left src="assets/img/dice.png" alt="игральная кость" title="" />
+  </div>
 
-<ion-content scroll="false">
-  <div *ngIf="shopEquipment" class="shop__equipment">
-    <div class="shop__equipment__type-equipment">
-      <img item-left src="assets/img/dice.png" alt="" title="" />
-    </div>
-    <div *ngFor="let e of equipment"
-         class="shop__equipment__type-equipment">
-      <img item-left src="{{e.img}}" alt="" title="" />
-    </div>
-    <div class="shop__equipment__hitpoints">
-      <img item-left src="{{shopEquipment.hitpoints.img}}" alt="" title="" />
-    </div>
+  <div *ngFor="let e of equipment"
+        class="type-equipment">
+    <img item-left src="{{e.img}}" alt="тип снаряжения" title="" />
+  </div>
 
-    <div class="shop__equipment__values">
-      <div *ngFor="let itemValue of itemValues"
-           class="shop__equipment__values__value"
-           [ngClass]="{ 'shop__equipment__values__value_quality_good': itemValue.value >= 4 }"
-           [ngStyle]="{ 'color': itemValue.color }">
-        +{{itemValue.value}}
-      </div>
-    </div>
-    <div *ngFor="let e of equipment" class="shop__equipment__values">
-      <div *ngFor="let item of (e.items | availableItems: choosenHero)"
-            [@flyInOutLeft]="'in'"
-            class="shop__equipment__values__value"
-            [ngClass]="{
-                        'shop__equipment__values__value_not-available-price': item.cost > playerGold,
-                        'shop__equipment__values__value_selected': isSelectedItem(e.itemType, item.value)
-                      }"
-            (click)="selectItem(e.itemType, item)">
-        {{item.cost}}
-        <img src="assets/img/gold.png" alt="" title="" />
-        <span *ngIf="!isSelectedItem(e.itemType, item.value)"
-              class="shop__equipment__values__value__item-count">
-          {{item.countExists() | itemCount}}
-        </span>
-      </div>
-    </div>
-    <div class="shop__equipment__values">
-      <div *ngFor="let item of (shopEquipment.hitpoints.items | availableHitPoints: choosenHero)"
-           [@flyInOutRight]="'in'"
-           class="shop__equipment__values__value"
-           [ngClass]="{
-                        'shop__equipment__values__value_not-available-price': item.cost > playerGold,
-                        'shop__equipment__values__value_selected': isSelectedHitpoints(item.value)
-                      }"
-           (click)="selectHitpoints(item)">
-        {{item.cost}}
-        <img src="assets/img/gold.png" alt="" title="" />
-        (<span class="shop__equipment__values__value__hitpoints-value">
-          +{{item.value}}
-        </span>)
-      </div>
+  <div class="hitpoints">
+    <img item-left src="{{shopEquipment.hitpoints.img}}" alt="очки здоровья" title="" />
+  </div>
+
+  <div class="values">
+    <div *ngFor="let itemValue of itemValues"
+          class="values__value"
+          [ngClass]="{ 'values__value_quality_good': itemValue.value >= 4 }"
+          [ngStyle]="{ 'color': itemValue.color }">
+      +{{itemValue.value}}
     </div>
   </div>
-</ion-content>
+  <div *ngFor="let e of equipment" class="values">
+    <div *ngFor="let item of (e.items | availableItems: choosenHero)"
+          [@flyInOutLeft]="'in'"
+          class="values__value"
+          [ngClass]="{
+                      'values__value_not-available-price': item.cost > playerGold,
+                      'values__value_selected': isSelectedItem(e.itemType, item.value)
+                    }"
+          (click)="selectItem(e.itemType, item)">
+      {{item.cost}}
+      <img src="assets/img/gold.png" alt="" title="" />
+      <span *ngIf="!isSelectedItem(e.itemType, item.value)"
+            class="values__value__item-count">
+        {{item.countExists() | itemCount}}
+      </span>
+    </div>
+  </div>
+  <div class="values">
+    <div *ngFor="let item of (shopEquipment.hitpoints.items | availableHitPoints: choosenHero)"
+          [@flyInOutRight]="'in'"
+          class="values__value"
+          [ngClass]="{
+                      'values__value_not-available-price': item.cost > playerGold,
+                      'values__value_selected': isSelectedHitpoints(item.value)
+                    }"
+          (click)="selectHitpoints(item)">
+      {{item.cost}}
+      <img src="assets/img/gold.png" alt="" title="" />
+      (<span class="values__value__hitpoints-value">
+        +{{item.value}}
+      </span>)
+    </div>
+  </div>
+</ng-container>

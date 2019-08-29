@@ -1,66 +1,65 @@
-equipment {
-  .shop__equipment {
-    display: grid;
-    height: 100%;
-    text-align: center;
-    grid-template-columns: repeat(6, 1fr) 2fr;
-    grid-template-rows: 1fr 3fr;
-    justify-content: center;
-    align-items: center;
+:host {
+  display: grid;
+  height: 100%;
+  text-align: center;
+  grid-template-columns: repeat(6, 1fr) 2fr;
+  grid-template-rows: 1fr 3fr;
+  justify-content: center;
+  align-items: center;
 
-    &__type-equipment, &__hitpoints {
+  .type-equipment, .hitpoints {
+    max-height: 100%;
+    max-width: 100%;
+    img {
       max-height: 100%;
       max-width: 100%;
-      img {
-        max-height: 100%;
-        max-width: 100%;
-        padding: 1vh;
-      }
+      padding: 1vh;
     }
+  }
 
-    &__values {
-      height: 100%;
-      display: grid;
-      grid-template-rows: repeat(6, 1fr);
-      justify-content: stretch;
-      align-content: space-between;
+  .values {
+    height: 100%;
+    display: grid;
+    grid-template-rows: repeat(6, 1fr);
+    justify-content: stretch;
+    align-content: space-between;
 
-      &__value {
-        margin: auto;
-        padding: .5vh 2vh;
-        color: white;
-        font-size: 4.5vh;
-        img {
-          height: 4vh;
-          width: 4vh;
-        }
+    &__value {
+      margin: auto;
+      padding: .5vh 2vh;
+      color: white;
+      font-size: 4.5vh;
+      img {
+        height: 4vh;
+        width: 4vh;
+      }
 
-        &__hitpoints-value {
-          color: red;
+      &__hitpoints-value {
+        color: red;
+        font-weight: bold;
+      }
+      &__item-count {
+        position: fixed;
+        padding-left: 5px;
+        font-size: 3vh;
+      }
+
+      &_not-available-price {
+        opacity: .4;
+      }
+      &_selected {
+        font-weight: bold;
+        color: green;
+        background-color:rgba(0, 0, 0, 0.4);
+        box-shadow: 0px 0px 2vh .5vh white;
+        border-radius: 3vh;
+      }
+      &_quality {
+        &_good {
           font-weight: bold;
-        }
-        &__item-count {
-          position: fixed;
-          padding-left: 5px;
-          font-size: 3vh;
-        }
-
-        &_not-available-price {
-          opacity: .4;
-        }
-        &_selected {
-          font-weight: bold;
-          color: green;
-          background-color:rgba(0, 0, 0, 0.4);
-          box-shadow: 0px 0px 2vh .5vh white;
-          border-radius: 3vh;
-        }
-        &_quality {
-          &_good {
-            font-weight: bold;
-          }
         }
       }
     }
   }
 }
+

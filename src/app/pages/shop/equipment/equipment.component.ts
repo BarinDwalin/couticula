@@ -1,11 +1,12 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
 import { animate, state, style, transition, trigger } from '@angular/animations';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { NavController } from '@ionic/angular';
-import { Subscription } from 'rxjs';
+import { Subject, Subscription } from 'rxjs';
 
 import { ItemType } from '@enums';
 import { Hero, Item, ShopEquipmentHitpoints } from '@models';
 import { HeroService, PlayerService, ShopService } from '@services';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'equipment',
@@ -38,6 +39,8 @@ export class EquipmentComponent implements OnInit, OnDestroy {
     return this.playerService.gold;
   }
 
+  private unsubscribe$ = new Subject();
+
   constructor(
     public navCtrl: NavController,
     private heroService: HeroService,
@@ -45,14 +48,17 @@ export class EquipmentComponent implements OnInit, OnDestroy {
     private shopService: ShopService
   ) {
     // Id is 1, nav refers to Tab1
-    //console.log(this.navCtrl.id);
+    // console.log(this.navCtrl.id);
   }
 
   ngOnInit() {
     const that = this;
-    this.subscriptions.push(
-      this.shopService.getShopEquipment().subscribe(shopEquipment => {
+    this.shopService
+      .getShopEquipment()
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe(shopEquipment => {
         this.shopEquipment = shopEquipment;
+
         this.shopEquipment.equipment.forEach(listItems => {
           listItems.items.forEach(item => {
             (item as any).countExists = (): number => {
@@ -71,11 +77,12 @@ export class EquipmentComponent implements OnInit, OnDestroy {
             };
           });
         });
-      })
-    );
+      });
   }
+
   ngOnDestroy() {
-    this.subscriptions.forEach(s => s.unsubscribe);
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
   }
 
   isSelectedItem(itemType: ItemType, value: number) {
