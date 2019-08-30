@@ -4,12 +4,15 @@
   padding: 0;
 }
 
-.ability-list {
+.ability-list, .ability-info {
   max-height: 51vh;
   min-height: 51vh;
-  overflow: auto;
   margin: 2vh;
   background-color: rgba(0, 0, 0, 0.4);
+}
+
+.ability-list {
+  overflow: auto;
 
   &__ability {
     &__img {
@@ -44,9 +47,7 @@
 }
 
 .ability-info {
-  margin: 2vh;
   padding: 2vh;
-  background-color:rgba(0, 0, 0, 0.4);
 
   &__title {
     text-align: center;

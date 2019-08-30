@@ -139,6 +139,10 @@ export class ShopPage implements OnInit, OnDestroy {
   }
 
   selectTab(pageType: ShopPageType) {
+    if (pageType === this.shopService.choosenPageType) {
+      return;
+    }
+
     this.shopService.selectPage(pageType);
     this.container.clear();
 

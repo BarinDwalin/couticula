@@ -1,3 +1,4 @@
+import { animate, state, style, transition, trigger } from '@angular/animations';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 
@@ -8,6 +9,28 @@ import { PlayerService, ShopService } from '@services';
   selector: 'ability-list',
   templateUrl: 'ability-list.component.html',
   styleUrls: ['ability-list.component.scss'],
+  animations: [
+    trigger('flyInOut', [
+      state(
+        'in',
+        style({
+          height: '*',
+          overflow: 'auto',
+          'max-height': '*',
+          'min-height': '*',
+        })
+      ),
+      transition('void => *', [
+        style({
+          height: '0px',
+          overflow: 'hidden',
+          'max-height': '0px',
+          'min-height': '0px',
+        }),
+        animate(600),
+      ]),
+    ]),
+  ],
 })
 export class AbilityListComponent implements OnInit, OnDestroy {
   shopAbilitiesPage: ShopAbilitiesPage;

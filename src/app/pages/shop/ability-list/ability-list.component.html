@@ -1,4 +1,4 @@
-<ion-list class="ability-list">
+<ion-list class="ability-list" [@flyInOut]="'in'">
   <ion-item *ngFor="let ability of availableAbilities"
             class="ability-list__ability"
             [color]="isSelectedAbility(ability) ? 'medium' : 'dark'"
@@ -24,7 +24,7 @@
   </ion-item>
 </ion-list>
 
-<div class="ability-info">
+<div class="ability-info" [@flyInOut]="'in'">
   <ng-container *ngIf="choosenAbility">
     <div class="ability-info__title">{{choosenAbility.name}}</div>
     <div class="ability-info__property"
