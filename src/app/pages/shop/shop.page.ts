@@ -71,7 +71,7 @@ export class ShopPage implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.selectTab(ShopPageType.Items);
+    this.selectShopPage(ShopPageType.Items);
     this.shopService.isNewHeroAvailable().then(success => (this.isNewHeroAvailable = success));
     this.shopService.selectHero(this.heroes[0]);
   }
@@ -139,10 +139,12 @@ export class ShopPage implements OnInit, OnDestroy {
   }
 
   selectTab(pageType: ShopPageType) {
-    if (pageType === this.shopService.choosenPageType) {
-      return;
+    if (pageType !== this.shopService.choosenPageType) {
+      this.selectShopPage(pageType);
     }
+  }
 
+  private selectShopPage(pageType: ShopPageType) {
     this.shopService.selectPage(pageType);
     this.container.clear();
 
