@@ -26,17 +26,13 @@ import { takeUntil } from 'rxjs/operators';
 export class EquipmentComponent implements OnInit, OnDestroy {
   shopEquipment: ShopEquipmentHitpoints;
   itemValues = [1, 2, 3, 4, 5, 6].map(value => ({ value, color: Item.getItemColor(value) }));
-
-  private subscriptions: Subscription[] = [];
+  playerGold: number;
 
   get choosenHero(): Hero {
     return this.shopService.choosenHero;
   }
   get equipment() {
     return this.shopEquipment.equipment;
-  }
-  get playerGold() {
-    return this.playerService.gold;
   }
 
   private unsubscribe$ = new Subject();
@@ -52,6 +48,10 @@ export class EquipmentComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.playerService.gold$
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe(gold => (this.playerGold = gold));
+
     const that = this;
     this.shopService
       .getShopEquipment()

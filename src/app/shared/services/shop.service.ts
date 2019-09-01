@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
-import { Observable, Subject, of } from 'rxjs';
+import { Observable, Subject, from, of, throwError } from 'rxjs';
+import { map, switchMap } from 'rxjs/operators';
 
 import { ItemType, ShopPageType } from '@enums';
 import { AbilitySettings, Hero, ShopAbilitiesPages, ShopEquipmentHitpoints } from '@models';
@@ -46,21 +47,19 @@ export class ShopService {
     this.isSelectedAvailable$ = this.isSelectedAvailableSource.asObservable();
   }
 
-  getHeroPrice(): Promise<number> {
-    return new Promise((resolve, reject) => {
-      let price;
-      switch (this.heroService.heroes.length) {
-        case 1:
-          price = this.settingsService.priceSecondHero;
-          break;
-        case 2:
-          price = this.settingsService.priceThirdHero;
-          break;
-        default:
-          return reject(null);
-      }
-      return resolve(price);
-    });
+  getHeroPrice(): Observable<number> {
+    let price;
+    switch (this.heroService.heroes.length) {
+      case 1:
+        price = this.settingsService.priceSecondHero;
+        break;
+      case 2:
+        price = this.settingsService.priceThirdHero;
+        break;
+      default:
+        throwError('Покупка дополнительных героев невозможна.');
+    }
+    return of(price);
   }
   getShopEquipment(): Observable<ShopEquipmentHitpoints> {
     return of(ShopEquipments);
@@ -123,34 +122,20 @@ export class ShopService {
     this.checkSelectedAvailable();
   }
 
-  isNewHeroAvailable(): Promise<boolean> {
-    return new Promise(resolve => {
-      this.getHeroPrice()
-        .then(price => {
-          resolve(this.playerService.gold >= price);
-        })
-        .catch(() => resolve(false));
-    });
+  isNewHeroAvailable(): Observable<boolean> {
+    return this.getHeroPrice().pipe(map(price => this.playerService.gold >= price));
   }
+
   isItemAvailable(price: number): Promise<boolean> {
     return new Promise(resolve => {
       resolve(this.playerService.gold >= price);
     });
   }
-  buyNewHero(): Promise<boolean> {
-    return new Promise(resolve => {
-      this.getHeroPrice()
-        .then(price => {
-          if (this.playerService.gold >= price) {
-            this.playerService.decreaseGold(price).then(success => {
-              resolve(success);
-            });
-          } else {
-            resolve(false);
-          }
-        })
-        .catch(() => resolve(false));
-    });
+
+  buyNewHero(): Observable<boolean> {
+    return this.getHeroPrice().pipe(
+      switchMap(price => from(this.playerService.decreaseGold(price)))
+    );
   }
   buyAbility() {
     const ability = this.choosenAbility;

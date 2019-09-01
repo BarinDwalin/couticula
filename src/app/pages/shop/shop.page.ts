@@ -7,8 +7,10 @@ import {
   ViewChild,
   ViewContainerRef,
 } from '@angular/core';
+import { Router } from '@angular/router';
 import { AlertController, NavController } from '@ionic/angular';
-import { Subscription } from 'rxjs';
+import { Subject, Subscription } from 'rxjs';
+import { filter, switchMap, takeUntil } from 'rxjs/operators';
 
 import { ShopPageType } from '@enums';
 import { Hero, ShopAbilitiesPages } from '@models';
@@ -33,7 +35,7 @@ export class ShopPage implements OnInit, OnDestroy {
   isSelectedAvailable: boolean;
   isNewHeroAvailable = false;
 
-  private subscriptions: Subscription[] = [];
+  private unsubscribe$ = new Subject();
 
   get heroes(): Hero[] {
     return this.heroService.heroes;
@@ -48,35 +50,41 @@ export class ShopPage implements OnInit, OnDestroy {
   constructor(
     public alertCtrl: AlertController,
     public navCtrl: NavController,
+    private router: Router,
     private componentFactoryResolver: ComponentFactoryResolver,
     private heroService: HeroService,
     private playerService: PlayerService,
     private shopService: ShopService
   ) {
-    this.subscriptions.push(
-      this.shopService.isSelectedAvailable$.subscribe(isSelectedAvailable => {
+    this.shopService.isSelectedAvailable$
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe(isSelectedAvailable => {
         this.isSelectedAvailable = isSelectedAvailable;
-      })
-    );
-    this.subscriptions.push(
-      this.playerService.gold$.subscribe(gold => {
-        this.shopService.isNewHeroAvailable().then(success => (this.isNewHeroAvailable = success));
-      })
-    );
-    this.subscriptions.push(
-      this.shopService.getShopAbilitesPages().subscribe(shopAbilities => {
+      });
+    this.playerService.gold$
+      .pipe(
+        switchMap(() => this.shopService.isNewHeroAvailable()),
+        takeUntil(this.unsubscribe$)
+      )
+      .subscribe(success => {
+        this.isNewHeroAvailable = success;
+      });
+    this.shopService
+      .getShopAbilitesPages()
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe(shopAbilities => {
         this.shopAbilitiesPages = shopAbilities;
-      })
-    );
+      });
   }
 
   ngOnInit() {
     this.selectShopPage(ShopPageType.Items);
-    this.shopService.isNewHeroAvailable().then(success => (this.isNewHeroAvailable = success));
     this.shopService.selectHero(this.heroes[0]);
   }
+
   ngOnDestroy() {
-    this.subscriptions.forEach(s => s.unsubscribe);
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
   }
 
   ionViewDidLoad() {
@@ -98,44 +106,45 @@ export class ShopPage implements OnInit, OnDestroy {
   choseHero(hero: Hero) {
     this.shopService.selectHero(hero);
   }
-  openPage(page) {
-    console.log('openPage ' + page.title);
-    // this.navCtrl.push(page.component);
-  }
+
   addHero() {
-    this.shopService.getHeroPrice().then(price => {
-      if (price > this.playerService.gold) {
-        return;
-      }
-      const confirm = this.alertCtrl.create({
-        header: 'Купить нового героя?',
-        message: `Стоимость ${price} золота`,
-        buttons: [
-          {
-            text: 'Отмена',
-            handler: () => {
-              console.log('Disagree clicked');
-            },
-          },
-          {
-            text: 'Купить',
-            handler: () => {
-              console.log('Agree clicked');
-              const navTransition = confirm
-                .then(() => this.shopService.buyNewHero())
-                .then(success => {
-                  if (success) {
-                    navTransition.then(() => {
-                      this.openPage({ title: 'ChoiceHeroPage', component: ChoiceHeroPage });
-                    });
-                  }
-                });
-              return false;
-            },
-          },
-        ],
+    this.shopService
+      .getHeroPrice()
+      .pipe(
+        filter(price => price <= this.playerService.gold),
+        takeUntil(this.unsubscribe$)
+      )
+      .subscribe(price => {
+        this.presentAlertNewHeroConfirm(price);
       });
+  }
+
+  async presentAlertNewHeroConfirm(price: number) {
+    const alert = await this.alertCtrl.create({
+      header: 'Купить нового героя?',
+      message: `Стоимость ${price} золота`,
+      buttons: [
+        {
+          text: 'Отмена',
+          handler: () => {},
+        },
+        {
+          text: 'Купить',
+          handler: () => {
+            this.shopService
+              .buyNewHero()
+              .pipe(takeUntil(this.unsubscribe$))
+              .subscribe(success => {
+                if (success) {
+                  this.router.navigateByUrl('/choice-hero');
+                }
+              });
+          },
+        },
+      ],
     });
+
+    await alert.present();
   }
 
   selectTab(pageType: ShopPageType) {

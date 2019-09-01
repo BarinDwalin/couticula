@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable, Subject } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 
 import { Item } from '@models';
 
@@ -10,7 +10,7 @@ export class PlayerService {
   gold$: Observable<number>;
 
   private playerGold: number;
-  private playerGoldSource: Subject<number> = new Subject<number>();
+  private playerGoldSource: BehaviorSubject<number> = new BehaviorSubject<number>(null);
   private heroesInventory: Item[] = [];
 
   get gold() {
@@ -23,6 +23,7 @@ export class PlayerService {
   constructor(private settingsService: SettingsService) {
     this.gold$ = this.playerGoldSource.asObservable();
     this.playerGold = this.settingsService.startGold;
+    this.playerGoldSource.next(this.settingsService.startGold);
   }
   increaseGold(value: number): Promise<boolean> {
     return new Promise(resolve => {

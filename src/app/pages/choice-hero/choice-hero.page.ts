@@ -1,5 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { NavController } from '@ionic/angular';
 import { Subscription } from 'rxjs';
 
 import { HeroSettings } from '@models';
@@ -16,6 +17,7 @@ export class ChoiceHeroPage implements OnInit, OnDestroy {
   private subscriptions: Subscription[] = [];
 
   constructor(
+    private navCtrl: NavController,
     private router: Router,
     public gameService: GameService,
     public heroService: HeroService,
@@ -35,9 +37,9 @@ export class ChoiceHeroPage implements OnInit, OnDestroy {
     const isFirstHero = this.heroService.heroes.length === 0;
     this.heroService.addNewHero(hero.heroClass).then(() => {
       if (isFirstHero) {
-        this.router.navigateByUrl('/map');
+        this.navCtrl.navigateBack('/map');
       } else {
-        this.router.navigateByUrl('/shop');
+        this.navCtrl.navigateBack('/shop');
       }
     });
   }
