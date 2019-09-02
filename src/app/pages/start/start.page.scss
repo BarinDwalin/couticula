@@ -16,6 +16,84 @@
     &__item {
       opacity: var(--control-opacity);
       font-weight: bold;
+
+      &_enabled {
+        --menu-item-gradient-color-start: #302e2f;
+        --menu-item-gradient-color-end: #8d6351;
+        --menu-item-border-width: 1vh;
+        --menu-item-animation: 2s linear infinite;
+
+        span:nth-child(1) {
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: var(--menu-item-border-width);
+          background: linear-gradient(to right, var(--menu-item-gradient-color-start), var(--menu-item-gradient-color-end));
+          animation: animate1 var(--menu-item-animation);
+        }
+        span:nth-child(2) {
+          position: absolute;
+          top: 0;
+          right: 0;
+          width: var(--menu-item-border-width);
+          height: 100%;
+          background: linear-gradient(to bottom, var(--menu-item-gradient-color-start), var(--menu-item-gradient-color-end));
+          animation: animate2 var(--menu-item-animation);
+          animation-delay: 1s;
+        }
+        span:nth-child(3) {
+          position: absolute;
+          bottom: 0;
+          right: 0;
+          width: 100%;
+          height: var(--menu-item-border-width);
+          background: linear-gradient(to left, var(--menu-item-gradient-color-start), var(--menu-item-gradient-color-end));
+          animation: animate3 var(--menu-item-animation);
+        }
+        span:nth-child(4) {
+          position: absolute;
+          bottom: 0;
+          left: 0;
+          width: var(--menu-item-border-width);
+          height: 100%;
+          background: linear-gradient(to top, var(--menu-item-gradient-color-start), var(--menu-item-gradient-color-end));
+          animation: animate4 var(--menu-item-animation);
+          animation-delay: 1s;
+        }
+        @keyframes animate1 {
+          0% {
+            transform: translateX(-100%)
+          }
+          100% {
+            transform: translateX(100%)
+          }
+        }
+        @keyframes animate2 {
+          0% {
+            transform: translateY(-100%)
+          }
+          100% {
+            transform: translateY(100%)
+          }
+        }
+        @keyframes animate3 {
+          0% {
+            transform: translateX(100%)
+          }
+          100% {
+            transform: translateX(-100%)
+          }
+        }
+        @keyframes animate4 {
+          0% {
+            transform: translateY(100%)
+          }
+          100% {
+            transform: translateY(-100%)
+          }
+        }
+      }
     }
   }
 }

@@ -2,9 +2,15 @@
   <div class="menu">
     <ion-button *ngFor="let page of pages"
                 class="menu__item"
+                [ngClass]="{'menu__item_enabled': page.title !== 'Multiplayer'}"
                 expand="full"
                 color="dark"
                 [disabled]="page.title === 'Multiplayer'"
-                (click)="openPage(page)">{{page.title}}</ion-button>
+                (click)="openPage(page)">{{page.title}}
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+              </ion-button>
   </div>
 </div>
