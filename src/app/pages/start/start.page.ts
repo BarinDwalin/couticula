@@ -8,13 +8,13 @@ import { Router } from '@angular/router';
 })
 export class StartPage {
   background: string;
-  pages: { title: string; route: string }[];
+  pages: { title: string; route: string; disabled?: boolean }[];
 
   constructor(private router: Router) {
     this.background = 'assets/img/start-background.jpg';
     this.pages = [
       { title: 'Single', route: '/single' },
-      { title: 'Multiplayer', route: '/multiplayer' },
+      { title: 'Multiplayer', route: '/multiplayer', disabled: true },
       { title: 'Settings', route: '/settings' },
     ];
   }

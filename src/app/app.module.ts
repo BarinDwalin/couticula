@@ -4,19 +4,18 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouteReuseStrategy } from '@angular/router';
 
-import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
+import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
 
 import { PAGES_COMPONENTS } from '@pages';
-import { SHARED_COMPONENTS } from '@shared/components';
-import { SHARED_PIPES } from '@shared/pipes';
-import { SHARED_SERVICES } from '@shared/services';
+import { SharedModule } from '@shared/shared.module';
+
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 
 @NgModule({
-  declarations: [AppComponent, PAGES_COMPONENTS, SHARED_COMPONENTS, SHARED_PIPES],
+  declarations: [AppComponent, PAGES_COMPONENTS],
   imports: [
     AppRoutingModule,
     BrowserModule,
@@ -28,13 +27,13 @@ import { AppComponent } from './app.component';
       scrollPadding: false,
       scrollAssist: false,
     }),
+    SharedModule,
   ],
-  entryComponents: [AppComponent, PAGES_COMPONENTS, SHARED_COMPONENTS],
+  entryComponents: [AppComponent, PAGES_COMPONENTS],
   providers: [
     StatusBar,
     SplashScreen,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
-    SHARED_SERVICES,
   ],
   bootstrap: [AppComponent],
 })

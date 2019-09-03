@@ -1,0 +1,17 @@
+<ion-button fill="solid"
+            expand="full"
+            size="small"
+            class="button"
+            [color]="color"
+            [disabled]="disabled"
+            [size]="size"
+            [ngClass]="{
+              'button_animated': animated,
+              'button_transparent': transparent
+            }"
+            (click)="onClick()">{{name}}
+  <span></span>
+  <span></span>
+  <span></span>
+  <span></span>
+</ion-button>
