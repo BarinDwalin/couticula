@@ -6,8 +6,8 @@
   }
 
   &_animated {
-    --menu-item-gradient-color-start: #302e2f;
-    --menu-item-gradient-color-end: #8d6351;
+    --menu-item-gradient-color-start: var(--ion-color-shade);
+    --menu-item-gradient-color-end: var(--ion-color-contrast);
     --menu-item-border-width: 1vh;
     --menu-item-animation: 2s linear infinite;
 
