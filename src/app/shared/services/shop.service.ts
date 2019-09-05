@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable, Subject, from, of, throwError } from 'rxjs';
-import { map, switchMap } from 'rxjs/operators';
+import { filter, map, switchMap, tap } from 'rxjs/operators';
 
 import { ItemType, ShopPageType } from '@enums';
 import { AbilitySettings, Hero, ShopAbilitiesPages, ShopEquipmentHitpoints } from '@models';
@@ -31,8 +31,10 @@ export class ShopService {
   choosenItem: { itemType: ItemType; item: { value: number; cost: number } };
   choosenHitpoints: { value: number; cost: number };
   choosenPageType: ShopPageType;
+  isEquimentChanged$: Observable<boolean>;
   isSelectedAvailable$: Observable<boolean>;
 
+  private isEquimentChangedSource: Subject<boolean> = new Subject<boolean>();
   private isSelectedAvailableSource: Subject<boolean> = new Subject<boolean>();
 
   get choosenAbility() {
@@ -44,6 +46,7 @@ export class ShopService {
     private playerService: PlayerService,
     private settingsService: SettingsService
   ) {
+    this.isEquimentChanged$ = this.isEquimentChangedSource.asObservable();
     this.isSelectedAvailable$ = this.isSelectedAvailableSource.asObservable();
   }
 
@@ -159,16 +162,14 @@ export class ShopService {
   }
 
   buyEquipment() {
-    if (this.choosenHitpoints != null) {
-      this.buyHitpoint(this.choosenHero).then(() => {
-        this.choosenHitpoints = null;
-      });
-    } else if (this.choosenItem != null) {
-      this.buyItem(this.choosenHero).then(() => {
-        this.choosenItem = null;
-      });
-    }
     this.isSelectedAvailableSource.next(false);
+    if (this.choosenHitpoints != null) {
+      return from(this.buyHitpoint(this.choosenHero)).pipe(
+        tap(() => (this.choosenHitpoints = null))
+      );
+    } else if (this.choosenItem != null) {
+      return this.buyItem(this.choosenHero).pipe(tap(() => (this.choosenItem = null)));
+    }
   }
 
   private buyHitpoint(hero: Hero): Promise<boolean> {
@@ -195,27 +196,29 @@ export class ShopService {
     });
   }
   private buyItem(hero: Hero) {
-    return new Promise<boolean>(resolve => {
-      this.getShopEquipment().subscribe(shopEquipment => {
-        const item = shopEquipment.equipment
+    return this.getShopEquipment().pipe(
+      map(shopEquipment => {
+        return shopEquipment.equipment
           .find(p => p.itemType === this.choosenItem.itemType)
           .items.find(p => p.value === this.choosenItem.item.value);
-        if (item) {
-          const currentHero = this.heroService.heroes.find(p => p.id === hero.id);
-          if (currentHero.maxItemValue >= item.value) {
-            this.playerService.decreaseGold(item.cost).then(success => {
-              if (success) {
-                const newItem = ItemFabric.createEquipment(this.choosenItem.itemType, item.value);
-                this.heroService.addItemToInventory(hero, newItem);
-                this.heroService.equipItem(hero.id, newItem).then(() => {
-                  resolve(success);
-                });
-              }
-            });
-          }
-        }
-      });
-    });
+      }),
+      filter(itemSettings => !!itemSettings),
+      filter(itemSettings => {
+        const currentHero = this.heroService.heroes.find(p => p.id === hero.id);
+        return currentHero.maxItemValue >= itemSettings.value;
+      }),
+      switchMap(item =>
+        from(this.playerService.decreaseGold(item.cost)).pipe(
+          filter(success => success),
+          map(() => ItemFabric.createEquipment(this.choosenItem.itemType, item.value))
+        )
+      ),
+      switchMap(newItem => {
+        this.heroService.addItemToInventory(hero, newItem);
+        return from(this.heroService.equipItem(hero.id, newItem));
+      }),
+      tap(() => this.isEquimentChangedSource.next())
+    );
   }
   private checkSelectedAvailable() {
     let selected: { cost: number };

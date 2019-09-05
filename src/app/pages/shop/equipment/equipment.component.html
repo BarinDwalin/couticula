@@ -30,9 +30,9 @@
                     }"
           (click)="selectItem(e.itemType, item)">
       {{item.cost}}
-      <span *ngIf="!!item.countExists() && !isSelectedItem(e.itemType, item.value)"
+      <span *ngIf="!!item.availableCount && !isSelectedItem(e.itemType, item.value)"
             class="values__value__item-count">
-        {{item.countExists() | itemCount}}
+        {{item.availableCount | itemCount}}
       </span>
     </div>
   </div>

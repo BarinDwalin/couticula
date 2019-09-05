@@ -1,12 +1,12 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { NavController } from '@ionic/angular';
-import { Subject, Subscription } from 'rxjs';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 import { ItemType } from '@enums';
 import { Hero, Item, ShopEquipmentHitpoints } from '@models';
 import { HeroService, PlayerService, ShopService } from '@services';
-import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'equipment',
@@ -42,47 +42,36 @@ export class EquipmentComponent implements OnInit, OnDestroy {
     private heroService: HeroService,
     private playerService: PlayerService,
     private shopService: ShopService
-  ) {
-    // Id is 1, nav refers to Tab1
-    // console.log(this.navCtrl.id);
-  }
+  ) {}
 
   ngOnInit() {
     this.playerService.gold$
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe(gold => (this.playerGold = gold));
 
-    const that = this;
     this.shopService
       .getShopEquipment()
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe(shopEquipment => {
         this.shopEquipment = shopEquipment;
-
-        this.shopEquipment.equipment.forEach(listItems => {
-          listItems.items.forEach(item => {
-            (item as any).countExists = (): number => {
-              const countInInventory = that.playerService.inventory.filter(
-                i => i.type === listItems.itemType && i.value === item.value
-              ).length;
-              const countInEquipment = that.heroService.heroes.reduce((sum, hero) => {
-                return (
-                  sum +
-                  hero.equipment.items.filter(
-                    i => i.type === listItems.itemType && i.value === item.value
-                  ).length
-                );
-              }, 0);
-              return countInInventory + countInEquipment;
-            };
-          });
-        });
+        this.calcInventoryItems();
       });
+    this.shopService.isEquimentChanged$
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe(() => this.calcInventoryItems());
   }
 
   ngOnDestroy() {
     this.unsubscribe$.next();
     this.unsubscribe$.complete();
+  }
+
+  private calcInventoryItems() {
+    this.shopEquipment.equipment.forEach(listItems => {
+      listItems.items.forEach(item => {
+        item.availableCount = this.getAvailableItemsCount(listItems.itemType, item.value);
+      });
+    });
   }
 
   isSelectedItem(itemType: ItemType, value: number) {
@@ -100,5 +89,17 @@ export class EquipmentComponent implements OnInit, OnDestroy {
   }
   selectHitpoints(item: { value: number; cost: number }) {
     this.shopService.selectHitpoints(item);
+  }
+
+  private getAvailableItemsCount(itemType: ItemType, itemValue: number) {
+    return this.heroService.heroes.reduce((sum, hero) => {
+      const inventoryItemsCount = hero.inventory.filter(
+        item => item.type === itemType && item.value === itemValue
+      ).length;
+      const equipmentItemsCount = hero.equipment.items.filter(
+        item => item.type === itemType && item.value === itemValue
+      ).length;
+      return sum + inventoryItemsCount + equipmentItemsCount;
+    }, 0);
   }
 }

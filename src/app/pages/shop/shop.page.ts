@@ -97,7 +97,10 @@ export class ShopPage implements OnInit, OnDestroy {
   buy() {
     const pageType = this.shopService.choosenPageType;
     if (pageType === ShopPageType.Items) {
-      this.shopService.buyEquipment();
+      this.shopService
+        .buyEquipment()
+        .pipe(takeUntil(this.unsubscribe$))
+        .subscribe();
     } else {
       this.shopService.buyAbility();
     }
