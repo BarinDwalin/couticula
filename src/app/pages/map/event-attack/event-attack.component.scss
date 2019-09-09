@@ -1,69 +1,51 @@
-.map__event-attack {
+.header {
+  margin-top: 3vh;
+  font-size: 4vh;
+  font-weight: bold;
+  text-align: center;
+}
 
-  &__header {
-    height: 10vh;
-    padding-top: 3vh;
-    font-size: 4vh;
-    font-weight: bold;
-    text-align: center;
-    vertical-align: bottom;
+.monsters {
+  text-align: center;
+  position: relative;
+  height: 30vh;
+
+  &__boss, &__level2, &__level1 {
+    left: 0;
+    right: 0;
   }
 
-  &__monsters {
-    text-align: center;
-    position: relative;
-    height: 30vh;
-
-    &__boss, &__level2, &__level1 {
-      left: 0;
-      right: 0;
-    }
-
-    &__boss {
-      position: absolute;
-      .cell-image {
-        height: 30vh;
-      }
-    }
-
-    &__level2 {
-      position: absolute;
-      bottom: 0;
-      .cell-image {
-        height: 21vh;
-        margin-left: -7vh;
-        margin-right: -7vh;
-      }
-    }
-
-    &__level1 {
-      position: absolute;
-      bottom: 0;
-      .cell-image {
-        height: 15vh;
-        margin-left: -4vh;
-        margin-right: -4vh;
-      }
+  &__boss {
+    position: absolute;
+    .cell-image {
+      height: 30vh;
     }
   }
 
-  &__buttons {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    justify-content: space-between;
-    grid-column-gap: 5vh;
-    padding: 1vh;
-    overflow: hidden;
-
-    button {
-      margin: 0;
-      width: 100%;
-      border-radius: 1vw;
-      font-size: 3vh;
-    }
-
-    .buttons_start button {
-      background-color: red;
+  &__level2 {
+    position: absolute;
+    bottom: 0;
+    .cell-image {
+      height: 21vh;
+      margin-left: -7vh;
+      margin-right: -7vh;
     }
   }
+
+  &__level1 {
+    position: absolute;
+    bottom: 0;
+    .cell-image {
+      height: 15vh;
+      margin-left: -4vh;
+      margin-right: -4vh;
+    }
+  }
+}
+
+.buttons {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-column-gap: 5vh;
+  padding: 1vh;
 }

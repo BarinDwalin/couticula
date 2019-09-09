@@ -1,26 +1,33 @@
+<h2 class="header">Монстры</h2>
 
-<ion-toolbar>
-  <div class="map__event-attack__header">Монстры</div>
-</ion-toolbar>
-<div class="map__event-attack__monsters">
-  <div class="map__event-attack__monsters__boss">
-    <img *ngIf="existsBoss" src="{{monsterBossImage}}"
-         class="cell-image" alt="">
+<div class="monsters">
+  <div class="monsters__boss">
+    <img *ngIf="existsBoss"
+          src="{{monsterBossImage}}"
+          class="cell-image"
+          alt="босс">
   </div>
-  <div class="map__event-attack__monsters__level2">
-    <img *ngFor="let image of monstersLevel2" src="{{image}}"
-         class="cell-image" alt="">
+  <div class="monsters__level2">
+    <img *ngFor="let image of monstersLevel2"
+          src="{{image}}"
+          class="cell-image"
+          alt="монстр 2 уровня">
   </div>
-  <div class="map__event-attack__monsters__level1">
-    <img *ngFor="let image of monstersLevel1" src="{{image}}"
-         class="cell-image" alt="">
+  <div class="monsters__level1">
+    <img *ngFor="let image of monstersLevel1"
+          src="{{image}}"
+          class="cell-image"
+          alt="монстр 1 уровня">
   </div>
 </div>
-<div class="map__event-attack__buttons">
-  <div class="buttons_start">
-    <button ion-button color="light" (click)="attack()">Напасть!</button>
-  </div>
-  <div class="buttons_end">
-    <button ion-button color="dark" (click)="close()">Отмена</button>
-  </div>
+
+<div class="buttons">
+  <ion-button fill="solid"
+              color="danger"
+              size="small"
+              (click)="attack()">Напасть!</ion-button>
+  <ion-button fill="solid"
+              color="dark"
+              size="small"
+              (click)="close()">Отмена</ion-button>
 </div>
