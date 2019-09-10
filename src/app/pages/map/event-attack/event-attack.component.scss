@@ -1,8 +1,13 @@
+:host {
+  background-image: radial-gradient(ellipse 120% 50% at 55% 75%,black 0%, #1a3838eb 50%, black 90%);
+}
+
 .header {
   margin-top: 3vh;
   font-size: 4vh;
   font-weight: bold;
   text-align: center;
+  color: white;
 }
 
 .monsters {
@@ -11,35 +16,33 @@
   height: 30vh;
 
   &__boss, &__level2, &__level1 {
+    position: absolute;
     left: 0;
     right: 0;
   }
 
-  &__boss {
-    position: absolute;
-    .cell-image {
-      height: 30vh;
-    }
-  }
-
-  &__level2 {
-    position: absolute;
+  &__level2, &__level1 {
     bottom: 0;
-    .cell-image {
-      height: 21vh;
-      margin-left: -7vh;
-      margin-right: -7vh;
-    }
   }
+}
 
-  &__level1 {
-    position: absolute;
-    bottom: 0;
-    .cell-image {
-      height: 15vh;
-      margin-left: -4vh;
-      margin-right: -4vh;
-    }
+.image {
+  position: relative;
+  filter: blur(1px);
+  z-index: -1;
+
+  &_boss {
+    height: 30vh;
+  }
+  &_level2 {
+    height: 21vh;
+    margin-left: -7vh;
+    margin-right: -7vh;
+  }
+  &_level1 {
+    height: 15vh;
+    margin-left: -4vh;
+    margin-right: -4vh;
   }
 }
 

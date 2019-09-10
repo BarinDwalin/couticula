@@ -4,19 +4,19 @@
   <div class="monsters__boss">
     <img *ngIf="existsBoss"
           src="{{monsterBossImage}}"
-          class="cell-image"
+          class="image image_boss"
           alt="босс">
   </div>
   <div class="monsters__level2">
     <img *ngFor="let image of monstersLevel2"
           src="{{image}}"
-          class="cell-image"
+          class="image image_level2"
           alt="монстр 2 уровня">
   </div>
   <div class="monsters__level1">
     <img *ngFor="let image of monstersLevel1"
           src="{{image}}"
-          class="cell-image"
+          class="image image_level1"
           alt="монстр 1 уровня">
   </div>
 </div>
