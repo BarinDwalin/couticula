@@ -1,0 +1,3 @@
+@mixin default-background {
+  --background: radial-gradient(ellipse 100% 80% at 45% 55%, var(--color-frog) 10%, black 100%);
+}

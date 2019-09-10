@@ -1,9 +1,7 @@
+@import "theme/mixins.scss";
+
 .settings {
-  --background: url('assets/img/backgrounds/todo.jpg') no-repeat center center fixed;
-  -webkit-background-size: cover;
-  -moz-background-size: cover;
-  -o-background-size: cover;
-  background-size: cover;
+  @include default-background;
 
   &__header {
     min-height: auto;
