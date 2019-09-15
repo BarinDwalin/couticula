@@ -1,8 +1,17 @@
 
-.map__field {
+.field {
   display: grid;
   align-items: center;
   justify-content: center;
+}
+
+.cell {
+  height: 100%;
+  width: 100%;
+
+  &_animation {
+    animation: animate-in linear forwards;
+  }
 }
 
 .popover-event-attack .popover-event-search .popover-content {
@@ -11,4 +20,12 @@
 
 .popover-event-treasures .popover-content {
   width: auto;
+}
+
+@keyframes animate-in {
+  0% {}
+  100% {
+    transform: translate(0, 0) scale(1);
+    box-shadow: none;
+  }
 }

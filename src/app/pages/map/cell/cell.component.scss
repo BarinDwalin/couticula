@@ -1,5 +1,7 @@
-.map__field__cell {
+.cell {
   position: relative;
+  height: 100%;
+  width: 100%;
 
   &__battle-event, &__search-event, &__treasures, &__cave, &__info {
     position: absolute;
@@ -17,6 +19,7 @@
   &__search-event, &__treasures, &__cave {
     padding: 25%;
   }
+
   &__cave {
     padding: 15%;
   }

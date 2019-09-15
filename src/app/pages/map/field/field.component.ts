@@ -1,4 +1,5 @@
 import {
+  AfterViewInit,
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
@@ -21,8 +22,9 @@ import { EventTreasuresComponent } from '../event-treasures/event-treasures.comp
   styleUrls: ['field.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class FieldComponent implements OnInit, OnDestroy {
+export class FieldComponent implements OnInit, OnDestroy, AfterViewInit {
   visibleMap: Cell[];
+  loading = true;
 
   private subscriptions: Subscription[] = [];
 
@@ -71,14 +73,21 @@ export class FieldComponent implements OnInit, OnDestroy {
     this.subscriptions.forEach(s => s.unsubscribe());
   }
 
+  ngAfterViewInit() {
+    setTimeout(() => {
+      this.loading = false;
+      this.cd.markForCheck();
+    }, 1500);
+  }
+
   onCellSelected(cell: Cell) {
     console.log(cell);
-    if (cell) {
+    if (!this.loading && !!cell) {
       this.mapService.setCurrentPosition(cell.x, cell.y);
     }
   }
   onCellSelectedEvent(cell: Cell) {
-    if (cell) {
+    if (!this.loading && !!cell) {
       if (!cell.isClear) {
         this.showEventAttackComponent(cell);
       } else if (!cell.isTravel) {
@@ -93,6 +102,10 @@ export class FieldComponent implements OnInit, OnDestroy {
   swipeEvent(e) {
     console.clear();
     console.log(e);
+  }
+
+  getFloor(value: number) {
+    return Math.floor(value);
   }
 
   private async showEventAttackComponent(cell: Cell) {

@@ -1,23 +1,23 @@
-<div class="map__field__cell">
+<div class="cell">
   <img src="{{image}}"
-       class="map__field__cell__background"
+       class="cell__background"
        (click)="click()">
   <img *ngIf="existsBattleEvent"
        src="{{imageBattleEvent}}"
-       class="map__field__cell__battle-event"
-       [ngClass]="{'map__field__cell__battle-event_exists-boss': existsBoss }"
+       class="cell__battle-event"
+       [ngClass]="{'cell__battle-event_exists-boss': existsBoss }"
        (click)="clickEvent()">
   <img *ngIf="existsSearchEvent"
        src="{{imageSearchEvent}}"
-       class="map__field__cell__search-event"
+       class="cell__search-event"
        (click)="clickEvent()">
   <img *ngIf="existsCave"
        src="{{imageCave}}"
-       class="map__field__cell__cave"
+       class="cell__cave"
        (click)="clickEvent()">
   <img *ngIf="existsTreasures"
        src="{{imageTreasures}}"
-       class="map__field__cell__treasures"
+       class="cell__treasures"
        (click)="clickEvent()">
-       <!--<span *ngIf="cell" class="map__field__cell__info">X:{{cell.x}}-Y:{{cell.y}}</span>-->
+       <!--<span *ngIf="cell" class="cell__info">X:{{cell.x}}-Y:{{cell.y}}</span>-->
 </div>
