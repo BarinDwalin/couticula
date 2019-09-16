@@ -6,7 +6,7 @@
   position: absolute;
   width: 100%;
   height: 100%;
-  opacity: .5;
+  animation: animate-frog 8s linear infinite;
 }
 
 .header {
@@ -58,4 +58,16 @@
   grid-template-columns: 1fr 1fr;
   grid-column-gap: 5vh;
   padding: 1vh;
+}
+
+@keyframes animate-frog {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: .4;
+  }
+  100% {
+    opacity: 1;
+  }
 }
