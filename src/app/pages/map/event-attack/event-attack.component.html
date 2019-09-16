@@ -1,7 +1,5 @@
 <div #background class="background"></div>
 
-<h2 class="header">Монстры</h2>
-
 <div class="monsters">
   <div class="monsters__boss">
     <img *ngIf="existsBoss"
@@ -24,12 +22,10 @@
 </div>
 
 <div class="buttons">
-  <ion-button fill="solid"
-              color="danger"
-              size="small"
-              (click)="attack()">Напасть!</ion-button>
-  <ion-button fill="solid"
-              color="dark"
-              size="small"
-              (click)="close()">Отмена</ion-button>
+  <ion-img src="assets/img/map/attack.svg"
+          class="attack"
+          (click)="attack()"></ion-img>
+  <ion-img src="assets/img/map/run-away.svg"
+          class="run-away"
+          (click)="close()"></ion-img>
 </div>
