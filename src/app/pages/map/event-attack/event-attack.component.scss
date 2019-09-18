@@ -61,6 +61,36 @@
     height: 20vh;
     width: 20vh;
   }
+
+  .attack ::ng-deep .sword {
+    transform-origin: 25% 75%;
+    animation: animate-sword 4s ease-in infinite;
+  }
+  .attack ::ng-deep .axe {
+    transform-origin: 75% 75%;
+    animation: animate-axe 4s ease-in infinite;
+  }
+
+  .run-away ::ng-deep .helmet {
+    transform-origin: 50% 25%;
+    animation: animate-helmet 1s ease-in-out infinite;
+  }
+  .run-away ::ng-deep .hero-hand-left, .run-away ::ng-deep .shield {
+    transform-origin: 50% 25%;
+    animation: animate-hero-hand-left 1s ease-in-out infinite;
+  }
+  .run-away ::ng-deep .hero-hand-right {
+    transform-origin: 50% 25%;
+    animation: animate-hero-hand-right 1s ease-in-out infinite;
+  }
+  .run-away ::ng-deep .hero-leg-left {
+    transform-origin: 60% 70%;
+    animation: animate-hero-leg-left 1s ease-in-out infinite;
+  }
+  .run-away ::ng-deep .hero-leg-right {
+    transform-origin: 60% 70%;
+    animation: animate-hero-leg-right 1s ease-in-out infinite;
+  }
 }
 
 @keyframes animate-frog {
@@ -72,5 +102,96 @@
   }
   100% {
     opacity: 1;
+  }
+}
+
+@keyframes animate-sword {
+  0% {
+    transform: rotate(10deg);
+  }
+  50% {
+    transform: rotate(10deg);
+  }
+  90% {
+    transform: rotate(-40deg);
+  }
+  100% {
+    transform: rotate(10deg);
+  }
+}
+
+@keyframes animate-axe {
+  0% {
+    transform: rotate(-10deg);
+  }
+  50% {
+    transform: rotate(-10deg);
+  }
+  90% {
+    transform: rotate(40deg);
+  }
+  100% {
+    transform: rotate(-10deg);
+  }
+}
+
+@keyframes animate-helmet {
+  0% {
+    transform: rotate(-20deg);
+  }
+  50% {
+    transform: rotate(10deg);
+  }
+  100% {
+    transform: rotate(-20deg);
+  }
+}
+
+@keyframes animate-hero-hand-left {
+  0% {
+    transform: rotate(10deg);
+  }
+  50% {
+    transform: rotate(-20deg);
+  }
+  100% {
+    transform: rotate(10deg);
+  }
+}
+
+@keyframes animate-hero-hand-right {
+  0% {
+    transform: rotate(-15deg);
+  }
+  50% {
+    transform: rotate(15deg);
+  }
+  100% {
+    transform: rotate(-15deg);
+  }
+}
+
+
+@keyframes animate-hero-leg-left {
+  0% {
+    transform: rotate(10deg);
+  }
+  50% {
+    transform: rotate(-20deg);
+  }
+  100% {
+    transform: rotate(10deg);
+  }
+}
+
+@keyframes animate-hero-leg-right {
+  0% {
+    transform: rotate(-15deg);
+  }
+  50% {
+    transform: rotate(15deg);
+  }
+  100% {
+    transform: rotate(-15deg);
   }
 }
