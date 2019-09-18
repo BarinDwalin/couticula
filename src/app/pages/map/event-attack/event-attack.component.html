@@ -22,10 +22,10 @@
 </div>
 
 <div class="buttons">
-  <ion-img src="assets/img/map/attack.svg"
-          class="attack"
-          (click)="attack()"></ion-img>
-  <ion-img src="assets/img/map/run-away.svg"
-          class="run-away"
-          (click)="close()"></ion-img>
+  <div [inlineSVG]="'assets/img/map/attack.svg'"
+      class="attack"
+      (click)="attack()"></div>
+  <div [inlineSVG]="'assets/img/map/run-away.svg'"
+      class="run-away"
+      (click)="close()"></div>
 </div>

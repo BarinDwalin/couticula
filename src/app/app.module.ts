@@ -1,3 +1,4 @@
+import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
@@ -7,6 +8,7 @@ import { RouteReuseStrategy } from '@angular/router';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
+import { InlineSVGModule } from 'ng-inline-svg';
 
 import { PAGES_COMPONENTS } from '@pages';
 import { SharedModule } from '@shared/shared.module';
@@ -21,7 +23,9 @@ import { AppComponent } from './app.component';
     BrowserModule,
     BrowserAnimationsModule,
     FormsModule,
+    HttpClientModule,
     ReactiveFormsModule,
+    InlineSVGModule.forRoot(),
     IonicModule.forRoot({
       // tabsPlacement: 'bottom',
       scrollPadding: false,
