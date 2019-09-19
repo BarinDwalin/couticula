@@ -5,7 +5,7 @@ export const HeroTypes: HeroSettings[] = [
   {
     heroClass: HeroClass.Warrior,
     name: 'Воин',
-    img: 'assets/img/heroes/warrior.jpg',
+    img: 'assets/img/heroes/warrior.svg',
     hitPoint: 50,
     maxAddonHitPoint: 70,
     weapon: 0,
@@ -17,8 +17,8 @@ export const HeroTypes: HeroSettings[] = [
     maxWeaponValue: 6,
     description: '+1 к силовому вскрытию сундуков.',
     inventory: [],
-    abilites: [ AbilityType.HeroBasicAttack ],
-    effects: [ EffectType.ForceBreakingChests ],
+    abilites: [AbilityType.HeroBasicAttack],
+    effects: [EffectType.ForceBreakingChests],
   },
   {
     heroClass: HeroClass.Prist,
@@ -35,7 +35,7 @@ export const HeroTypes: HeroSettings[] = [
     maxWeaponValue: 6,
     description: 'вместо атаки лечение.',
     inventory: [],
-    abilites: [ AbilityType.HeroBasicHeal ],
+    abilites: [AbilityType.HeroBasicHeal],
     effects: [],
   },
   {
@@ -51,9 +51,10 @@ export const HeroTypes: HeroSettings[] = [
     body: 0,
     maxArmorValue: 3,
     maxWeaponValue: 3,
-    description: '+1 к вскрытию сундуков, максимальная броня/оружие 3, максимум 50 хитов, ударяет цель дважды.',
+    description:
+      '+1 к вскрытию сундуков, максимальная броня/оружие 3, максимум 50 хитов, ударяет цель дважды.',
     inventory: [],
-    abilites: [ AbilityType.HeroDoubleSimpleAttack ],
-    effects: [ EffectType.BreakingChests ],
+    abilites: [AbilityType.HeroDoubleSimpleAttack],
+    effects: [EffectType.BreakingChests],
   },
 ];
