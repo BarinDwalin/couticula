@@ -1,0 +1,32 @@
+<svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path class="weapom__right" d="M36 45V51.5C40.5 53.3333 49 57.2004 52.5 63.5C53 64.927 49 62 47.5 63C63.5 71.5 45.3333 53.1667 36 45Z" fill="#C4C4C4" stroke="black"/>
+  <g class="hand-right">
+    <path d="M60 51.8848L45.5 49C41.5 46.5 45.9772 41.261 49 42.3848C52 43.5 69 48 69 51.8848L66 55L54.5 61.5L51.5 58L60 51.8848Z" fill="#9C0A0A" stroke="black"/>
+    <path d="M54.5 61.5L51.5 58L47 59.5L51.5 63.5L54.5 61.5Z" fill="#B69999" stroke="black"/>
+  </g>
+  <g class="body">
+    <path d="M54 43.5L51.5 40L43 42L45 45L54 43.5Z" fill="#375E4B" stroke="black"/>
+    <path d="M45 45C57.5 37 64.5 54 66 61.5C68.2212 72.6061 41 55.5 45 45Z" fill="#375E4B" stroke="black"/>
+  </g>
+  <g class="leg-right">
+    <path d="M66 80.5L58 73L54 74.5L64.5 82L66 80.5Z" fill="#C98787" stroke="black"/>
+    <path d="M68 83L64.8572 77V80.4286L60.1429 79.1429L63.2857 81.2857H57L57.7109 83H68Z" fill="#615A23" stroke="black"/>
+    <path d="M59 64L52.5 73L55 77.5L56 75L58 77V74L61.5 76L59.5 73L67 66.5L66 61L59 64Z" fill="#C4C4C4" stroke="black"/>
+  </g>
+  <path class="weapom__left" d="M30.1292 37.5L24.5 40C25.1623 44.8138 27.2056 51.8191 23.5 58C21.8038 58.8475 23.1108 55.7666 21.4948 54.9676C22.5 70.5 29 46.5 30.1292 37.5Z" fill="#C4C4C4" stroke="black"/>
+  <g class="hand-left">
+    <path d="M43 57L41.5 46C41.5 42.5 46.7 43.4 49.5 45C52.3 46.6 50.6667 56.6667 49.5 61.5L46 63.5L28 59V55L43 57Z" fill="#9C0A0A" stroke="black"/>
+    <path d="M28 59V55L24.5 52.5L22 57L28 59Z" fill="#B69999" stroke="black"/>
+  </g>
+  <g class="leg-left">
+    <path d="M48 73L52.5 88H49.5L42 74L48 73Z" fill="#C98787" stroke="black"/>
+    <path d="M53 89.5L51.5 81.5L50 86.5L46 84L47 87.5L39 86.5L40.5 89.5H53Z" fill="#615A23" stroke="black"/>
+    <path d="M57 63L41.5 73.5L42.5 77.5L44 75.5L46 77.5L47 75.5L50 77.5L49 73.5L62.5 70.5L67 64L64.5 61.5L57 63Z" fill="#C4C4C4" stroke="black"/>
+  </g>
+  <g class="head">
+    <path class="hair" d="M39 26L49 28L52 34" stroke="black" stroke-width="3"/>
+    <path class="skull" d="M36 43.9467L53.5 39.9467C50.5 25.9467 45.6667 25.9467 38 27.9467L36 32.9467L33 34.4467L32 37.4467L35 38.9467V41.4467L36 43.9467Z" fill="#C98787" stroke="black"/>
+    <path class="mounth" d="M44 39L35 41V39L41.5 37.5L43.5 35.5L45.5 38L44 39Z" fill="white" stroke="black"/>
+    <path class="eye" d="M39 32.9467C38.6 31.7467 41.1667 31.1134 42.5 30.9467L41.5 33.4467L39 32.9467Z" fill="white" stroke="black"/>
+  </g>
+</svg>

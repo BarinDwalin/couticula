@@ -4,13 +4,9 @@
     <ion-card-subtitle>{{heroClassName}}</ion-card-subtitle>
   </ion-card-header>
 
-  <img *ngIf="heroClassName != 'Воин'; else newHeroImage"
-        class="hero__image"
-        src="{{hero.img}}">
-  <ng-template #newHeroImage>
-    <div [inlineSVG]="hero.img"
-          class="hero__image"></div>
-  </ng-template>
+  <div [inlineSVG]="hero.img"
+        class="hero__image">
+  </div>
 
   <ion-card-content class="hero__description">
     <b>Особенность: </b>{{hero.description}}

@@ -23,7 +23,7 @@ export const HeroTypes: HeroSettings[] = [
   {
     heroClass: HeroClass.Prist,
     name: 'Клирик',
-    img: 'assets/img/heroes/prist.jpg',
+    img: 'assets/img/heroes/prist.svg',
     hitPoint: 50,
     maxAddonHitPoint: 70,
     weapon: 0,
@@ -41,7 +41,7 @@ export const HeroTypes: HeroSettings[] = [
   {
     heroClass: HeroClass.Scout,
     name: 'Следопыт',
-    img: 'assets/img/heroes/scout.jpg',
+    img: 'assets/img/heroes/scout.svg',
     hitPoint: 30,
     maxAddonHitPoint: 20,
     weapon: 0,
