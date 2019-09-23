@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 
-import { MapService, RandomService } from '@services';
 import {
   AbilityFabric,
   CreatureFabric,
@@ -8,6 +7,8 @@ import {
   EnemyGroupFabric,
   ItemFabric,
 } from '@shared/fabrics';
+import { MapService } from './map.service';
+import { RandomService } from './random.service';
 
 @Injectable()
 export class GameService {

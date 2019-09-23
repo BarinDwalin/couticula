@@ -1,5 +1,6 @@
 import { AbilityType, HeroClass } from '@enums';
 import { Creature } from './creature';
+import { CreatureEquipment } from './creature-equipment';
 
 export class Hero extends Creature {
   heroClass: HeroClass;
@@ -8,21 +9,6 @@ export class Hero extends Creature {
   maxItemValue: number;
   uniqueAbilities: AbilityType[]; // уникальные способности героя
   shopHideAbilities: AbilityType[];
-
-  constructor(
-    id: number,
-    name: string,
-    image: string,
-    hitpoint = 0,
-    weapon = 0,
-    head = 0,
-    hands = 0,
-    legs = 0,
-    body = 0
-  ) {
-    super(id, name, image, hitpoint, weapon, head, hands, legs, body);
-    this.addonHitPoint = 0;
-  }
 
   static getHeroClassName(heroClass: HeroClass) {
     switch (heroClass) {
@@ -33,6 +19,17 @@ export class Hero extends Creature {
       case HeroClass.Warrior:
         return 'Воин';
     }
+  }
+
+  constructor(
+    id: number,
+    name: string,
+    image: string,
+    hitpoint: number,
+    equipment: CreatureEquipment
+  ) {
+    super(id, name, image, hitpoint, equipment);
+    this.addonHitPoint = 0;
   }
 
   setAddonHitPoints(value: number) {

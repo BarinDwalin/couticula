@@ -17,7 +17,8 @@ import { Hero, ShopAbilitiesPages } from '@models';
 import { ChoiceHeroPage } from '@pages';
 import { HeroService, PlayerService, ShopService } from '@services';
 
-import { AbilityListComponent, EquipmentComponent } from './index';
+import { AbilityListComponent } from './ability-list/ability-list.component';
+import { EquipmentComponent } from './equipment/equipment.component';
 
 const maxHeroCount = 3;
 

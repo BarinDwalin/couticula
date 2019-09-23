@@ -25,7 +25,7 @@ export class Creature {
   // !!! Позволяет создавать однотипные эффекты с разным описанием. Если реально не пригодится - заменить на тип эффекта:
   effects: Effect[] = []; // эффекты на существе
   currentEffects: Effect[] = []; // эффекты на существе во время боя
-  equipment: CreatureEquipment = new CreatureEquipment();
+  equipment: CreatureEquipment = null;
   inventory: Item[] = [];
   lastDiceValue: number = null;
   lastDiceTarget: DiceTarget = null;
@@ -35,24 +35,15 @@ export class Creature {
     id: number,
     name: string,
     image: string,
-    hitpoint = 0,
-    weapon = 0,
-    head = 0,
-    hands = 0,
-    legs = 0,
-    body = 0
+    hitpoint: number,
+    equipment: CreatureEquipment
   ) {
     this.id = id;
     this.name = name;
     this.image = image;
     this.hitPoint = hitpoint;
     this.maxHitPoint = hitpoint;
-    this.equipment.Weapon = ItemFabric.createEquipment(ItemType.Weapon, weapon);
-    this.equipment.Head = ItemFabric.createEquipment(ItemType.Head, head);
-    this.equipment.Hands = ItemFabric.createEquipment(ItemType.Hands, hands);
-    this.equipment.Legs = ItemFabric.createEquipment(ItemType.Legs, legs);
-    this.equipment.Body = ItemFabric.createEquipment(ItemType.Body, body);
-    this.equipment.Shield = ItemFabric.createEquipment(ItemType.Shield, 0, { hitPoints: 0 }) as Shield;
+    this.equipment = equipment;
     this.abilities.push(AbilityType.MonsterBasicAttack);
   }
 
@@ -94,9 +85,11 @@ export class Creature {
 
   getAvailableAbilities() {
     return this.currentAbilities.filter(
-      ability => this.usedInThisRoundAbilities.indexOf(ability.type) === -1 &&
-        (!ability.maxUseCount || !this.usedInThisBattleAbilities.has(ability.type) ||
-        ability.maxUseCount > this.usedInThisBattleAbilities.get(ability.type))
+      ability =>
+        this.usedInThisRoundAbilities.indexOf(ability.type) === -1 &&
+        (!ability.maxUseCount ||
+          !this.usedInThisBattleAbilities.has(ability.type) ||
+          ability.maxUseCount > this.usedInThisBattleAbilities.get(ability.type))
     );
   }
 
@@ -110,9 +103,8 @@ export class Creature {
   increaseHitpoint(value: number): number {
     let healHitPoint = 0;
     if (!this.isExistsEffect(EffectType.BlockHeal)) {
-      healHitPoint = this.hitPoint + value > this.maxHitPoint
-        ? this.maxHitPoint - this.hitPoint
-        : value;
+      healHitPoint =
+        this.hitPoint + value > this.maxHitPoint ? this.maxHitPoint - this.hitPoint : value;
       this.hitPoint = this.hitPoint + healHitPoint;
     }
     return healHitPoint;
@@ -121,7 +113,10 @@ export class Creature {
   decreaseHitpoint(value: number): number {
     let damage = 0;
     if (!this.isExistsEffect(EffectType.BlockDamage)) {
-      if (this.hitPoint < damage || (damage >= 13 && !this.isExistsEffect(EffectType.Destructible13))) {
+      if (
+        this.hitPoint < damage ||
+        (damage >= 13 && !this.isExistsEffect(EffectType.Destructible13))
+      ) {
         damage = this.hitPoint;
         this.hitPoint = 0;
         this.state = CreatureState.DeadInThisTurn;

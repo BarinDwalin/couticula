@@ -1,8 +1,9 @@
-import { HeroClass } from '@enums';
-import { Creature, CreatureSettings, Hero, HeroSettings } from '@models';
+import { HeroClass, ItemType } from '@enums';
+import { Creature, CreatureEquipment, CreatureSettings, Hero, HeroSettings, Shield } from '@models';
 import { RandomService } from '@services';
 import { CreaturesBoss, CreaturesLevel1, CreaturesLevel2, HeroTypes } from '@shared/db';
 import { EffectFabric } from './effect-fabric';
+import { ItemFabric } from './item-fabric';
 
 export class CreatureFabric {
   private static randomService: RandomService;
@@ -14,7 +15,15 @@ export class CreatureFabric {
 
   static createHero(heroClass: HeroClass): Hero {
     const settings: HeroSettings = HeroTypes.find(p => p.heroClass === heroClass);
-    const newHero = new Hero(CreatureFabric.GUID++, settings.name, settings.img, settings.hitPoint);
+    const equipment = CreatureFabric.createCreatureEquipment(settings);
+
+    const newHero = new Hero(
+      CreatureFabric.GUID++,
+      settings.name,
+      settings.img,
+      settings.hitPoint,
+      equipment
+    );
     newHero.heroClass = heroClass;
     newHero.description = settings.description;
     newHero.maxAddonHitPoint = settings.maxAddonHitPoint;
@@ -22,6 +31,11 @@ export class CreatureFabric {
     newHero.abilities = [...settings.abilites];
     newHero.inventory = [...settings.inventory];
     newHero.effects = settings.effects.map(effectType => EffectFabric.createEffect(effectType));
+    newHero.inventory.push(ItemFabric.createRandomEquipment());
+    newHero.inventory.push(ItemFabric.createRandomEquipment());
+    newHero.inventory.push(ItemFabric.createRandomEquipment());
+    newHero.inventory.push(ItemFabric.createRandomEquipment());
+    newHero.inventory.push(ItemFabric.createRandomEquipment());
     return newHero;
   }
 
@@ -47,21 +61,30 @@ export class CreatureFabric {
   }
 
   private static createCreature(settings: CreatureSettings): Creature {
+    const equipment = CreatureFabric.createCreatureEquipment(settings);
+
     const newCreature = new Creature(
       CreatureFabric.GUID++,
       settings.name,
       settings.img,
       settings.hitPoint,
-      settings.weapon,
-      settings.head,
-      settings.hands,
-      settings.legs,
-      settings.body
+      equipment
     );
     newCreature.description = settings.description;
     newCreature.abilities = [...settings.abilites];
     newCreature.inventory = [...settings.inventory];
     newCreature.effects = settings.effects.map(effectType => EffectFabric.createEffect(effectType));
     return newCreature;
+  }
+
+  private static createCreatureEquipment(settings: CreatureSettings) {
+    const equipment = new CreatureEquipment();
+    equipment.Weapon = ItemFabric.createEquipment(ItemType.Weapon, settings.weapon);
+    equipment.Head = ItemFabric.createEquipment(ItemType.Head, settings.head);
+    equipment.Hands = ItemFabric.createEquipment(ItemType.Hands, settings.hands);
+    equipment.Legs = ItemFabric.createEquipment(ItemType.Legs, settings.legs);
+    equipment.Body = ItemFabric.createEquipment(ItemType.Body, settings.body);
+    equipment.Shield = ItemFabric.createEquipment(ItemType.Shield, 0, { hitPoints: 0 }) as Shield;
+    return equipment;
   }
 }
