@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { NavController } from '@ionic/angular';
 
 import { Hero, Item } from '@models';
@@ -8,6 +8,7 @@ import { HeroService } from '@services';
   selector: 'page-inventory',
   templateUrl: 'inventory.page.html',
   styleUrls: ['inventory.page.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class InventoryPage {
   selectedHero: Hero;
@@ -25,12 +26,17 @@ export class InventoryPage {
     return Hero.getHeroClassName(this.selectedHero.heroClass);
   }
 
-  constructor(public navCtrl: NavController, private heroService: HeroService) {
+  constructor(
+    private cd: ChangeDetectorRef,
+    private heroService: HeroService,
+    public navCtrl: NavController
+  ) {
     this.selectedHero = this.heroes[0];
   }
 
   choseHero(hero: Hero) {
     this.selectedHero = hero;
+    this.cd.markForCheck();
   }
 
   close() {

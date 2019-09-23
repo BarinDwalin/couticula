@@ -16,25 +16,25 @@
     </ion-buttons>
   </ion-toolbar>
 
-  <div class="inventory">
-    <div class="inventory__hero-equipment">
+  <main>
+    <div class="equipment">
       <div *ngFor="let item of heroEquipment"
-          class="inventory__hero-equipment__item">
-        <div class="inventory__hero-equipment__item__type"
+          class="equipment__item">
+        <div class="equipment__item__type"
             [ngStyle]="{ 'backgroundImage': 'url(' + getItemTypeImage(item) + ')' }"></div>
         <item-info-short [item]='item'
-                        class="inventory__hero-equipment__item__value"></item-info-short>
+                        class="equipment__item__value"></item-info-short>
       </div>
     </div>
 
-    <div class="inventory__hero-panel">
-      <div class="inventory__hero-panel__image">
+    <div class="panel">
+      <div class="panel__image">
         <img src="{{selectedHero.image}}">
       </div>
-      <div class="inventory__hero-panel__type">{{heroClassName}}</div>
-      <!-- <div class="inventory__hero-panel__name">{{selectedHero.name}}</div> -->
-      <div class="inventory__hero-panel__description">{{selectedHero.description}}</div>
-      <div class="inventory__hero-panel__heroes">
+      <div class="panel__type">{{heroClassName}}</div>
+      <!-- <div class="panel__name">{{selectedHero.name}}</div> -->
+      <div class="panel__description">{{selectedHero.description}}</div>
+      <div class="panel__heroes">
         <heroes-info-short [heroes]="heroes"
                           [isNewHeroAvailable]="false"
                           (selectedHero)="choseHero($event)"></heroes-info-short>
@@ -42,17 +42,17 @@
     </div>
 
     <div *ngIf="heroInventory.length === 0; else inventory"
-          class="inventory__hero-inventory inventory__hero-inventory_empty">
+          class="inventory inventory_empty">
       Нет предметов
     </div>
     <ng-template #inventory>
-      <div class="inventory__hero-inventory">
+      <div class="inventory">
         <div *ngFor="let item of heroInventory"
-            class="inventory__hero-inventory__item"
+            class="inventory__item"
             (click)="equipItem(item)">
           <item-info-short [item]='item'></item-info-short>
         </div>
       </div>
     </ng-template>
-  </div>
+  </main>
 </ion-content>

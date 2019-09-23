@@ -10,11 +10,11 @@
     --background: transparent;
   }
 
-  .inventory {
+  main {
     display: grid;
-    grid-template-columns: minmax(20vw, auto) minmax(auto, 40vw) minmax(20vw, auto);
+    grid-template-columns: minmax(20vw, auto) minmax(auto, 40vw) 44vh;
 
-    &__hero-equipment {
+    .equipment {
       display: grid;
       grid-template-rows: repeat(6, 12vh) auto;
       grid-row-gap: 2vh;
@@ -39,7 +39,7 @@
       }
     }
 
-    &__hero-panel {
+    .panel {
       display: grid;
       grid-template-rows: 33vh auto 1fr 20vh;
       grid-row-gap: 2vh;
@@ -53,16 +53,22 @@
           object-fit: contain;
         }
       }
+
+      &__description {
+        text-align: center;
+        font-size: 4vh;
+      }
     }
 
-    &__hero-inventory {
+    .inventory {
       display: grid;
       overflow-y: auto;
       grid-template-columns: repeat(3, 12vh);
-      grid-template-rows: repeat(6, 12vh) auto;
+      grid-template-rows: repeat(6, 12vh);
       grid-column-gap: 2vh;
       grid-row-gap: 2vh;
-      justify-items: center;
+      padding-left: 2vh;
+      padding-right: 2vh;
 
       &_empty {
         display: block;
