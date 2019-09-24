@@ -12,7 +12,6 @@ import { takeUntil } from 'rxjs/operators';
 
 import { AbilityType, BattleState } from '@enums';
 import { AbilityResult, BattleStateEvent, Cell } from '@models';
-import { InventoryPage } from '@pages';
 import { BattleStateService, SettingsService } from '@services';
 import { DiceComponent, DiceTargetComponent } from '@shared/components';
 

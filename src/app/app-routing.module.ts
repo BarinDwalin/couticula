@@ -1,23 +1,11 @@
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
-import {
-  BattlePage,
-  ChoiceHeroPage,
-  InventoryPage,
-  LoginPage,
-  MapPage,
-  MultiplayerPage,
-  SettingsPage,
-  ShopPage,
-  SinglePage,
-  StartPage,
-} from './pages';
+import { BattlePage, ChoiceHeroPage, MapPage, ShopPage } from './pages';
 
 const routes: Routes = [
   {
     path: 'start-page',
-    component: StartPage,
-    pathMatch: 'full',
+    loadChildren: () => import('./pages/start/start.module').then(m => m.StartModule),
   },
   {
     path: 'battle',
@@ -31,13 +19,11 @@ const routes: Routes = [
   },
   {
     path: 'inventory',
-    component: InventoryPage,
-    pathMatch: 'full',
+    loadChildren: () => import('./pages/inventory/inventory.module').then(m => m.InventoryModule),
   },
   {
     path: 'login',
-    component: LoginPage,
-    pathMatch: 'full',
+    loadChildren: () => import('./pages/login/login.module').then(m => m.LoginModule),
   },
   {
     path: 'map',
@@ -46,13 +32,12 @@ const routes: Routes = [
   },
   {
     path: 'multiplayer',
-    component: MultiplayerPage,
-    pathMatch: 'full',
+    loadChildren: () =>
+      import('./pages/multiplayer/multiplayer.module').then(m => m.MultiplayerModule),
   },
   {
     path: 'settings',
-    component: SettingsPage,
-    pathMatch: 'full',
+    loadChildren: () => import('./pages/settings/settings.module').then(m => m.SettingsModule),
   },
   {
     path: 'shop',
@@ -61,8 +46,7 @@ const routes: Routes = [
   },
   {
     path: 'single',
-    component: SinglePage,
-    pathMatch: 'full',
+    loadChildren: () => import('./pages/single/single.module').then(m => m.SingleModule),
   },
   {
     path: '',

@@ -1,10 +1,8 @@
 import { Component, ViewChild } from '@angular/core';
 
-import { MenuController, Platform } from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
-
-import { StartPage } from '@pages';
+import { MenuController, Platform } from '@ionic/angular';
 
 @Component({
   selector: 'app-root',

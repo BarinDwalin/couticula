@@ -9,7 +9,9 @@ import { CreatureFabric } from '@shared/fabrics';
 import { PlayerService } from './player.service';
 import { RandomService } from './random.service';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root',
+})
 export class HeroService {
   heroes: Hero[];
 
@@ -27,8 +29,10 @@ export class HeroService {
   addNewHero(heroClass: HeroClass): Promise<any> {
     return new Promise(resolve => {
       const newHero: Hero = CreatureFabric.createHero(heroClass);
+      const newHero2: Hero = CreatureFabric.createHero(HeroClass.Scout);
       // newHero.uniqueAbilities = heroInfo.uniqueAbilities;
       this.heroes.push(newHero);
+      //this.heroes.push(newHero2);
       resolve();
     });
   }

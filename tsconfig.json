@@ -10,7 +10,7 @@
       "dom",
       "es2018"
     ],
-    "module": "es2015",
+    "module": "esnext",
     "moduleResolution": "node",
     "sourceMap": true,
     "target": "es2015",
