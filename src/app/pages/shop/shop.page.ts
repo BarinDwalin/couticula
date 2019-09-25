@@ -14,7 +14,6 @@ import { filter, switchMap, takeUntil } from 'rxjs/operators';
 
 import { ShopPageType } from '@enums';
 import { Hero, ShopAbilitiesPages } from '@models';
-import { ChoiceHeroPage } from '@pages';
 import { HeroService, PlayerService, ShopService } from '@services';
 
 import { AbilityListComponent } from './ability-list/ability-list.component';

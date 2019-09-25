@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
-import { BattlePage, ChoiceHeroPage, MapPage, ShopPage } from './pages';
+import { BattlePage } from './pages';
 
 const routes: Routes = [
   {
@@ -9,13 +9,14 @@ const routes: Routes = [
   },
   {
     path: 'battle',
+    // loadChildren: () => import('./pages/battle/battle.module').then(m => m.BattleModule),
     component: BattlePage,
     pathMatch: 'full',
   },
   {
     path: 'choice-hero',
-    component: ChoiceHeroPage,
-    pathMatch: 'full',
+    loadChildren: () =>
+      import('./pages/choice-hero/choice-hero.module').then(m => m.ChoiceHeroModule),
   },
   {
     path: 'inventory',
@@ -27,8 +28,7 @@ const routes: Routes = [
   },
   {
     path: 'map',
-    component: MapPage,
-    pathMatch: 'full',
+    loadChildren: () => import('./pages/map/map.module').then(m => m.MapModule),
   },
   {
     path: 'multiplayer',
@@ -41,8 +41,7 @@ const routes: Routes = [
   },
   {
     path: 'shop',
-    component: ShopPage,
-    pathMatch: 'full',
+    loadChildren: () => import('./pages/shop/shop.module').then(m => m.ShopModule),
   },
   {
     path: 'single',
