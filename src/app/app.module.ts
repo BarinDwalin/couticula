@@ -10,14 +10,13 @@ import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
 import { InlineSVGModule } from 'ng-inline-svg';
 
-import { PAGES_COMPONENTS } from '@pages';
 import { SharedModule } from '@shared/shared.module';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 
 @NgModule({
-  declarations: [AppComponent, PAGES_COMPONENTS],
+  declarations: [AppComponent],
   imports: [
     AppRoutingModule,
     BrowserModule,
@@ -33,7 +32,6 @@ import { AppComponent } from './app.component';
     }),
     SharedModule,
   ],
-  entryComponents: [AppComponent, PAGES_COMPONENTS],
   providers: [
     StatusBar,
     SplashScreen,

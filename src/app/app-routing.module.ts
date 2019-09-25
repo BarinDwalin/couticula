@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
-import { BattlePage } from './pages';
 
 const routes: Routes = [
   {
@@ -9,9 +8,7 @@ const routes: Routes = [
   },
   {
     path: 'battle',
-    // loadChildren: () => import('./pages/battle/battle.module').then(m => m.BattleModule),
-    component: BattlePage,
-    pathMatch: 'full',
+    loadChildren: () => import('./pages/battle/battle.module').then(m => m.BattleModule),
   },
   {
     path: 'choice-hero',

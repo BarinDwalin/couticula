@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 
 import { CreatureView } from '@models';
-import { AbilityType } from '@app/shared/enums';
+import { AbilityType } from '@shared/enums';
 
 @Component({
   selector: 'target',
