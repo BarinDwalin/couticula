@@ -4,7 +4,7 @@ import { CreatureSettings, Item } from '@models';
 export const CreaturesLevel1: CreatureSettings[] = [
   {
     name: 'Виверна',
-    img: 'assets/img/monsters/enemy.jpg',
+    img: 'assets/img/monsters/level-1.svg',
     hitPoint: 35,
     maxAddonHitPoint: 0,
     weapon: 4,
@@ -14,7 +14,7 @@ export const CreaturesLevel1: CreatureSettings[] = [
     body: 0,
     description: 'Яд 1, шанс 1d6',
     inventory: [],
-    abilites: [ AbilityType.MonsterBasicAttack ],
-    effects: [ EffectType.AttackWithPoisonWeak1 ],
+    abilites: [AbilityType.MonsterBasicAttack],
+    effects: [EffectType.AttackWithPoisonWeak1],
   },
 ];

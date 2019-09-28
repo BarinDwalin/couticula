@@ -4,7 +4,7 @@ import { CreatureSettings, Item } from '@models';
 export const CreaturesBoss: CreatureSettings[] = [
   {
     name: 'Двухголовая гидра',
-    img: 'assets/img/monsters/enemy.jpg',
+    img: 'assets/img/monsters/boss.svg',
     hitPoint: 220,
     maxAddonHitPoint: 0,
     weapon: 4,
@@ -14,8 +14,7 @@ export const CreaturesBoss: CreatureSettings[] = [
     body: 0,
     description: `Регенерация 5. В начале хода возрождает змея. Атакует двоих.`,
     inventory: [],
-    abilites: [ AbilityType.MonsterBasicAttackTwoTargets ],
-    effects: [ EffectType.Regeneration5, EffectType.RebirthSerpent ],
+    abilites: [AbilityType.MonsterBasicAttackTwoTargets],
+    effects: [EffectType.Regeneration5, EffectType.RebirthSerpent],
   },
 ];
-
