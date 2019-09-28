@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Router } from '@angular/router';
 
 import { CreatureView } from '@models';
 import { AbilityType } from '@shared/enums';
@@ -20,7 +21,7 @@ export class TargetComponent implements OnInit {
   @Output()
   selectAbilityType = new EventEmitter<AbilityType>();
 
-  constructor() {}
+  constructor(private router: Router) {}
 
   ngOnInit() {
     this.selectAbilityType.next(this.selectedAbilityType);
@@ -33,5 +34,9 @@ export class TargetComponent implements OnInit {
   selectAbility(abilityType: AbilityType) {
     this.selectedAbilityType = abilityType;
     this.selectAbilityType.next(abilityType);
+  }
+
+  openInventory() {
+    this.router.navigateByUrl('/inventory');
   }
 }

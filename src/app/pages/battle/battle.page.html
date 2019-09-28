@@ -1,45 +1,32 @@
-<div class="battle">
-  <ion-toolbar class="battle__title">
-    <ion-buttons slot="start">
-      <gold></gold>
-    </ion-buttons>
-    <ion-title>Сражение</ion-title>
-    <ion-buttons slot="end">
-      <ion-button fill="clear"
-                  size="small"
-                  color="light"
-                  (click)="openInventory()">
-        Инвентарь
-      </ion-button>
-    </ion-buttons>
-  </ion-toolbar>
-
-  <div class="battle-field">
+<ion-content class="content" forceOverscroll="false">
+  <main>
     <target [isShownAbilities]="false"
             [creature]="targetMonster"
-            class="battle-field__target battle-field__target_monster"></target>
+            class="target target_monster"></target>
 
-    <creatures-list [creatures]="orderedCreatures"
+    <creatures-list class="creatures"
+                    [creatures]="orderedCreatures"
                     [selectedCreatureId]="selectedCreatureId"
                     [lastCreatureInRound]="lastCreatureInRound"
                     [currentRound]="currentRound"
                     (selectCreature)="onSelectCreature($event)">
     </creatures-list>
 
-    <div class="battle-field__dices">
-      <dice-target class="battle-field__dices__target-dice"
+    <div class="dices">
+      <dice-target class="dices__target-dice"
                     (click)="clickTarget()"></dice-target>
       <dice [dice]='6'
-            class="battle-field__dices__value-dice"
+            class="dices__value-dice"
             (click)="clickDice()"></dice>
     </div>
 
-    <target [isShownAbilities]="true"
+    <target [isHero]="true"
+            [isShownAbilities]="true"
             [creature]="targetHero"
             [selectedAbilityType]="selectedHeroAbilityType"
             (selectAbilityType)="onSelectAbilityType($event)"
-            class="battle-field__target battle-field__target_hero"></target>
-  </div>
+            class="target target_hero"></target>
+  </main>
 
   <div *ngIf="waiting" class="display-blocker"></div>
-</div>
+</ion-content>

@@ -1,133 +1,120 @@
 :host {
   display: grid;
   grid-template-columns: auto auto 1fr;
-  grid-template-rows: 1fr 1fr;
+  grid-template-rows: 12vh 1fr;
   grid-template-areas: "img equipment effects"
                        "img equipment abilities";
   background-color: gold;
 
-  .battle-field__target {
-    &__main {
-      width: 30vh;
-      grid-row: img;
-      grid-column: img;
-      position: relative;
+  .avatar {
+    width: 30vh;
+    grid-row: img;
+    grid-column: img;
+    position: relative;
 
-      &__image {
-        height: 100%;
-        width: 100%;
+    &__image {
+      height: 100%;
+      width: 100%;
+      border-radius: 2vh;
+    }
+
+    &__name {
+      width: 100%;
+      position: absolute;
+      top: 0;
+      text-align: center;
+      font-size: 4vh;
+      color: white;
+      text-shadow:
+        -1px -1px 0 #000,
+        1px -1px 0 #000,
+        -1px 1px 0 #000,
+        1px 1px 0 #000,
+        0 0 10px #000;
+    }
+
+    &__info {
+      width: 5vh;
+      height: 5vh;
+      border-radius: 2.5vh;
+      position: absolute;
+      top: 0;
+      right: 0;
+      color: white;
+      background-color: black;
+      font-size: 3vh;
+      padding: 1vh 2vh;
+      box-shadow: inset 0 0 5px white;
+    }
+
+    &__inventory {
+      width: 8vh;
+      height: 8vh;
+      position: absolute;
+      bottom: 6vh;
+      right: 1vh;
+      border-radius: 50%;
+      box-shadow: 0 0 5px black;
+    }
+
+    &__hitpoints {
+      width: 100%;
+      position: absolute;
+      bottom: 0;
+      border-radius: 0 0 2vh 2vh;
+      text-align: center;
+      font-size: 4vh;
+      font-weight: bold;
+      color: red;
+      background-color:rgba(0, 0, 0, 0.7);
+    }
+  }
+
+  .equipment {
+    width: 20vh;
+    grid-row: equipment;
+    grid-column: equipment;
+    display: grid;
+    grid-template-columns: auto auto;
+    grid-gap: .5vh;
+    padding: .5vh;
+    background-color: green;
+
+    &__item {
+      display: block;
+      height: 100%;
+      width: 100%;
+      border-radius: 1vh;
+    }
+  }
+
+  .effects {
+    grid-row: effects;
+    grid-column: effects;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, 8vh);
+    grid-column-gap: 2vh;
+    justify-items: center;
+    align-items: center;
+    padding: 0 2vh;
+    background-color: blueviolet;
+  }
+
+  .abilites {
+    grid-row: abilities;
+    grid-column: abilities;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, 12vh);
+    grid-column-gap: 2vh;
+    justify-items: center;
+    align-items: center;
+    padding: 0 2vh;
+    background-color: darkcyan;
+
+    &__ability {
+      &_selected {
         border-radius: 2vh;
-      }
-
-      &__name {
-        width: 100%;
-        position: absolute;
-        top: 0;
-        text-align: center;
-        font-size: 4vh;
-        color: white;
-        text-shadow:
-          -1px -1px 0 #000,
-          1px -1px 0 #000,
-          -1px 1px 0 #000,
-          1px 1px 0 #000,
-          0 0 10px #000;
-      }
-
-      &__info {
-        width: 5vh;
-        height: 5vh;
-        border-radius: 2.5vh;
-        position: absolute;
-        top: 0;
-        right: 0;
-        color: white;
-        background-color: black;
-        font-size: 3vh;
-        padding: 1vh 2vh;
-        box-shadow: inset 0 0 5px white;
-      }
-
-      &__inventory {
-        width: 8vh;
-        height: 8vh;
-        position: absolute;
-        bottom: 6vh;
-        right: 1vh;
-        border-radius: 50%;
-        box-shadow: 0 0 5px black;
-      }
-
-      &__hitpoints {
-        width: 100%;
-        position: absolute;
-        bottom: 0;
-        border-radius: 0 0 2vh 2vh;
-        text-align: center;
-        font-size: 4vh;
-        font-weight: bold;
-        color: red;
-        background-color:rgba(0, 0, 0, 0.7);
-        &__icon{
-          color: red;
-        }
-      }
-    }
-
-    &__equipment {
-      width: 20vh;
-      grid-row: equipment;
-      grid-column: equipment;
-      display: grid;
-      grid-template-columns: auto auto;
-      grid-gap: .5vh;
-      padding: .5vh;
-      background-color: green;
-
-      &__item {
-        display: block;
-        height: 100%;
-        width: 100%;
-        border-radius: 1vh;
-      }
-    }
-
-    &__effects {
-      grid-row: effects;
-      grid-column: effects;
-      display: grid;
-      grid-template-columns: repeat(auto-fill, 10vh);
-      grid-column-gap: 2vh;
-      padding: 0 2vh;
-      background-color: blueviolet;
-
-      &__effect {
-        height: 10vh;
-        width: 10vh;
-        margin: auto 0;
-        display: block;
-      }
-    }
-
-    &__abilites {
-      grid-row: abilities;
-      grid-column: abilities;
-      display: grid;
-      grid-template-columns: repeat(auto-fill, 10vh);
-      grid-column-gap: 2vh;
-      padding: 0 2vh;
-      background-color: darkcyan;
-
-      &__ability {
-        height: 10vh;
-        width: 10vh;
-        margin: auto 0;
-        display: block;
-
-        &_selected {
-          border-radius: 2vh;
-          border: solid gold 1vh;
-        }
+        border: solid gold 1vh;
       }
     }
   }

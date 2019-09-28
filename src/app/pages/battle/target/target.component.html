@@ -1,37 +1,38 @@
-<div class="battle-field__target__main" (click)="showCreatureDescription()">
+<div class="avatar" (click)="showCreatureDescription()">
   <img src="{{creature.image}}"
-       class="battle-field__target__main__image">
+       class="avatar__image">
 
-  <div class="battle-field__target__main__name">{{creature.name}}</div>
+  <div class="avatar__name">{{creature.name}}</div>
 
-  <div class="battle-field__target__main__info">i</div>
+  <div class="avatar__info">i</div>
 
   <img *ngIf="isHero"
         src="assets/img/menu/inventory.svg"
-        class="battle-field__target__main__inventory">
+        class="avatar__inventory"
+        (click)="openInventory()">
 
-  <div class="battle-field__target__main__hitpoints">
+  <div class="avatar__hitpoints">
     {{creature.hitPoint}}/{{creature.maxHitPoint}}
-    <ion-icon name="heart" class="battle-field__target__main__hitpoints__icon"></ion-icon>
+    <ion-icon name="heart"></ion-icon>
   </div>
 </div>
 
-<div class="battle-field__target__equipment">
+<div class="equipment">
   <item-info-short *ngFor="let item of creature.equipment.items"
                    [item]='item'
-                   class="battle-field__target__equipment__item"></item-info-short>
+                   class="equipment__item"></item-info-short>
 </div>
 
-<div class="battle-field__target__effects">
+<div class="effects">
   <img *ngFor="let effect of creature.currentEffects"
        [src]="effect.image"
-       class="battle-field__target__effects__effect">
+       class="effects__effect">
 </div>
 
-<div *ngIf="isShownAbilities" class="battle-field__target__abilites">
+<div *ngIf="isShownAbilities" class="abilites">
   <img *ngFor="let ability of creature.availableAbilities"
        (click)="selectAbility(ability.type)"
        [src]="ability.image"
-       class="battle-field__target__abilites__ability"
-       [ngClass]="{ 'battle-field__target__abilites__ability_selected': ability.type === selectedAbilityType }">
+       class="abilites__ability"
+       [ngClass]="{ 'abilites__ability_selected': ability.type === selectedAbilityType }">
 </div>

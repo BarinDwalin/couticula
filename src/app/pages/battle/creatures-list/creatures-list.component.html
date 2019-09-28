@@ -1,9 +1,9 @@
-<div class="battle-field__creatures"
+<div class="creatures"
       [ngStyle]="{ 'grid-template-columns': 'repeat(' + (creaturesCount + 1) + ', minmax(10vh, auto))' }">
   <ng-container *ngFor="let creature of creatures">
-    <div class="battle-field__creatures__creature"
+    <div class="creatures__creature"
         [@scaleSelected]="creature.id === selectedCreatureId ? 'selected' : ''"
-        [ngClass]="{ 'battle-field__creatures__creature_selected': creature.id === selectedCreatureId }"
+        [ngClass]="{ 'creatures__creature_selected': creature.id === selectedCreatureId }"
         [ngStyle]="{
           'height': (26.5 - creaturesCount * 1.5) + 'vh',
           'width': (26.5 - creaturesCount * 1.5) + 'vh'
@@ -13,14 +13,14 @@
     </div>
 
     <div *ngIf="creature.id === lastCreatureInRound"
-          class="battle-field__creatures__round"
+          class="creatures__round"
           [ngStyle]="{
             'height': (26.5 - creaturesCount * 1.5) + 'vh',
             'width': '8vh'
           }">
-      <div class="battle-field__creatures__round__border"></div>
-      <div class="battle-field__creatures__round__value"
-            [ngClass]="{ 'battle-field__creatures__round__value_big': currentRound > 9 }">{{currentRound}}</div>
+      <div class="round__border"></div>
+      <div class="round__value"
+            [ngClass]="{ 'round__value_big': currentRound > 9 }">{{currentRound}}</div>
     </div>
   </ng-container>
 </div>

@@ -115,10 +115,6 @@ export class BattlePage implements OnDestroy {
     this.cd.markForCheck();
   }
 
-  openInventory() {
-    // this.navCtrl.push(InventoryPage);
-  }
-
   clickDice() {
     this.battleStateService.heroAction(this.selectedHeroAbilityType, this.targetMonster.id);
   }

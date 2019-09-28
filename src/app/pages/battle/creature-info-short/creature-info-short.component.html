@@ -1,16 +1,16 @@
-<div class="battle-field__creature-info-short">
+<div class="creature-info-short">
   <img src="{{creature.image}}"
-       class="battle-field__creature-info-short__image">
+       class="creature-info-short__image">
 
-  <div class="battle-field__creature-info-short__name">{{creature.name}}</div>
+  <div class="creature-info-short__name">{{creature.name}}</div>
 
-  <div class="battle-field__creature-info-short__hitpoints">
-    {{creature.hitPoint}}
-    <ion-icon name="heart" class="battle-field__creature-info-short__hitpoints__icon"></ion-icon>
+  <div class="creature-info-short__hitpoints"
+      [ngStyle]="{'width': hitPointsPercent + '%'}">
   </div>
+
   <div *ngIf="changeHitPoint"
-        class="battle-field__creature-info-short__effects"
-        [ngClass]="{ 'battle-field__creature-info-short__effects_positive': isPositive }">
-    <div class="battle-field__creature-info-short__effects__change-hitpoints">{{changeHitPoint}}</div>
+        class="creature-info-short__effects"
+        [ngClass]="{ 'creature-info-short__effects_positive': isPositive }">
+    <div class="change-hitpoints">{{changeHitPoint}}</div>
   </div>
 </div>

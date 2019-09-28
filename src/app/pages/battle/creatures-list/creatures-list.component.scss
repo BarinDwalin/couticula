@@ -1,4 +1,4 @@
-.battle-field__creatures {
+.creatures {
   width: 100%;
   height: 100%;
   display: grid;
@@ -19,14 +19,14 @@
   &__round {
     position: relative;
 
-    &__border {
+    .round__border {
       height: 100%;
       width: 0px;
       margin: auto;
       border-right: solid 2vh black;
     }
 
-    &__value {
+    .round__value {
       position: absolute;
       top: 35%;
       width: 8vh;

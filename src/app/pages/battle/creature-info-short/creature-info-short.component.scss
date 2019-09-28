@@ -1,4 +1,4 @@
-.battle-field__creature-info-short {
+.creature-info-short {
   height: 100%;
   width: 100%;
   position: relative;
@@ -25,18 +25,10 @@
   }
 
   &__hitpoints {
-    width: 100%;
     position: absolute;
     bottom: 0;
-    border-radius: 0 0 2vh 2vh;
-    text-align: center;
-    font-size: 4vh;
-    font-weight: bold;
-    color: red;
-    background-color:rgba(0, 0, 0, 0.7);
-    &__icon{
-      color: red;
-    }
+    height: 1vh;
+    background-color: red;
   }
 
   &__effects {
@@ -54,7 +46,7 @@
       background-color: blue;
     }
 
-    &__change-hitpoints {
+    .change-hitpoints {
       position: absolute;
       top: 50%;
       left: 50%;

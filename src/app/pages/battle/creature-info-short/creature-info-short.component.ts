@@ -29,6 +29,10 @@ export class CreatureInfoShortComponent implements OnInit, OnDestroy {
     return this.hitPointDiff > 0;
   }
 
+  get hitPointsPercent() {
+    return Math.floor((100 * this.creature.hitPoint) / this.creature.maxHitPoint);
+  }
+
   get changeHitPoint() {
     if (this.hitPointDiff > 0) {
       return '+' + this.hitPointDiff;

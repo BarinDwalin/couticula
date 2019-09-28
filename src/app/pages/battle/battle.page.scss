@@ -1,26 +1,19 @@
 @import "theme/mixins.scss";
 
-.battle {
+.content {
   @include default-background;
 
-  .battle__title {
-    --min-height: 8vh;
-    --max-height: 8vh;
-    --background: transparent;
-    color: white;
-  }
-
-  .battle-field {
+  main {
     display: grid;
-    min-height: 92vh;
-    max-height: 92vh;
+    min-height: 100vh;
+    max-height: 100vh;
     grid-template-columns: 1fr auto;
-    grid-template-rows: 30vh 32vh 30vh;
+    grid-template-rows: 28vh 44vh 28vh;
     grid-template-areas: "monster monster"
                           "creatures dices"
                           "hero hero";
 
-    &__target {
+    .target {
       &_monster {
         grid-row: monster;
         grid-column: monster;
@@ -31,26 +24,26 @@
       }
     }
 
-    creatures-list {
+    .creatures {
       grid-row: creatures;
       grid-column: creatures;
       max-width: calc(100vw - 16vh);
       background-color: gray;
     }
 
-    &__dices {
+    .dices {
       grid-row: dices;
       grid-column: dices;
       width: 16vh;
       display: grid;
       grid-template-rows: 1fr 1fr;
       background-color: brown;
+      justify-items: center;
+      align-items: center;
 
       &__target-dice, &__value-dice {
-        position: relative;
         height: 12vh;
         width: 12vh;
-        margin: auto;
       }
     }
   }
