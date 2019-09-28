@@ -48,6 +48,16 @@
         box-shadow: inset 0 0 5px white;
       }
 
+      &__inventory {
+        width: 8vh;
+        height: 8vh;
+        position: absolute;
+        bottom: 6vh;
+        right: 1vh;
+        border-radius: 50%;
+        box-shadow: 0 0 5px black;
+      }
+
       &__hitpoints {
         width: 100%;
         position: absolute;

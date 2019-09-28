@@ -10,6 +10,8 @@ import { AbilityType } from '@shared/enums';
 })
 export class TargetComponent implements OnInit {
   @Input()
+  isHero = false;
+  @Input()
   isShownAbilities = false;
   @Input()
   creature: CreatureView;

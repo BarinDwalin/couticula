@@ -6,6 +6,10 @@
 
   <div class="battle-field__target__main__info">i</div>
 
+  <img *ngIf="isHero"
+        src="assets/img/menu/inventory.svg"
+        class="battle-field__target__main__inventory">
+
   <div class="battle-field__target__main__hitpoints">
     {{creature.hitPoint}}/{{creature.maxHitPoint}}
     <ion-icon name="heart" class="battle-field__target__main__hitpoints__icon"></ion-icon>
