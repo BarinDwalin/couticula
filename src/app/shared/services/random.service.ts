@@ -2,7 +2,9 @@ import { Injectable } from '@angular/core';
 import { RollType } from '@shared/enums';
 import { SettingsService } from './settings.service';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root',
+})
 export class RandomService {
   predictedRolls: {
     tag: string;

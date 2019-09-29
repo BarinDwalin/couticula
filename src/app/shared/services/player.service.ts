@@ -5,7 +5,9 @@ import { Item } from '@models';
 
 import { SettingsService } from './settings.service';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root',
+})
 export class PlayerService {
   gold$: Observable<number>;
 

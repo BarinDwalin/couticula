@@ -14,10 +14,12 @@ import {
 } from '@models';
 import { AbilityFabric, CreatureFabric, EffectFabric } from '@shared/fabrics';
 import { HeroService } from './hero.service';
-import { SettingsService } from './settings.service';
 import { RandomService } from './random.service';
+import { SettingsService } from './settings.service';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root',
+})
 export class BattleService {
   battleState$: Observable<BattleState>;
   events$: Observable<BattleEvent>;

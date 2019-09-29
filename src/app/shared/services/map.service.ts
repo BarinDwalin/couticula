@@ -9,7 +9,9 @@ import { EnemyGroupFabric } from '@shared/fabrics';
 import { RandomService } from './random.service';
 import { SettingsService } from './settings.service';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root',
+})
 export class MapService {
   visibleMap$: Observable<Cell[]>;
 

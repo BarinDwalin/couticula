@@ -2,7 +2,9 @@ import { Injectable } from '@angular/core';
 import { Platform } from '@ionic/angular';
 import { GameMode, RollType } from '@shared/enums';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root',
+})
 export class SettingsService {
   autoWin = false;
   apiUrl = '/api';

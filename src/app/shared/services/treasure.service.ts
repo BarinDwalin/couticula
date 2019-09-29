@@ -5,7 +5,9 @@ import { ItemFabric } from '@shared/fabrics';
 import { PlayerService } from './player.service';
 import { RandomService } from './random.service';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root',
+})
 export class TreasureService {
   constructor(private playerService: PlayerService, private randomService: RandomService) {}
 

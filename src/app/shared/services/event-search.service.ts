@@ -6,10 +6,12 @@ import { Cell, EventSearch, Hero, Item } from '@models';
 import { HeroService } from './hero.service';
 import { MapService } from './map.service';
 import { PlayerService } from './player.service';
-import { TreasureService } from './treasure.service';
 import { RandomService } from './random.service';
+import { TreasureService } from './treasure.service';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root',
+})
 export class EventSearchService {
   events$: Observable<EventSearch>;
 

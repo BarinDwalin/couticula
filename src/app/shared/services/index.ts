@@ -1,39 +1,11 @@
-import { BattleStateService } from './battle-state.service';
-import { BattleService } from './battle.service';
-import { EventSearchService } from './event-search.service';
-import { GameService } from './game.service';
-import { HeroService } from './hero.service';
-import { MapService } from './map.service';
-import { PlayerService } from './player.service';
-import { RandomService } from './random.service';
-import { SettingsService } from './settings.service';
-import { ShopService } from './shop.service';
-import { TreasureService } from './treasure.service';
-
-const SHARED_SERVICES: any[] = [
-  BattleService,
-  BattleStateService,
-  EventSearchService,
-  GameService,
-  MapService,
-  PlayerService,
-  RandomService,
-  SettingsService,
-  ShopService,
-  TreasureService,
-];
-
-export {
-  SHARED_SERVICES,
-  BattleService,
-  BattleStateService,
-  EventSearchService,
-  GameService,
-  HeroService,
-  MapService,
-  PlayerService,
-  RandomService,
-  SettingsService,
-  ShopService,
-  TreasureService,
-};
+export * from './battle-state.service';
+export * from './battle.service';
+export * from './event-search.service';
+export * from './game.service';
+export * from './hero.service';
+export * from './map.service';
+export * from './player.service';
+export * from './random.service';
+export * from './settings.service';
+export * from './shop.service';
+export * from './treasure.service';

@@ -24,7 +24,9 @@ import { SettingsService } from './settings.service';
  * - выбранная позиция раздела
  * - доступность покупки выбранной позиции
  */
-@Injectable()
+@Injectable({
+  providedIn: 'root',
+})
 export class ShopService {
   choosenHero: Hero;
   choosenAbilities: { pageType: ShopPageType; ability: AbilitySettings }[] = [];

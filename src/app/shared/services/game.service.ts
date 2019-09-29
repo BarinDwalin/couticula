@@ -10,7 +10,9 @@ import {
 import { MapService } from './map.service';
 import { RandomService } from './random.service';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root',
+})
 export class GameService {
   constructor(private mapService: MapService, private randomService: RandomService) {}
 

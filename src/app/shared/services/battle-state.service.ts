@@ -15,7 +15,9 @@ import {
 import { BattleService } from './battle.service';
 import { SettingsService } from './settings.service';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root',
+})
 export class BattleStateService {
   events$: Observable<BattleStateEvent>;
   endEvent$: Observable<Cell>;
