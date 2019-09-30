@@ -1,15 +1,15 @@
 <ng-container *ngIf="shopEquipment">
   <div class="type-equipment">
-    <img item-left src="assets/img/dice.png" alt="игральная кость" title="" />
+    <img src="assets/img/dice.png" alt="игральная кость"/>
   </div>
 
   <div *ngFor="let e of equipment"
         class="type-equipment">
-    <img item-left src="{{e.img}}" alt="тип снаряжения" title="" />
+    <img src="{{e.img}}" alt="тип снаряжения"/>
   </div>
 
   <div class="hitpoints">
-    <img item-left src="{{shopEquipment.hitpoints.img}}" alt="очки здоровья" title="" />
+    <img src="{{shopEquipment.hitpoints.img}}" alt="очки здоровья"/>
   </div>
 
   <div class="values">
