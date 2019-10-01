@@ -6,11 +6,6 @@
 
   <div class="avatar__info">i</div>
 
-  <img *ngIf="isHero"
-        src="assets/img/menu/inventory.svg"
-        class="avatar__inventory"
-        (click)="openInventory()">
-
   <div class="avatar__hitpoints">
     {{creature.hitPoint}}/{{creature.maxHitPoint}}
     <ion-icon name="heart"></ion-icon>
@@ -24,6 +19,11 @@
 </div>
 
 <div class="effects">
+  <img *ngIf="isHero"
+        src="assets/img/menu/inventory.svg"
+        class="inventory"
+        (click)="openInventory()">
+
   <img *ngFor="let effect of creature.currentEffects"
        [src]="effect.image"
        class="effects__effect">
