@@ -17,6 +17,7 @@
                     (click)="clickTarget()"></dice-target>
       <dice [dice]='6'
             class="dices__value-dice"
+            [ngClass]="{'dices__value-dice_active': !waiting}"
             (click)="clickDice()"></dice>
     </div>
 

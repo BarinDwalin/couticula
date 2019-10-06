@@ -28,7 +28,6 @@
       grid-row: creatures;
       grid-column: creatures;
       max-width: calc(100vw - 16vh);
-      /* background-color: gray; */
     }
 
     .dices {
@@ -37,13 +36,34 @@
       width: 16vh;
       display: grid;
       grid-template-rows: 1fr 1fr;
-      background-color: brown;
       justify-items: center;
-      align-items: center;
 
       &__target-dice, &__value-dice {
         height: 12vh;
         width: 12vh;
+        margin: 1vh;
+      }
+      &__target-dice {
+        align-self: end;
+      }
+       &__value-dice {
+        align-self: start;
+        position: relative;
+        z-index: 1;
+
+        &_active::before {
+          content: '';
+          position: absolute;
+          top: -.5vh;
+          left: -.5vh;
+          background: linear-gradient(30deg, #296739, #b99c33, #296739, #b99c33);
+          background-size: 200%;
+          width: calc(100% + 1vh);
+          height: calc(100% + 1vh);
+          z-index: -1;
+          filter: blur(1vh);
+          animation: animate-active-dice 3s linear infinite;
+        }
       }
     }
   }
@@ -56,5 +76,14 @@
     left: 0;
     background-color: olive;
     opacity: .3;
+  }
+}
+
+@keyframes animate-active-dice {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: 200% 0;
   }
 }
