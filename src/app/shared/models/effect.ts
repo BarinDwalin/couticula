@@ -12,6 +12,10 @@ export class Effect implements EffectSettings {
 
   action: (creature: Creature) => void;
 
+  static checkEffectTypeOnСombat(type: EffectType) {
+    return [EffectType.BreakingChests, EffectType.ForceBreakingChests].indexOf(type) === -1;
+  }
+
   constructor(settings: EffectSettings, actionFunction: (currentCreature: Creature) => void) {
     this.effectType = settings.effectType;
     this.name = settings.name;

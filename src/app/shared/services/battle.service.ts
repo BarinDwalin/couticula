@@ -17,12 +17,16 @@ import {
   BattleEvent,
   Cell,
   Creature,
+  Effect,
   Hero,
+  Monster,
 } from '@models';
 import { AbilityFabric, CreatureFabric, EffectFabric } from '@shared/fabrics';
 import { HeroService } from './hero.service';
 import { RandomService } from './random.service';
 import { SettingsService } from './settings.service';
+
+type Character = Hero | Monster;
 
 @Injectable({
   providedIn: 'root',
@@ -36,11 +40,11 @@ export class BattleService {
     BattleState.Begin
   );
   private eventsSource: Subject<BattleEvent> = new Subject<BattleEvent>();
-  private monsters: Creature[];
+  private monsters: Monster[];
   private currentCreature: { id: number; index: number };
   private currentRound: number;
   private currentTargetForMonsters: number;
-  private creatures: Creature[];
+  private creatures: Character[];
 
   constructor(
     private heroService: HeroService,
@@ -56,8 +60,10 @@ export class BattleService {
           (event.abilityResult as AbilityResult).isAddonAction
         ) {
           if (event.state === BattleState.MonsterAbility) {
-            const currentCreature: Creature = this.creatures[this.currentCreature.index];
-            this.monsterAttack(currentCreature);
+            const currentCreature = this.creatures[this.currentCreature.index];
+            if (currentCreature.type === CreatureType.Monster) {
+              this.monsterAttack(currentCreature);
+            }
           } else {
             this.eventsSource.next({
               state: BattleState.ContinuationPlayerTurn,
@@ -162,12 +168,7 @@ export class BattleService {
     this.creatures.forEach(creature => {
       creature.currentEffects = []; // сброс для героев
       creature.effects
-        .filter(
-          effect =>
-            [EffectType.BreakingChests, EffectType.ForceBreakingChests].indexOf(
-              effect.effectType
-            ) === -1
-        )
+        .filter(effect => Effect.checkEffectTypeOnСombat(effect.effectType))
         .forEach(effect => {
           creature.currentEffects.push(effect);
         });
@@ -185,7 +186,7 @@ export class BattleService {
       this.setAbilitiesWithBottles(creature);
     });
   }
-  private setAbilitiesWithBottles(creature: Creature) {
+  private setAbilitiesWithBottles(creature: Character) {
     [ItemType.BottleOfHeal, ItemType.BottleOfPoison, ItemType.BottleOfStan].forEach(itemType => {
       const bottles = creature.inventory.filter(item => item.type === itemType);
       if (bottles.length > 0) {
@@ -233,9 +234,7 @@ export class BattleService {
       heroes.length === 0 ? exceptHero : heroes.sort(() => Math.random() - 0.5).pop();
   }
   private prepareHeroBeforeBattle() {
-    this.heroService.heroes.forEach(hero => {
-      // TODO: добавление способностей зелий
-    });
+    this.heroService.heroes.forEach(hero => {});
   }
   private prepareHeroAfterWin() {
     this.heroService.heroes.forEach(hero => {
@@ -315,7 +314,7 @@ export class BattleService {
     }
   }
   private startTurn() {
-    const creature: Creature = this.creatures[this.currentCreature.index];
+    const creature: Character = this.creatures[this.currentCreature.index];
     console.log('startTurn', creature);
 
     if (creature.state !== CreatureState.Alive) {
@@ -342,13 +341,13 @@ export class BattleService {
     }
 
     if (creature.type === CreatureType.Hero) {
-      this.heroTurn(creature as Hero);
+      this.heroTurn(creature);
     } else {
       this.monsterTurn(creature);
     }
   }
   private endTurn() {
-    const currentCreature: Creature = this.creatures[this.currentCreature.index];
+    const currentCreature: Character = this.creatures[this.currentCreature.index];
     console.log('endTurn', currentCreature);
     // снятие эффектов в конце хода существа
     currentCreature.dropCurrentEffects([
@@ -383,7 +382,7 @@ export class BattleService {
     });
     this.battleStateSource.next(BattleState.PlayerTurn);
   }
-  private monsterTurn(creature: Creature) {
+  private monsterTurn(creature: Monster) {
     console.log('monsterTurn');
     this.eventsSource.next({
       state: BattleState.MonsterTurn,
@@ -395,7 +394,7 @@ export class BattleService {
 
     this.monsterAttack(creature);
   }
-  private monsterAttack(creature: Creature) {
+  private monsterAttack(creature: Monster) {
     console.log('monsterAttack', creature);
     // проверка цели
     if (
@@ -424,7 +423,7 @@ export class BattleService {
     });
     this.battleStateSource.next(BattleState.MonsterAbility);
   }
-  private useAbility(creature: Creature, targetCreature: Creature, ability: Ability) {
+  private useAbility(creature: Character, targetCreature: Character, ability: Ability) {
     const abilityResult = ability.ability(creature, targetCreature);
     if ('notCorrectTarget' in abilityResult) {
       return abilityResult;
@@ -445,7 +444,7 @@ export class BattleService {
     }
   }
 
-  private checkIfIsStunned(creature: Creature) {
+  private checkIfIsStunned(creature: Character) {
     if (creature.isExistsEffect(EffectType.Stan2)) {
       creature.dropCurrentEffect(EffectType.Stan2);
       creature.currentEffects.push(EffectFabric.createEffect(EffectType.Stan));
