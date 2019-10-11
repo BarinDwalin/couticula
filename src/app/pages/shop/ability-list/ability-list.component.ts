@@ -62,9 +62,7 @@ export class AbilityListComponent implements OnInit, OnDestroy {
     return description;
   }
 
-  constructor(private playerService: PlayerService, private shopService: ShopService) {
-    //this.shopAbilitiesPage = navParams.data;
-  }
+  constructor(private playerService: PlayerService, private shopService: ShopService) {}
 
   ngOnInit() {}
   ngOnDestroy() {

@@ -17,12 +17,12 @@ export class Creature {
   hitPoint = 0;
   maxHitPoint = 0;
   state: CreatureState = CreatureState.Alive;
-  abilities: AbilityType[] = []; // способности существа
+  abilities: AbilityType[] = [];
   currentAbilities: Ability[] = []; // способности существа, доступные во время боя
   // !!! Каждая способность применяется только 1 раз за раунд
-  usedInThisBattleAbilities: Map<AbilityType, number> = new Map<AbilityType, number>(); // способности существа, примененные в этом раунде
+  usedInThisBattleAbilities: Map<AbilityType, number> = new Map<AbilityType, number>();
   usedInThisRoundAbilities: AbilityType[] = []; // способности существа, примененные в этом бою
-  // !!! Позволяет создавать однотипные эффекты с разным описанием. Если реально не пригодится - заменить на тип эффекта:
+  // !!! Позволяет создавать однотипные эффекты с разным описанием. Если реально не пригодится - заменить на тип эффекта
   effects: Effect[] = []; // эффекты на существе
   currentEffects: Effect[] = []; // эффекты на существе во время боя
   equipment: CreatureEquipment = null;

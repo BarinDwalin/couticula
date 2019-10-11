@@ -1,3 +1,4 @@
+import { animate, state, style, transition, trigger } from '@angular/animations';
 import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
@@ -5,7 +6,6 @@ import {
   Input,
   OnInit,
 } from '@angular/core';
-import { animate, state, style, transition, trigger } from '@angular/animations';
 import { interval } from 'rxjs';
 import { finalize, take } from 'rxjs/operators';
 

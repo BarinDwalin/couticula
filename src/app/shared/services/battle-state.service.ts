@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { Observable, Subject, interval } from 'rxjs';
-import { takeUntil, zip } from 'rxjs/operators';
+import { Observable, Subject, interval, zip } from 'rxjs';
+import { map, takeUntil } from 'rxjs/operators';
 
 import { AbilityType, BattleState, CreatureState } from '@enums';
 import {
@@ -64,9 +64,9 @@ export class BattleStateService {
   }
 
   private subcribeOnBattleEvents() {
-    this.battleService.events$
+    zip([this.battleService.events$, interval(100)])
       .pipe(
-        zip(interval(100), (event, i) => event),
+        map(value => value[0] as BattleEvent),
         takeUntil(this.endEvent$)
       )
       .subscribe(event => {
@@ -191,8 +191,7 @@ export class BattleStateService {
   }
 
   private updateCreature(updatedCreature: CreatureView) {
-    const creatureIndex = this.creatures.findIndex(creature => creature.id === updatedCreature.id);
-    const creature = this.creatures[creatureIndex];
+    const creature = this.creatures.find(oldCreature => oldCreature.id === updatedCreature.id);
     for (const key in creature) {
       if (creature.hasOwnProperty(key) && updatedCreature.hasOwnProperty(key)) {
         creature[key] = updatedCreature[key];

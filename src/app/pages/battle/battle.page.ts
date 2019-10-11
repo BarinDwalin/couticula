@@ -91,6 +91,7 @@ export class BattlePage implements OnDestroy {
     if (event) {
       switch (event.state) {
         case BattleState.NewRound:
+          // tslint:disable-next-line:no-console
           console.info(`ROUND ${this.battleStateService.currentRound}`);
           break;
         case BattleState.NewTurn:

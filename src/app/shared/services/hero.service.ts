@@ -17,28 +17,20 @@ export class HeroService {
 
   constructor(private playerService: PlayerService, private randomService: RandomService) {
     this.heroes = [];
-    // this.getHeroes().then(heroes => this.heroes = heroes.map(hero => new Hero(hero)));
-    // обновлен список героев
-    /*this.shopService.newHero.subscribe(() => {
-      this.httpService.get('playerHeroes')
-      .then(heroes => {
-        this.heroes = heroes.map(hero => Hero.createHero(hero));
-      });
-    });*/
   }
+
   addNewHero(heroClass: HeroClass): Promise<any> {
     return new Promise(resolve => {
       const newHero: Hero = CreatureFabric.createHero(heroClass);
-      const newHero2: Hero = CreatureFabric.createHero(HeroClass.Scout);
-      // newHero.uniqueAbilities = heroInfo.uniqueAbilities;
       this.heroes.push(newHero);
-      //this.heroes.push(newHero2);
       resolve();
     });
   }
+
   getAllHeroClassesDescription(): Observable<HeroSettings[]> {
-    return of(HeroTypes as HeroSettings[]);
+    return of(HeroTypes);
   }
+
   equipItem(heroID: number, item: Item): Promise<boolean> {
     return new Promise<boolean>(resolve => {
       const hero = this.heroes.find(p => p.id === heroID);

@@ -10,7 +10,6 @@ import {
 } from '@angular/core';
 
 import { CreatureView } from '@models';
-import { CreatureState } from '@app/shared/enums';
 
 @Component({
   selector: 'creatures-list',

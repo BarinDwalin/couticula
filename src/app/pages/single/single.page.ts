@@ -4,8 +4,7 @@ import { NavController } from '@ionic/angular';
 
 import { GameService } from '@services';
 import { interval } from 'rxjs';
-import { take, finalize } from 'rxjs/operators';
-import { resolve } from 'q';
+import { finalize, take } from 'rxjs/operators';
 
 @Component({
   selector: 'page-single',
@@ -36,7 +35,7 @@ export class SinglePage implements OnInit {
   }
 
   pseudoProgress() {
-    const loadTime = 2000;
+    const loadTime = 500;
     const steps = 10;
     return new Promise(resolver => {
       interval(loadTime / steps)
@@ -52,6 +51,6 @@ export class SinglePage implements OnInit {
 
   openFirstGamePage() {
     this.router.navigateByUrl('/choice-hero');
-    //this.navCtrl.setPages([{ page: MapPage }, { page: ShopPage }, { page: ChoiceHeroPage }]);
+    // this.navCtrl.setPages([{ page: MapPage }, { page: ShopPage }, { page: ChoiceHeroPage }]);
   }
 }

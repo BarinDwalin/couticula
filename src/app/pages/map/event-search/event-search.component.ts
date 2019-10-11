@@ -1,10 +1,10 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { NavParams, PopoverController } from '@ionic/angular';
-import { Subscription, interval } from 'rxjs';
-import { zip } from 'rxjs/operators';
+import { Subscription, interval, zip } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 import { SearchEventType } from '@enums';
-import { Cell, Hero } from '@models';
+import { Cell, EventSearch, Hero } from '@models';
 import { EventSearchService, HeroService, MapService, SettingsService } from '@services';
 import { DiceComponent } from '@shared/components';
 
@@ -43,8 +43,11 @@ export class EventSearchComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.subscription = this.eventSearchService.events$
-      .pipe(zip(interval(this.settingsService.eventsDelay), (event, i) => event))
+    this.subscription = zip([
+      this.eventSearchService.events$,
+      interval(this.settingsService.eventsDelay),
+    ])
+      .pipe(map(value => value[0] as EventSearch))
       .subscribe(event => {
         console.log(event);
         this.lastEvent = event;

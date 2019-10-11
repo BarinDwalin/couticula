@@ -16,14 +16,6 @@ export class Item {
     }
   }
 
-  constructor(type: ItemType, value: number, name: string, img: string, description = '') {
-    this.name = name;
-    this.type = type;
-    this.value = value;
-    this.img = img;
-    this.description = description;
-  }
-
   static checkItemTypeOnEquipment(type: ItemType) {
     return (
       [
@@ -72,6 +64,14 @@ export class Item {
       default:
         return 'black';
     }
+  }
+
+  constructor(type: ItemType, value: number, name: string, img: string, description = '') {
+    this.name = name;
+    this.type = type;
+    this.value = value;
+    this.img = img;
+    this.description = description;
   }
 
   copy() {

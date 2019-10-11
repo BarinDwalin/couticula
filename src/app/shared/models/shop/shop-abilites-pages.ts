@@ -1,5 +1,5 @@
-import { AbilitySettings, ShopAbilitiesPage } from '@models';
 import { ShopPageType } from '@enums';
+import { AbilitySettings, ShopAbilitiesPage } from '@models';
 
 export class ShopAbilitiesPages {
   pages: ShopAbilitiesPage[];
