@@ -1,5 +1,5 @@
 import { HeroClass } from '@enums';
-import { CreatureSettings } from '@models';
+import { CreatureSettings } from './creature-settings';
 
 export interface HeroSettings extends CreatureSettings {
   heroClass: HeroClass;

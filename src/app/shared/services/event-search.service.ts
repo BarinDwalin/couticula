@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
 
 import { SearchEventType } from '@enums';
-import { Cell, EventSearch, Hero, Item } from '@models';
+import { Cell, Hero, Item, SearchEvent } from '@models';
 import { HeroService } from './hero.service';
 import { MapService } from './map.service';
 import { PlayerService } from './player.service';
@@ -13,9 +13,9 @@ import { TreasureService } from './treasure.service';
   providedIn: 'root',
 })
 export class EventSearchService {
-  events$: Observable<EventSearch>;
+  events$: Observable<SearchEvent>;
 
-  private eventsSource = new Subject<EventSearch>();
+  private eventsSource = new Subject<SearchEvent>();
 
   constructor(
     private heroService: HeroService,

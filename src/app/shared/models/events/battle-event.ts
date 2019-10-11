@@ -1,7 +1,6 @@
 import { AbilityType, BattleState } from '@enums';
-import { AbilityResult } from './ability-result';
-import { AbilityResultError } from './ability-result-error';
-import { CreatureView } from './creature-view';
+import { AbilityResult, AbilityResultError } from '../ability';
+import { CreatureView } from '../creature-view';
 
 export interface BattleEvent {
   state: BattleState;

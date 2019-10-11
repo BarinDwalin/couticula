@@ -1,5 +1,5 @@
 import { AbilityType, EffectType } from '@enums';
-import { Item } from './item';
+import { Item } from '../item';
 
 export interface CreatureSettings {
   name: string;

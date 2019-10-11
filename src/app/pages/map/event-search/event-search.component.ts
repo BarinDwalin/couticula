@@ -4,7 +4,7 @@ import { Subscription, interval, zip } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { SearchEventType } from '@enums';
-import { Cell, EventSearch, Hero } from '@models';
+import { Cell, Hero, SearchEvent } from '@models';
 import { EventSearchService, HeroService, MapService, SettingsService } from '@services';
 import { DiceComponent } from '@shared/components';
 
@@ -47,7 +47,7 @@ export class EventSearchComponent implements OnInit, OnDestroy {
       this.eventSearchService.events$,
       interval(this.settingsService.eventsDelay),
     ])
-      .pipe(map(value => value[0] as EventSearch))
+      .pipe(map(value => value[0] as SearchEvent))
       .subscribe(event => {
         console.log(event);
         this.lastEvent = event;

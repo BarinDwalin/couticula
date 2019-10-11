@@ -1,8 +1,8 @@
 import { AbilityType } from '@enums';
+import { Creature } from '../creature';
+import { AbilitySettings } from '../settings';
 import { AbilityResult } from './ability-result';
 import { AbilityResultError } from './ability-result-error';
-import { AbilitySettings } from './ability-settings';
-import { Creature } from './creature';
 
 // TODO: перенести в магазин (shop.ts)
 /* var AbilitiesShop = {
@@ -58,7 +58,10 @@ export class Ability {
   type: AbilityType;
   name: string;
   description: string;
-  ability: (currentCreature: Creature, targetCreature: Creature) => AbilityResult | AbilityResultError;
+  ability: (
+    currentCreature: Creature,
+    targetCreature: Creature
+  ) => AbilityResult | AbilityResultError;
   image: string;
   // cost: number;
   maxUseCount: number;
@@ -69,7 +72,10 @@ export class Ability {
 
   constructor(
     settings: AbilitySettings,
-    abilityFunction: (currentCreature: Creature, targetCreature: Creature) => AbilityResult | AbilityResultError,
+    abilityFunction: (
+      currentCreature: Creature,
+      targetCreature: Creature
+    ) => AbilityResult | AbilityResultError
   ) {
     this.type = settings.type;
     this.name = settings.name;

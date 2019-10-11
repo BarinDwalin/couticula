@@ -1,5 +1,5 @@
 import { DiceTarget } from '@enums';
-import { CreatureView } from './creature-view';
+import { CreatureView } from '../creature-view';
 
 export interface AbilityResult {
   targetCreatureBefore: CreatureView;

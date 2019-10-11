@@ -1,12 +1,9 @@
-import { AbilityType, CreatureState, DiceTarget, EffectType, ItemType } from '@enums';
-import { ItemFabric } from '@shared/fabrics';
+import { AbilityType, CreatureState, DiceTarget, EffectType } from '@enums';
 
 import { Ability } from './ability';
 import { CreatureEquipment } from './creature-equipment';
-import { CreatureView } from './creature-view';
 import { Effect } from './effect';
 import { Item } from './item';
-import { Shield } from './shield';
 
 export class Creature {
   id: number;

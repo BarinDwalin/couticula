@@ -1,6 +1,6 @@
 import { EffectType } from '@enums';
 import { Creature } from './creature';
-import { EffectSettings } from './effect-settings';
+import { EffectSettings } from './settings';
 
 export class Effect implements EffectSettings {
   name: string;
@@ -12,10 +12,7 @@ export class Effect implements EffectSettings {
 
   action: (creature: Creature) => void;
 
-  constructor(
-    settings: EffectSettings,
-    actionFunction: (currentCreature: Creature) => void,
-  ) {
+  constructor(settings: EffectSettings, actionFunction: (currentCreature: Creature) => void) {
     this.effectType = settings.effectType;
     this.name = settings.name;
     this.description = settings.description;
