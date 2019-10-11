@@ -2,7 +2,14 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { delay } from 'rxjs/operators';
 
-import { AbilityType, BattleState, CreatureState, EffectType, ItemType } from '@enums';
+import {
+  AbilityType,
+  BattleState,
+  CreatureState,
+  CreatureType,
+  EffectType,
+  ItemType,
+} from '@enums';
 import {
   Ability,
   AbilityResult,
@@ -135,13 +142,13 @@ export class BattleService {
   private generateMonsters() {
     this.monsters = [];
     for (let index = 0; index < this.cell.mosterLevel1Count; index++) {
-      this.monsters.push(CreatureFabric.createRandomCreatureLevel1());
+      this.monsters.push(CreatureFabric.createRandomMonsterLevel1());
     }
     for (let index = 0; index < this.cell.mosterLevel2Count; index++) {
-      this.monsters.push(CreatureFabric.createRandomCreatureLevel2());
+      this.monsters.push(CreatureFabric.createRandomMonsterLevel2());
     }
     if (this.cell.doesBossExists) {
-      this.monsters.push(CreatureFabric.createRandomCreatureBoss());
+      this.monsters.push(CreatureFabric.createRandomMonsterBoss());
     }
   }
   private setCreaturesOrder() {
@@ -215,7 +222,7 @@ export class BattleService {
     this.creatures.forEach(creature => {
       if (
         creature.state === CreatureState.Alive &&
-        creature instanceof Hero &&
+        creature.type === CreatureType.Hero &&
         creature.id !== exceptHero &&
         !creature.isExistsEffect(EffectType.HideCreature)
       ) {
@@ -249,10 +256,10 @@ export class BattleService {
 
   private checkBattleEnd() {
     const cntMonsters = this.creatures.filter(
-      creature => !(creature instanceof Hero) && creature.state === CreatureState.Alive
+      creature => creature.type === CreatureType.Monster && creature.state === CreatureState.Alive
     ).length;
     const cntHeroes = this.creatures.filter(
-      creature => creature instanceof Hero && creature.state === CreatureState.Alive
+      creature => creature.type === CreatureType.Hero && creature.state === CreatureState.Alive
     ).length;
 
     if (cntHeroes === 0) {
@@ -334,8 +341,8 @@ export class BattleService {
       return;
     }
 
-    if (creature instanceof Hero) {
-      this.heroTurn(creature);
+    if (creature.type === CreatureType.Hero) {
+      this.heroTurn(creature as Hero);
     } else {
       this.monsterTurn(creature);
     }
@@ -360,7 +367,7 @@ export class BattleService {
       )
     ) {
       this.creatures.forEach(creature => {
-        if (creature instanceof Hero) {
+        if (creature.type === CreatureType.Hero) {
           creature.dropCurrentEffect(EffectType.HideCreature);
         }
       });

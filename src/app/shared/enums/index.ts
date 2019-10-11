@@ -2,6 +2,7 @@ export * from './ability-category';
 export * from './ability-type';
 export * from './battle-state';
 export * from './creature-state';
+export * from './creature-type';
 export * from './dice-target';
 export * from './effect-type';
 export * from './game-mode';

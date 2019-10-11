@@ -1,4 +1,4 @@
-import { AbilityType, CreatureState, DiceTarget, EffectType } from '@enums';
+import { AbilityType, CreatureState, CreatureType, DiceTarget, EffectType } from '@enums';
 
 import { Ability } from './ability';
 import { CreatureEquipment } from './creature-equipment';
@@ -6,7 +6,8 @@ import { Effect } from './effect';
 import { Item } from './item';
 
 export class Creature {
-  id: number;
+  readonly type: CreatureType;
+  readonly id: number;
   name: string;
   // image: ImageType = ImageType.NoImage;
   description = '';

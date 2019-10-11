@@ -1,5 +1,13 @@
 import { HeroClass, ItemType } from '@enums';
-import { Creature, CreatureEquipment, CreatureSettings, Hero, HeroSettings, Shield } from '@models';
+import {
+  Creature,
+  CreatureEquipment,
+  CreatureSettings,
+  Hero,
+  HeroSettings,
+  Monster,
+  Shield,
+} from '@models';
 import { RandomService } from '@services';
 import { CreaturesBoss, CreaturesLevel1, CreaturesLevel2, HeroTypes } from '@shared/db';
 import { EffectFabric } from './effect-fabric';
@@ -39,42 +47,42 @@ export class CreatureFabric {
     return newHero;
   }
 
-  static createRandomCreatureLevel1(): Creature {
+  static createRandomMonsterLevel1(): Monster {
     const randomIndex = CreatureFabric.randomService.getInt(0, CreaturesLevel1.length - 1);
     const settings = CreaturesLevel1[randomIndex];
-    const newCreature = CreatureFabric.createCreature(settings);
+    const newCreature = CreatureFabric.createMonster(settings);
     return newCreature;
   }
 
-  static createRandomCreatureLevel2(): Creature {
+  static createRandomMonsterLevel2(): Monster {
     const randomIndex = CreatureFabric.randomService.getInt(0, CreaturesLevel2.length - 1);
     const settings = CreaturesLevel2[randomIndex];
-    const newCreature = CreatureFabric.createCreature(settings);
+    const newCreature = CreatureFabric.createMonster(settings);
     return newCreature;
   }
 
-  static createRandomCreatureBoss(): Creature {
+  static createRandomMonsterBoss(): Monster {
     const randomIndex = CreatureFabric.randomService.getInt(0, CreaturesBoss.length - 1);
     const settings = CreaturesBoss[randomIndex];
-    const newCreature = CreatureFabric.createCreature(settings);
+    const newCreature = CreatureFabric.createMonster(settings);
     return newCreature;
   }
 
-  private static createCreature(settings: CreatureSettings): Creature {
+  private static createMonster(settings: CreatureSettings): Monster {
     const equipment = CreatureFabric.createCreatureEquipment(settings);
 
-    const newCreature = new Creature(
+    const newMonster = new Monster(
       CreatureFabric.GUID++,
       settings.name,
       settings.img,
       settings.hitPoint,
       equipment
     );
-    newCreature.description = settings.description;
-    newCreature.abilities = [...settings.abilites];
-    newCreature.inventory = [...settings.inventory];
-    newCreature.effects = settings.effects.map(effectType => EffectFabric.createEffect(effectType));
-    return newCreature;
+    newMonster.description = settings.description;
+    newMonster.abilities = [...settings.abilites];
+    newMonster.inventory = [...settings.inventory];
+    newMonster.effects = settings.effects.map(effectType => EffectFabric.createEffect(effectType));
+    return newMonster;
   }
 
   private static createCreatureEquipment(settings: CreatureSettings) {

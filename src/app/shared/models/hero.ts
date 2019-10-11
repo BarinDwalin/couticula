@@ -1,8 +1,9 @@
-import { AbilityType, HeroClass } from '@enums';
+import { AbilityType, CreatureType, HeroClass } from '@enums';
 import { Creature } from './creature';
 import { CreatureEquipment } from './creature-equipment';
 
 export class Hero extends Creature {
+  readonly type = CreatureType.Hero;
   heroClass: HeroClass;
   addonHitPoint: number;
   maxAddonHitPoint: number;

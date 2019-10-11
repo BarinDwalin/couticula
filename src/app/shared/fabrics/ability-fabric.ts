@@ -1,4 +1,4 @@
-import { AbilityType, CreatureState, DiceTarget, EffectType, ItemType } from '@enums';
+import { AbilityType, CreatureState, CreatureType, DiceTarget, EffectType, ItemType } from '@enums';
 import {
   Ability,
   AbilityResult,
@@ -244,7 +244,7 @@ function heroHealAfterBattle(currentCreature: Creature, targetCreature: Creature
 
 function heroHealFromPoison(currentCreature: Creature, targetCreature: Creature) {
   if (
-    !(targetCreature instanceof Hero) ||
+    !(targetCreature.type === CreatureType.Hero) ||
     !targetCreature.isExistsSomeEffects([
       EffectType.Poison1,
       EffectType.Poison2,

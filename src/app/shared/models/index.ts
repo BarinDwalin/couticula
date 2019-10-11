@@ -8,6 +8,7 @@ export * from './effect';
 export * from './events';
 export * from './hero';
 export * from './item';
+export * from './monster';
 export * from './settings';
 export * from './shield';
 export * from './shop';
