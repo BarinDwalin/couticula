@@ -3,7 +3,7 @@ import { AbilityType, CreatureState, CreatureType, DiceTarget, EffectType } from
 import { Ability } from './ability';
 import { CreatureEquipment } from './creature-equipment';
 import { Effect } from './effect';
-import { Item } from './item';
+import { Item } from './items';
 
 export class Creature {
   readonly type: CreatureType;

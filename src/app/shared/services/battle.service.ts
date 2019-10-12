@@ -19,6 +19,7 @@ import {
   Creature,
   Effect,
   Hero,
+  Item,
   Monster,
 } from '@models';
 import { AbilityFabric, CreatureFabric, EffectFabric } from '@shared/fabrics';
@@ -187,7 +188,7 @@ export class BattleService {
     });
   }
   private setAbilitiesWithBottles(creature: Character) {
-    [ItemType.BottleOfHeal, ItemType.BottleOfPoison, ItemType.BottleOfStan].forEach(itemType => {
+    Item.getBottles().forEach(itemType => {
       const bottles = creature.inventory.filter(item => item.type === itemType);
       if (bottles.length > 0) {
         const bottle = bottles[0];

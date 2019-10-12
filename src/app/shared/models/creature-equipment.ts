@@ -1,5 +1,4 @@
-import { Item } from './item';
-import { Shield } from './shield';
+import { Item, Shield } from './items';
 
 export class CreatureEquipment {
   Head: Item;

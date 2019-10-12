@@ -1,4 +1,4 @@
-import { Item } from './item';
+import { Item } from './items';
 
 export class Cell {
   x: number;

@@ -29,6 +29,10 @@ export class Item {
     );
   }
 
+  static getBottles() {
+    return [ItemType.BottleOfHeal, ItemType.BottleOfPoison, ItemType.BottleOfStan];
+  }
+
   static getItemColor(value: number) {
     switch (value) {
       case 6:
