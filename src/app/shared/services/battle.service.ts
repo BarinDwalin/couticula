@@ -15,11 +15,11 @@ import {
   AbilityResult,
   AbilitySettings,
   BattleEvent,
+  Bottle,
   Cell,
   Creature,
   Effect,
   Hero,
-  Item,
   Monster,
 } from '@models';
 import { AbilityFabric, CreatureFabric, EffectFabric } from '@shared/fabrics';
@@ -188,37 +188,15 @@ export class BattleService {
     });
   }
   private setAbilitiesWithBottles(creature: Character) {
-    Item.getBottles().forEach(itemType => {
-      const bottles = creature.inventory.filter(item => item.type === itemType);
+    Bottle.getBottleTypes().forEach(itemType => {
+      const bottles = creature.inventory.filter(item => item.type === itemType) as Bottle[];
       if (bottles.length > 0) {
-        const bottle = bottles[0];
-        const settings: AbilitySettings = {
-          type: this.getAbilityTypeOfItem(itemType),
-          name: bottle.name,
-          description: bottle.description,
-          image: bottle.img,
-          cost: null,
-          maxUseCount: bottles.length,
-          isImmediateAction: false,
-          isPassiveAction: false,
-          isAddonAction: true,
-          countTarget: 1,
-        };
-        const ability = AbilityFabric.createAbilityBySettings(settings);
+        const ability = AbilityFabric.createAbilityByBottle(bottles[0], bottles.length);
         creature.currentAbilities.push(ability);
       }
     });
   }
-  private getAbilityTypeOfItem(itemType: ItemType) {
-    switch (itemType) {
-      case ItemType.BottleOfHeal:
-        return AbilityType.HeroUseBottleOfHeal;
-      case ItemType.BottleOfPoison:
-        return AbilityType.HeroUseBottleOfPoison;
-      case ItemType.BottleOfStan:
-        return AbilityType.HeroUseBottleOfStan;
-    }
-  }
+
   private setNewTargetForMonster(exceptHero: number = null) {
     const heroes: number[] = [];
     this.creatures.forEach(creature => {

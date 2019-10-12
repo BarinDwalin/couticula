@@ -2,6 +2,11 @@ import { ItemType } from '@enums';
 
 export const Items = [
   {
+    type: ItemType.Gold,
+    name: 'Золотишко',
+    img: 'assets/img/items/gold-bag.jpg',
+  },
+  {
     type: ItemType.Weapon,
     name: 'Что-то в руках',
     img: 'assets/img/items/weapon.jpg',

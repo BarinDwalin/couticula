@@ -1,9 +1,9 @@
 import { ItemType } from '@enums';
 
 export class Item {
+  readonly type: ItemType;
   name: string;
   description: string;
-  type: ItemType;
   img: string;
 
   private _value: number;
@@ -27,10 +27,6 @@ export class Item {
         ItemType.Shield,
       ].indexOf(type) !== -1
     );
-  }
-
-  static getBottles() {
-    return [ItemType.BottleOfHeal, ItemType.BottleOfPoison, ItemType.BottleOfStan];
   }
 
   static getItemColor(value: number) {

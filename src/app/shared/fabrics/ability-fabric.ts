@@ -4,6 +4,7 @@ import {
   AbilityResult,
   AbilityResultError,
   AbilitySettings,
+  Bottle,
   Creature,
   Hero,
 } from '@models';
@@ -49,6 +50,22 @@ export class AbilityFabric {
         return null;
       });
     }
+  }
+
+  static createAbilityByBottle(bottle: Bottle, countBottle: number): Ability {
+    const settings: AbilitySettings = {
+      type: bottle.abilityType,
+      name: bottle.name,
+      description: bottle.description,
+      image: bottle.img,
+      cost: null,
+      maxUseCount: countBottle,
+      isImmediateAction: false,
+      isPassiveAction: false,
+      isAddonAction: true,
+      countTarget: 1,
+    };
+    return AbilityFabric.createAbilityBySettings(settings);
   }
 
   static initialize(randomService: RandomService) {

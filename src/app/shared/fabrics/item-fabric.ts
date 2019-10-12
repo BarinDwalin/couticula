@@ -1,5 +1,5 @@
 import { ItemType } from '@enums';
-import { Item, Shield } from '@models';
+import { Bottle, Item, Shield } from '@models';
 import { RandomService } from '@services';
 import { Items } from '@shared/db';
 
@@ -44,19 +44,19 @@ export class ItemFabric {
     }
   }
 
-  static createBottle(type: ItemType): Item {
+  static createBottle(type: ItemType): Bottle {
     const itemInfo = Items.find(p => p.type === type);
     switch (type) {
       case ItemType.BottleOfHeal:
-        return new Item(type, name, itemInfo.name, itemInfo.img, 'TODO:');
+        return new Bottle(type, name, itemInfo.name, itemInfo.img, 'TODO:');
       case ItemType.BottleOfStan:
-        return new Item(type, name, itemInfo.name, itemInfo.img, 'TODO:');
+        return new Bottle(type, name, itemInfo.name, itemInfo.img, 'TODO:');
       case ItemType.BottleOfPoison:
-        return new Item(type, name, itemInfo.name, itemInfo.img, 'TODO:');
+        return new Bottle(type, name, itemInfo.name, itemInfo.img, 'TODO:');
     }
   }
 
-  static createRandomBottle(): Item {
+  static createRandomBottle(): Bottle {
     const randomNum = ItemFabric.randomService.rollDiceD6();
     switch (randomNum) {
       case 1:
@@ -106,6 +106,7 @@ export class ItemFabric {
   static createRandomGoldBag(): Item {
     const sizeBag = ItemFabric.randomService.rollDiceD6();
     const value = ItemFabric.randomService.rollDiceD6();
+    const itemInfo = Items.find(p => p.type === ItemType.Gold);
     let gold: number;
     let name: string;
     switch (sizeBag) {
@@ -125,7 +126,7 @@ export class ItemFabric {
         name = 'Кошель';
         break;
     }
-    return new Item(ItemType.Gold, gold, name, 'assets/img/items/gold-bag.jpg');
+    return new Item(ItemType.Gold, gold, name, itemInfo.img);
   }
 
   private static createRandomShield(value: number) {
