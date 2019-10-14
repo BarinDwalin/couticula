@@ -57,8 +57,8 @@ export class BattlePage implements OnDestroy {
     return this.battleStateService.targetMonster;
   }
 
-  get orderedCreatures() {
-    return this.battleStateService.orderedCreatures;
+  get liveCreatures() {
+    return this.battleStateService.liveCreatures;
   }
 
   constructor(
