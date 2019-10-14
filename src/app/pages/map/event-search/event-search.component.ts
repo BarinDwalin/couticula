@@ -43,10 +43,10 @@ export class EventSearchComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.subscription = zip([
+    this.subscription = zip(
       this.eventSearchService.events$,
-      interval(this.settingsService.eventsDelay),
-    ])
+      interval(this.settingsService.eventsDelay)
+    )
       .pipe(map(value => value[0] as SearchEvent))
       .subscribe(event => {
         console.log(event);

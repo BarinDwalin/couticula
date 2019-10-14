@@ -64,7 +64,7 @@ export class BattleStateService {
   }
 
   private subcribeOnBattleEvents() {
-    zip([this.battleService.events$, interval(100)])
+    zip(this.battleService.events$, interval(100))
       .pipe(
         map(value => value[0] as BattleEvent),
         takeUntil(this.endEvent$)
