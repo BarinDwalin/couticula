@@ -3,7 +3,6 @@
   grid-template-columns: auto auto 2fr 3fr;
   grid-template-rows: 1fr;
   grid-template-areas: "img equipment effects abilities";
-  /* background-color: gold; */
 
   .avatar {
     width: 28vh;
@@ -15,7 +14,6 @@
     &__image {
       height: 100%;
       width: 100%;
-      border-radius: 2vh;
     }
 
     &__name {
@@ -51,7 +49,6 @@
       width: 100%;
       position: absolute;
       bottom: 0;
-      border-radius: 0 0 2vh 2vh;
       text-align: center;
       font-size: 4vh;
       font-weight: bold;
@@ -69,7 +66,6 @@
     grid-template-columns: auto auto;
     column-gap: 1vh;
     padding: .5vh 2vh;
-    /* background-color: green; */
 
     &__item {
       display: block;
@@ -89,7 +85,6 @@
     align-content: flex-start;
     justify-content: flex-start;
     padding: 0 2vh;
-    /* background-color: blueviolet; */
 
     &__effect {
       width: 8vh;
@@ -116,7 +111,6 @@
     align-content: flex-start;
     justify-content: flex-end;
     padding: 0 2vh;
-    /* background-color: darkcyan; */
 
     &__ability {
       width: 12vh;

@@ -18,16 +18,18 @@ import { CreatureView } from '@models';
   encapsulation: ViewEncapsulation.Emulated,
   changeDetection: ChangeDetectionStrategy.OnPush,
   animations: [
-    trigger('scaleSelected', [
-      state('selected', style({ transform: 'scale(1.3)' })),
-      // transition('selected => *', [animate('400ms ease-out')]),
-      transition('* => selected', [animate('200ms ease-in')]),
+    trigger('scaleCurrentCharacter', [
+      state('currentCharacter', style({ transform: 'scale(1.3)' })),
+      transition('currentCharacter => *', [animate('400ms ease-out')]),
+      transition('* => currentCharacter', [animate('200ms ease-in')]),
     ]),
   ],
 })
 export class CreaturesListComponent implements OnInit {
   @Input()
   creatures: CreatureView[];
+  @Input()
+  currentCreatureId: number;
   @Input()
   selectedCreatureId: number;
   @Input()

@@ -35,6 +35,9 @@ export class BattlePage implements OnDestroy {
   get currentRound() {
     return this.battleStateService.currentRound;
   }
+  get currentCreatureId() {
+    return this.battleStateService.currentCreature.id;
+  }
   get selectedCreatureId() {
     return this.battleStateService.selectedCreatureId;
   }

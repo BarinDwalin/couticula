@@ -32,6 +32,7 @@ type Character = Hero | Monster;
 @Injectable({
   providedIn: 'root',
 })
+/** локальный сервис расчета боя */
 export class BattleService {
   battleState$: Observable<BattleState>;
   events$: Observable<BattleEvent>;
@@ -73,6 +74,11 @@ export class BattleService {
         } else {
           this.endTurn();
           this.setNextCreature();
+          if (this.currentCreature === null) {
+            this.newRound();
+          } else {
+            this.startTurn();
+          }
         }
       }
     });
@@ -85,7 +91,8 @@ export class BattleService {
     this.prepareHeroBeforeBattle();
     this.generateMonsters();
     this.setCreaturesOrder();
-    this.setInitialEffectsAndAbilities();
+    this.setInitialEffects();
+    this.setInitialAbilities();
     this.setNewTargetForMonster();
   }
 
@@ -165,29 +172,35 @@ export class BattleService {
 
     this.creatures.sort(() => Math.random() - 0.5);
   }
-  private setInitialEffectsAndAbilities() {
+
+  private setInitialEffects() {
     this.creatures.forEach(creature => {
-      creature.currentEffects = []; // сброс для героев
-      creature.effects
-        .filter(effect => Effect.checkEffectTypeOnСombat(effect.effectType))
-        .forEach(effect => {
-          creature.currentEffects.push(effect);
-        });
-      const shield = creature.equipment.Shield;
-      if (shield && shield.hitPoint > 0) {
-        const shieldEffect = EffectFabric.createEffect(EffectType.Shield);
-        shieldEffect.description = `Щит, броня ${shield.value} , прочность ${shield.hitPoint}.`;
-        creature.currentEffects.push(shieldEffect);
-      }
-      creature.currentAbilities = []; // сброс для героев
-      creature.abilities.forEach(abilityType => {
-        const ability = AbilityFabric.createAbility(abilityType);
-        creature.currentAbilities.push(ability);
-      });
-      this.setAbilitiesWithBottles(creature);
+      creature.currentEffects = creature.effects.filter(effect =>
+        Effect.checkEffectTypeOnСombat(effect.effectType)
+      );
+      this.setShieldEffect(creature);
     });
   }
-  private setAbilitiesWithBottles(creature: Character) {
+
+  private setShieldEffect(creature: Character) {
+    const shield = creature.equipment.Shield;
+    if (shield && shield.hitPoint > 0) {
+      const shieldEffect = EffectFabric.createEffect(EffectType.Shield);
+      shieldEffect.description = `Щит, броня ${shield.value} , прочность ${shield.hitPoint}.`;
+      creature.currentEffects.push(shieldEffect);
+    }
+  }
+
+  private setInitialAbilities() {
+    this.creatures.forEach(creature => {
+      creature.currentAbilities = creature.abilities.map(abilityType =>
+        AbilityFabric.createAbility(abilityType)
+      );
+      this.setBottleAbilities(creature);
+    });
+  }
+
+  private setBottleAbilities(creature: Character) {
     Bottle.getBottleTypes().forEach(itemType => {
       const bottles = creature.inventory.filter(item => item.type === itemType) as Bottle[];
       if (bottles.length > 0) {
@@ -212,6 +225,7 @@ export class BattleService {
     this.currentTargetForMonsters =
       heroes.length === 0 ? exceptHero : heroes.sort(() => Math.random() - 0.5).pop();
   }
+
   private prepareHeroBeforeBattle() {
     this.heroService.heroes.forEach(hero => {});
   }
@@ -246,6 +260,7 @@ export class BattleService {
       this.winBattle();
     }
   }
+
   private newRound() {
     this.currentRound += 1;
     this.battleStateSource.next(BattleState.NewRound);
@@ -267,6 +282,7 @@ export class BattleService {
       this.startTurn();
     }
   }
+
   private setFirstCreature() {
     const firstCreatureIndex = this.creatures.findIndex(
       creature => creature.state === CreatureState.Alive
@@ -283,15 +299,15 @@ export class BattleService {
     );
 
     if (nextCreatureIndex === -1) {
-      this.newRound();
+      this.currentCreature = null;
     } else {
       this.currentCreature = {
         index: nextCreatureIndex,
         id: this.creatures[nextCreatureIndex].id,
       };
-      this.startTurn();
     }
   }
+
   private startTurn() {
     const creature: Character = this.creatures[this.currentCreature.index];
     console.log('startTurn', creature);
@@ -312,10 +328,16 @@ export class BattleService {
       .forEach(effect => effect.action(creature));
     // снятие временных эффектов в начале хода существа
     creature.dropCurrentEffects([EffectType.BlockDamage]);
-    const isStunned = this.checkIfIsStunned(creature);
+
+    const isStunned = this.checkForStunning(creature);
     if (isStunned) {
       this.endTurn();
       this.setNextCreature();
+      if (this.currentCreature === null) {
+        this.newRound();
+      } else {
+        this.startTurn();
+      }
       return;
     }
 
@@ -423,7 +445,7 @@ export class BattleService {
     }
   }
 
-  private checkIfIsStunned(creature: Character) {
+  private checkForStunning(creature: Character) {
     if (creature.isExistsEffect(EffectType.Stan2)) {
       creature.dropCurrentEffect(EffectType.Stan2);
       creature.currentEffects.push(EffectFabric.createEffect(EffectType.Stan));

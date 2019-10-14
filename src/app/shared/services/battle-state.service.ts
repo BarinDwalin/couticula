@@ -18,6 +18,7 @@ import { SettingsService } from './settings.service';
 @Injectable({
   providedIn: 'root',
 })
+/** сервис отслеживания состояний боя */
 export class BattleStateService {
   events$: Observable<BattleStateEvent>;
   endEvent$: Observable<Cell>;
@@ -29,7 +30,7 @@ export class BattleStateService {
   lastCreatureInRound: number;
   targetHero: CreatureView;
   targetMonster: CreatureView;
-  orderedCreatures: CreatureView[] = [];
+  liveCreatures: CreatureView[] = [];
 
   private creatures: CreatureView[] = [];
   private eventsSource: Subject<BattleStateEvent> = new Subject<BattleStateEvent>();
@@ -50,7 +51,7 @@ export class BattleStateService {
 
     this.battleService.createBattle(cell);
     this.creatures = this.battleService.getCreatures();
-    this.orderedCreatures = this.creatures;
+    this.liveCreatures = this.creatures;
     this.targetHero = this.creatures[0];
     this.targetMonster = this.creatures[0];
     this.currentCreature = { id: this.creatures[0].id, index: 0 };
@@ -124,7 +125,7 @@ export class BattleStateService {
           this.currentRound = event.round;
           break;
         case BattleState.NewTurn:
-          this.updateCreaturesOrder();
+          this.updateCreaturesList();
           break;
         case BattleState.MonsterTurn:
           this.startTurn(event);
@@ -165,15 +166,14 @@ export class BattleStateService {
       creature => creature.id === event.currentCreatureId
     );
     this.currentCreature = { id: event.currentCreatureId, index: currentCreatureIndex };
-    this.updateCreaturesOrder();
+    this.updateCreaturesList();
     this.updateCreature(event.currentCreature);
   }
 
-  private updateCreaturesOrder() {
-    this.orderedCreatures = [
-      ...this.creatures.slice(this.currentCreature.index),
-      ...this.creatures.slice(0, this.currentCreature.index),
-    ].filter(creature => creature.state === CreatureState.Alive);
+  private updateCreaturesList() {
+    this.liveCreatures = [...this.creatures].filter(
+      creature => creature.state === CreatureState.Alive
+    );
   }
 
   private prepareHeroTurn(event: BattleEvent) {
