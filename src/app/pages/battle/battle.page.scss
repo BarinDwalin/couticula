@@ -10,7 +10,7 @@
     grid-template-columns: 1fr auto;
     grid-template-rows: 28vh 44vh 28vh;
     grid-template-areas: "monster monster"
-                          "creatures dices"
+                          "creatures action-panel"
                           "hero hero";
 
     .target {
@@ -30,39 +30,61 @@
       max-width: calc(100vw - 16vh);
     }
 
-    .dices {
-      grid-row: dices;
-      grid-column: dices;
-      width: 16vh;
+    .action-panel {
+      grid-row: action-panel;
+      grid-column: action-panel;
       display: grid;
-      grid-template-rows: 1fr 1fr;
-      justify-items: center;
+      grid-template-rows: 20vh 1fr;
+      width: 30vh;
 
-      &__target-dice, &__value-dice {
-        height: 12vh;
-        width: 12vh;
-        margin: 1vh;
-      }
-      &__target-dice {
-        align-self: end;
-      }
-       &__value-dice {
-        align-self: start;
-        position: relative;
-        z-index: 1;
+      .dices {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        justify-items: center;
+        align-content: end;
+        padding-bottom: 2vh;
 
-        &_active::before {
-          content: '';
-          position: absolute;
-          top: -.5vh;
-          left: -.5vh;
-          background: linear-gradient(30deg, #296739, #b99c33, #296739, #b99c33);
-          background-size: 200%;
-          width: calc(100% + 1vh);
-          height: calc(100% + 1vh);
-          z-index: -1;
-          filter: blur(1vh);
-          animation: animate-active-dice 3s linear infinite;
+        &__target-dice, &__value-dice {
+          height: 12vh;
+          width: 12vh;
+          margin: 1vh;
+        }
+        &__target-dice {
+          align-self: end;
+        }
+        &__value-dice {
+          align-self: start;
+          position: relative;
+          z-index: 1;
+
+          &_active::before {
+            content: '';
+            position: absolute;
+            top: -.5vh;
+            left: -.5vh;
+            background: linear-gradient(30deg, #296739, #b99c33, #296739, #b99c33);
+            background-size: 200%;
+            width: calc(100% + 1vh);
+            height: calc(100% + 1vh);
+            z-index: -1;
+            filter: blur(1vh);
+            animation: animate-active-dice 3s linear infinite;
+          }
+        }
+      }
+
+      .description {
+        color: white;
+
+        &__name {
+          text-align: center;
+          font-size: 3vh;
+          font-weight: bold;
+          border-bottom: 1px solid white;
+        }
+
+        &__content {
+          font-size: 3vh;
         }
       }
     }

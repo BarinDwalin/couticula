@@ -13,13 +13,21 @@
                     (selectCreature)="onSelectCreature($event)">
     </creatures-list>
 
-    <div class="dices">
-      <dice-target class="dices__target-dice"
-                    (click)="clickTarget()"></dice-target>
-      <dice [dice]='6'
-            class="dices__value-dice"
-            [ngClass]="{'dices__value-dice_active': !waiting}"
-            (click)="clickDice()"></dice>
+    <div class="action-panel">
+      <div class="dices">
+        <dice-target class="dices__target-dice"
+                      (click)="clickTarget()"></dice-target>
+        <dice [dice]="6"
+              class="dices__value-dice"
+              [ngClass]="{'dices__value-dice_active': !waiting}"
+              (click)="useAbility()"></dice>
+      </div>
+      <div class="description">
+        <ng-container *ngIf="!!selectedHeroAbility">
+          <div class="description__name">{{selectedHeroAbility.name}}</div>
+          <div class="description__content">{{selectedHeroAbility.description}}</div>
+        </ng-container>
+      </div>
     </div>
 
     <target [isHero]="true"

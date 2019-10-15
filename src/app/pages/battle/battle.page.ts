@@ -44,6 +44,11 @@ export class BattlePage implements OnDestroy {
   get selectedHeroAbilityType() {
     return this.battleStateService.selectedHeroAbilityType;
   }
+  get selectedHeroAbility() {
+    return this.battleStateService.targetHero.availableAbilities.find(
+      ability => ability.type === this.battleStateService.selectedHeroAbilityType
+    );
+  }
   get currentCreature() {
     return this.battleStateService.currentCreature;
   }
@@ -119,9 +124,10 @@ export class BattlePage implements OnDestroy {
     this.cd.markForCheck();
   }
 
-  clickDice() {
+  useAbility() {
     this.battleStateService.heroAction(this.selectedHeroAbilityType, this.targetMonster.id);
   }
+
   clickTarget() {
     // TODO убрать после реализации боя
     this.navCtrl.pop();
