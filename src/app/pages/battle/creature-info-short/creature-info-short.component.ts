@@ -1,3 +1,4 @@
+import { animate, state, style, transition, trigger } from '@angular/animations';
 import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
@@ -17,6 +18,14 @@ import { BattleStateService } from '@services';
   templateUrl: 'creature-info-short.component.html',
   styleUrls: ['creature-info-short.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  animations: [
+    trigger('flyInOutTop', [
+      state('in', style({ transform: 'translate(-50%, 50%)' })),
+      state('out', style({ transform: 'translate(-50%, -50%)' })),
+      transition('void => in', [style({ transform: 'translate(-50%, -50%)' }), animate(1000)]),
+      transition('void => out', [style({ transform: 'translate(-50%, 50%)' }), animate(1000)]),
+    ]),
+  ],
 })
 export class CreatureInfoShortComponent implements OnInit, OnDestroy {
   @Input()
@@ -34,10 +43,8 @@ export class CreatureInfoShortComponent implements OnInit, OnDestroy {
   }
 
   get changeHitPoint() {
-    if (this.hitPointDiff > 0) {
-      return '+' + this.hitPointDiff;
-    } else if (this.hitPointDiff !== null) {
-      return this.hitPointDiff.toString();
+    if (this.hitPointDiff !== null) {
+      return Math.abs(this.hitPointDiff).toString();
     }
   }
 

@@ -9,8 +9,11 @@
   </div>
 
   <div *ngIf="changeHitPoint"
-        class="creature-info-short__effects"
-        [ngClass]="{ 'creature-info-short__effects_positive': isPositive }">
-    <div class="change-hitpoints">{{changeHitPoint}}</div>
+        class="creature-info-short__effects">
+    <div class="change-hitpoints"
+        [ngClass]="{ 'change-hitpoints_positive': isPositive }"
+        [@flyInOutTop]="isPositive ? 'out' : 'in'">
+      {{changeHitPoint}}
+    </div>
   </div>
 </div>
