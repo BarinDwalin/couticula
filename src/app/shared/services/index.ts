@@ -1,4 +1,5 @@
 export * from './battle-state.service';
+export * from './battle-store.service';
 export * from './battle.service';
 export * from './event-search.service';
 export * from './game.service';

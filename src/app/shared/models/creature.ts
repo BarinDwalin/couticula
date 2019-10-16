@@ -2,10 +2,11 @@ import { AbilityType, CreatureState, CreatureType, DiceTarget, EffectType } from
 
 import { Ability } from './ability';
 import { CreatureEquipment } from './creature-equipment';
+import { CreatureView } from './creature-view';
 import { Effect } from './effect';
-import { Item } from './items';
+import { Bottle, Item, Shield } from './items';
 
-export class Creature {
+export abstract class Creature {
   readonly type: CreatureType;
   readonly id: number;
   name: string;
@@ -24,7 +25,7 @@ export class Creature {
   effects: Effect[] = []; // эффекты на существе
   currentEffects: Effect[] = []; // эффекты на существе во время боя
   equipment: CreatureEquipment = null;
-  inventory: Item[] = [];
+  inventory: (Bottle | Item | Shield)[] = [];
   lastDiceValue: number = null;
   lastDiceTarget: DiceTarget = null;
   lastTargetInBattle: number = null;
@@ -45,9 +46,23 @@ export class Creature {
     this.abilities.push(AbilityType.MonsterBasicAttack);
   }
 
+  copy() {
+    const creature: Creature = Object.assign({}, this);
+    creature.abilities = [...creature.abilities];
+    creature.currentAbilities = [...creature.currentAbilities];
+    creature.currentEffects = [...creature.currentEffects];
+    creature.effects = [...creature.effects];
+    creature.equipment = Object.assign(new CreatureEquipment(), creature.equipment);
+    creature.inventory = [...creature.inventory];
+    creature.usedInThisBattleAbilities = new Map<AbilityType, number>(
+      creature.usedInThisBattleAbilities
+    );
+    creature.usedInThisRoundAbilities = [...creature.usedInThisRoundAbilities];
+    return creature;
+  }
+
   convertToCreatureView() {
-    return Object.assign({}, this, { availableAbilities: this.getAvailableAbilities() });
-    // return { ...this, availableAbilities: this.getAvailableAbilities() } as CreatureView;
+    return { ...this, availableAbilities: this.getAvailableAbilities() } as CreatureView;
   }
 
   dropAbility(abilityType: AbilityType) {

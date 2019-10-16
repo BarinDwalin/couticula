@@ -8,8 +8,6 @@ export class Hero extends Creature {
   addonHitPoint: number;
   maxAddonHitPoint: number;
   maxItemValue: number;
-  uniqueAbilities: AbilityType[]; // уникальные способности героя
-  shopHideAbilities: AbilityType[];
 
   static getHeroClassName(heroClass: HeroClass) {
     switch (heroClass) {
@@ -31,6 +29,13 @@ export class Hero extends Creature {
   ) {
     super(id, name, image, hitpoint, equipment);
     this.addonHitPoint = 0;
+  }
+
+  copy() {
+    let hero = new Hero(this.id, this.name, this.image, this.hitPoint, this.equipment);
+    hero = Object.assign(hero, this);
+    hero = Object.assign(hero, super.copy());
+    return hero;
   }
 
   setAddonHitPoints(value: number) {

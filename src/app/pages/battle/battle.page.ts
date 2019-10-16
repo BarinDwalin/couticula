@@ -52,9 +52,6 @@ export class BattlePage implements OnDestroy {
   get currentCreature() {
     return this.battleStateService.currentCreature;
   }
-  get lastCreatureInRound() {
-    return this.battleStateService.lastCreatureInRound;
-  }
   get targetHero() {
     return this.battleStateService.targetHero;
   }
@@ -97,6 +94,7 @@ export class BattlePage implements OnDestroy {
 
   private eventHandler(event: BattleStateEvent) {
     if (event) {
+      const abilityResult: AbilityResult = event.abilityResult;
       switch (event.state) {
         case BattleState.NewRound:
           // tslint:disable-next-line:no-console
@@ -110,18 +108,25 @@ export class BattlePage implements OnDestroy {
           break;
         case BattleState.PlayerAbility:
           this.waiting = true;
-          this.diceTarget.animate((event.abilityResult as AbilityResult).diceTarget, event.delay);
-          this.diceValue.animate((event.abilityResult as AbilityResult).diceValue, event.delay);
+          this.showDicesAnimation(abilityResult, event.delay);
           break;
         case BattleState.MonsterTurn:
           break;
         case BattleState.MonsterAbility:
-          this.diceTarget.animate((event.abilityResult as AbilityResult).diceTarget, event.delay);
-          this.diceValue.animate((event.abilityResult as AbilityResult).diceValue, event.delay);
+          this.showDicesAnimation(abilityResult, event.delay);
           break;
       }
     }
     this.cd.markForCheck();
+  }
+
+  private showDicesAnimation(abilityResult: AbilityResult, animationTime: number) {
+    if (abilityResult.diceTarget && animationTime) {
+      this.diceTarget.animate(abilityResult.diceTarget, animationTime);
+    }
+    if (abilityResult.diceValue && animationTime) {
+      this.diceValue.animate(abilityResult.diceValue, animationTime);
+    }
   }
 
   useAbility() {

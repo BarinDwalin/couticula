@@ -23,6 +23,7 @@ import {
   Monster,
 } from '@models';
 import { AbilityFabric, CreatureFabric, EffectFabric } from '@shared/fabrics';
+import { BattleStoreService } from './battle-store.service';
 import { HeroService } from './hero.service';
 import { RandomService } from './random.service';
 import { SettingsService } from './settings.service';
@@ -34,21 +35,15 @@ type Character = Hero | Monster;
 })
 /** локальный сервис расчета боя */
 export class BattleService {
-  battleState$: Observable<BattleState>;
   events$: Observable<BattleEvent>;
 
-  private cell: Cell;
   private battleStateSource: BehaviorSubject<BattleState> = new BehaviorSubject<BattleState>(
     BattleState.Begin
   );
   private eventsSource: Subject<BattleEvent> = new Subject<BattleEvent>();
-  private monsters: Monster[];
-  private currentCreature: { id: number; index: number };
-  private currentRound: number;
-  private currentTargetForMonsters: number;
-  private creatures: Character[];
 
   constructor(
+    private battleStoreService: BattleStoreService,
     private heroService: HeroService,
     private settingsService: SettingsService,
     private randomService: RandomService
@@ -62,9 +57,9 @@ export class BattleService {
           (event.abilityResult as AbilityResult).isAddonAction
         ) {
           if (event.state === BattleState.MonsterAbility) {
-            const currentCreature = this.creatures[this.currentCreature.index];
-            if (currentCreature.type === CreatureType.Monster) {
-              this.monsterAttack(currentCreature);
+            const currentCharacter = this.battleStoreService.getCurrentCharacter();
+            if (currentCharacter.type === CreatureType.Monster) {
+              this.monsterAttack(currentCharacter);
             }
           } else {
             this.eventsSource.next({
@@ -73,8 +68,8 @@ export class BattleService {
           }
         } else {
           this.endTurn();
-          this.setNextCreature();
-          if (this.currentCreature === null) {
+          this.setNextCharacter();
+          if (!this.battleStoreService.getCurrentCharacter()) {
             this.newRound();
           } else {
             this.startTurn();
@@ -85,19 +80,21 @@ export class BattleService {
   }
 
   createBattle(cell: Cell) {
-    this.cell = cell;
-    this.currentRound = 0;
+    this.battleStoreService.setCell(cell);
+    this.battleStoreService.setCurrentRound(0);
 
     this.prepareHeroBeforeBattle();
     this.generateMonsters();
-    this.setCreaturesOrder();
-    this.setInitialEffects();
-    this.setInitialAbilities();
+    this.setCharacters();
+    this.setCharactersOrder();
+    this.prepareCharacters();
     this.setNewTargetForMonster();
   }
 
-  getCreatures() {
-    return this.creatures.map(creature => creature.convertToCreatureView());
+  getAllCharacters() {
+    return this.battleStoreService
+      .getCharacters()
+      .map(creature => creature.convertToCreatureView());
   }
 
   startBattle() {
@@ -111,35 +108,40 @@ export class BattleService {
     }
   }
 
-  heroAction(abilityType: AbilityType, target: number) {
+  heroAction(abilityType: AbilityType, targetId: number) {
     console.log('heroAction');
+    this.battleStoreService.setCurrentHeroTarget(targetId);
 
-    const currentCreature = this.creatures.find(
-      creature => creature.id === this.currentCreature.id
-    );
+    const currentCreature = this.battleStoreService.getCurrentCharacter();
     const availableAbilities = currentCreature.getAvailableAbilities(); // способность применяется N раз за бой
     // проверка цели и способности
     const currentAbility = availableAbilities.find(ability => ability.type === abilityType);
-    const targetCreature = this.creatures.find(
-      creature => creature.id === target && creature.state === CreatureState.Alive
-    );
-    if (!targetCreature || !currentAbility) {
+    const targetCharacter = this.battleStoreService.getCurrentHeroTarget();
+    if (!targetCharacter || targetCharacter.state !== CreatureState.Alive || !currentAbility) {
       // TODO: ошибка и повторное действие
       this.eventsSource.next({
         state: BattleState.ContinuationPlayerTurn,
-        currentCreatureId: this.currentCreature.id,
+        currentCreatureId: currentCreature.id,
         currentCreature: currentCreature.convertToCreatureView(),
       });
       return;
     }
-    const abilityResult = this.useAbility(currentCreature, targetCreature, currentAbility);
+    const abilityResult = this.useAbility(currentCreature, targetCharacter, currentAbility);
+
+    this.checkBattleEnd();
+    if (
+      this.battleStateSource.value === BattleState.Win ||
+      this.battleStateSource.value === BattleState.Lose
+    ) {
+      return;
+    }
 
     this.eventsSource.next({
       state: BattleState.PlayerAbility,
-      currentCreatureId: this.currentCreature.id,
+      currentCreatureId: currentCreature.id,
       ability: currentAbility.type,
       abilityResult,
-      target,
+      target: targetId,
     });
     this.battleStateSource.next(BattleState.PlayerAbility);
   }
@@ -153,77 +155,97 @@ export class BattleService {
     this.eventsSource.next({ state: BattleState.Lose });
     this.battleStateSource.next(BattleState.Lose);
   }
+
+  private setCharacters() {
+    const characters = [].concat(this.generateMonsters(), this.heroService.heroes);
+    this.battleStoreService.setCharacters(characters);
+  }
+
+  private setCharactersOrder() {
+    const characters = [...this.battleStoreService.getCharacters()];
+    characters.sort(() => Math.random() - 0.5);
+    this.battleStoreService.setCharacters(characters);
+  }
+
   private generateMonsters() {
-    this.monsters = [];
-    for (let index = 0; index < this.cell.mosterLevel1Count; index++) {
-      this.monsters.push(CreatureFabric.createRandomMonsterLevel1());
+    const monsters: Monster[] = [];
+    const cell = this.battleStoreService.getCell();
+    for (let index = 0; index < cell.mosterLevel1Count; index++) {
+      monsters.push(CreatureFabric.createRandomMonsterLevel1());
     }
-    for (let index = 0; index < this.cell.mosterLevel2Count; index++) {
-      this.monsters.push(CreatureFabric.createRandomMonsterLevel2());
+    for (let index = 0; index < cell.mosterLevel2Count; index++) {
+      monsters.push(CreatureFabric.createRandomMonsterLevel2());
     }
-    if (this.cell.doesBossExists) {
-      this.monsters.push(CreatureFabric.createRandomMonsterBoss());
+    if (cell.doesBossExists) {
+      monsters.push(CreatureFabric.createRandomMonsterBoss());
     }
-  }
-  private setCreaturesOrder() {
-    this.creatures = [];
-    this.creatures.push(...this.monsters);
-    this.creatures.push(...this.heroService.heroes);
-
-    this.creatures.sort(() => Math.random() - 0.5);
+    return monsters;
   }
 
-  private setInitialEffects() {
-    this.creatures.forEach(creature => {
-      creature.currentEffects = creature.effects.filter(effect =>
-        Effect.checkEffectTypeOnСombat(effect.effectType)
-      );
-      this.setShieldEffect(creature);
+  private prepareCharacters() {
+    this.battleStoreService.getCharacters().forEach(character => {
+      const newCharacter = character.copy();
+      newCharacter.currentEffects = this.getInitialEffects(newCharacter);
+      newCharacter.currentAbilities = this.getInitialAbilities(newCharacter);
+      this.battleStoreService.updateCharacter(newCharacter);
     });
   }
 
-  private setShieldEffect(creature: Character) {
-    const shield = creature.equipment.Shield;
+  private getInitialEffects(character: Character) {
+    const currentEffects = character.effects.filter(effect =>
+      Effect.checkEffectTypeOnСombat(effect.effectType)
+    );
+
+    const shieldEfect = this.getShieldEffect(character);
+    if (shieldEfect) {
+      currentEffects.push(shieldEfect);
+    }
+    return currentEffects;
+  }
+
+  private getShieldEffect(character: Character) {
+    const shield = character.equipment.Shield;
     if (shield && shield.hitPoint > 0) {
       const shieldEffect = EffectFabric.createEffect(EffectType.Shield);
       shieldEffect.description = `Щит, броня ${shield.value} , прочность ${shield.hitPoint}.`;
-      creature.currentEffects.push(shieldEffect);
+      return shieldEffect;
     }
   }
 
-  private setInitialAbilities() {
-    this.creatures.forEach(creature => {
-      creature.currentAbilities = creature.abilities.map(abilityType =>
-        AbilityFabric.createAbility(abilityType)
-      );
-      this.setBottleAbilities(creature);
-    });
+  private getInitialAbilities(character: Character) {
+    const currentAbilities = character.abilities.map(abilityType =>
+      AbilityFabric.createAbility(abilityType)
+    );
+
+    const bottleAbilities = this.getBottleAbilities(character);
+    currentAbilities.push(...bottleAbilities);
+
+    return currentAbilities;
   }
 
-  private setBottleAbilities(creature: Character) {
-    Bottle.getBottleTypes().forEach(itemType => {
-      const bottles = creature.inventory.filter(item => item.type === itemType) as Bottle[];
-      if (bottles.length > 0) {
-        const ability = AbilityFabric.createAbilityByBottle(bottles[0], bottles.length);
-        creature.currentAbilities.push(ability);
-      }
-    });
+  private getBottleAbilities(character: Character) {
+    return Bottle.getBottleTypes()
+      .map(itemType => character.inventory.filter(item => item.type === itemType) as Bottle[])
+      .filter(bottles => bottles.length > 0)
+      .map(bottles => AbilityFabric.createAbilityByBottle(bottles[0], bottles.length));
   }
 
   private setNewTargetForMonster(exceptHero: number = null) {
-    const heroes: number[] = [];
-    this.creatures.forEach(creature => {
-      if (
-        creature.state === CreatureState.Alive &&
-        creature.type === CreatureType.Hero &&
-        creature.id !== exceptHero &&
-        !creature.isExistsEffect(EffectType.HideCreature)
-      ) {
-        heroes.push(creature.id);
-      }
-    });
-    this.currentTargetForMonsters =
+    const heroes: number[] = this.battleStoreService
+      .getCharacters()
+      .filter(
+        character =>
+          character.state === CreatureState.Alive &&
+          character.type === CreatureType.Hero &&
+          character.id !== exceptHero &&
+          !character.isExistsEffect(EffectType.HideCreature)
+      )
+      .map(character => character.id);
+
+    const currentTargetForMonstersId =
       heroes.length === 0 ? exceptHero : heroes.sort(() => Math.random() - 0.5).pop();
+
+    this.battleStoreService.setCurrentMonstersTarget(currentTargetForMonstersId);
   }
 
   private prepareHeroBeforeBattle() {
@@ -247,12 +269,13 @@ export class BattleService {
   }
 
   private checkBattleEnd() {
-    const cntMonsters = this.creatures.filter(
-      creature => creature.type === CreatureType.Monster && creature.state === CreatureState.Alive
-    ).length;
-    const cntHeroes = this.creatures.filter(
-      creature => creature.type === CreatureType.Hero && creature.state === CreatureState.Alive
-    ).length;
+    const aliveCharacters = this.battleStoreService
+      .getCharacters()
+      .filter(character => character.state === CreatureState.Alive);
+    const cntMonsters = aliveCharacters.filter(character => character.type === CreatureType.Monster)
+      .length;
+    const cntHeroes = aliveCharacters.filter(character => character.type === CreatureType.Hero)
+      .length;
 
     if (cntHeroes === 0) {
       this.loseBattle();
@@ -262,78 +285,87 @@ export class BattleService {
   }
 
   private newRound() {
-    this.currentRound += 1;
+    const currentRound = 1 + this.battleStoreService.getCurrentRound();
+    this.battleStoreService.setCurrentRound(currentRound);
     this.battleStateSource.next(BattleState.NewRound);
-    this.eventsSource.next({ state: BattleState.NewRound, round: this.currentRound });
-    this.creatures.forEach(creature => {
-      creature.usedInThisRoundAbilities = [];
+    this.eventsSource.next({ state: BattleState.NewRound, round: currentRound });
+    this.battleStoreService.getCharacters().forEach(character => {
+      const newCharacter = character.copy();
+      newCharacter.usedInThisRoundAbilities = [];
       // снятие эффектов в конце раунда
-      creature.dropCurrentEffects([
+      newCharacter.dropCurrentEffects([
         EffectType.BlockHeal,
         EffectType.MagicProtection,
         EffectType.Suppression,
       ]);
+      this.battleStoreService.updateCharacter(newCharacter);
     });
 
-    this.checkBattleEnd();
-
-    if (this.battleStateSource.value === BattleState.NewRound) {
-      this.setFirstCreature();
-      this.startTurn();
-    }
+    this.setFirstCharacter();
+    this.startTurn();
   }
 
-  private setFirstCreature() {
-    const firstCreatureIndex = this.creatures.findIndex(
-      creature => creature.state === CreatureState.Alive
-    );
-    this.currentCreature = {
-      index: firstCreatureIndex,
-      id: this.creatures[firstCreatureIndex].id,
-    };
+  private setFirstCharacter() {
+    const index = this.battleStoreService
+      .getCharacters()
+      .findIndex(character => character.state === CreatureState.Alive);
+    this.battleStoreService.setCurrentCharacter(index);
   }
-  private setNextCreature() {
-    const nextCreatureIndex = this.creatures.findIndex(
-      (creature, index) =>
-        creature.state === CreatureState.Alive && index > this.currentCreature.index
-    );
+  private setNextCharacter() {
+    const currentIndex = this.battleStoreService.getCurrentCharacterIndex();
+    const nextIndex = this.battleStoreService
+      .getCharacters()
+      .findIndex(
+        (creature, index) => creature.state === CreatureState.Alive && index > currentIndex
+      );
 
-    if (nextCreatureIndex === -1) {
-      this.currentCreature = null;
+    if (nextIndex === -1) {
+      this.battleStoreService.setCurrentCharacter(null);
     } else {
-      this.currentCreature = {
-        index: nextCreatureIndex,
-        id: this.creatures[nextCreatureIndex].id,
-      };
+      this.battleStoreService.setCurrentCharacter(nextIndex);
     }
   }
 
   private startTurn() {
-    const creature: Character = this.creatures[this.currentCreature.index];
-    console.log('startTurn', creature);
+    const character: Character = this.battleStoreService.getCurrentCharacter();
+    const newCharacter = character.copy();
+    console.log('startTurn', newCharacter);
 
-    if (creature.state !== CreatureState.Alive) {
+    if (newCharacter.state !== CreatureState.Alive) {
       return;
     }
 
+    // применение всех эффектов
+    newCharacter.currentEffects
+      .filter(effect => effect.isNewRoundActivation)
+      .forEach(effect => effect.action(newCharacter));
+    // снятие временных эффектов в начале хода существа
+    newCharacter.dropCurrentEffects([EffectType.BlockDamage]);
+    const isStunned = this.checkForStunning(newCharacter);
+    this.battleStoreService.updateCharacter(newCharacter);
+
     this.eventsSource.next({
       state: BattleState.NewTurn,
-      currentCreatureId: this.currentCreature.id,
+      currentCreatureId: newCharacter.id,
+      effectsResult: {
+        targetCreatureBefore: character.convertToCreatureView(),
+        targetCreatureAfter: newCharacter.convertToCreatureView(),
+      },
     });
     this.battleStateSource.next(BattleState.NewTurn);
 
-    // применение всех эффектов
-    creature.currentEffects
-      .filter(effect => effect.isNewRoundActivation)
-      .forEach(effect => effect.action(creature));
-    // снятие временных эффектов в начале хода существа
-    creature.dropCurrentEffects([EffectType.BlockDamage]);
+    this.checkBattleEnd();
+    if (
+      this.battleStateSource.value === BattleState.Win ||
+      this.battleStateSource.value === BattleState.Lose
+    ) {
+      return;
+    }
 
-    const isStunned = this.checkForStunning(creature);
     if (isStunned) {
       this.endTurn();
-      this.setNextCreature();
-      if (this.currentCreature === null) {
+      this.setNextCharacter();
+      if (!this.battleStoreService.getCurrentCharacter()) {
         this.newRound();
       } else {
         this.startTurn();
@@ -341,17 +373,17 @@ export class BattleService {
       return;
     }
 
-    if (creature.type === CreatureType.Hero) {
-      this.heroTurn(creature);
+    if (newCharacter.type === CreatureType.Hero) {
+      this.heroTurn(newCharacter);
     } else {
-      this.monsterTurn(creature);
+      this.monsterTurn(newCharacter);
     }
   }
   private endTurn() {
-    const currentCreature: Character = this.creatures[this.currentCreature.index];
-    console.log('endTurn', currentCreature);
+    const currentCharacter: Character = this.battleStoreService.getCurrentCharacter();
+    console.log('endTurn', currentCharacter);
     // снятие эффектов в конце хода существа
-    currentCreature.dropCurrentEffects([
+    currentCharacter.dropCurrentEffects([
       EffectType.Course,
       EffectType.Imbecility,
       EffectType.Slackness,
@@ -359,99 +391,110 @@ export class BattleService {
 
     // TODO: делать проверку только после гибели
     // если погиб последний герой воин-страж, снимаем со всех защиту
+    const allCharacters = this.battleStoreService.getCharacters();
     if (
-      !this.creatures.some(
+      !allCharacters.some(
         creature =>
           creature.state === CreatureState.Alive &&
           creature.abilities.indexOf(AbilityType.HeroHideCreature) !== -1
       )
     ) {
-      this.creatures.forEach(creature => {
+      allCharacters.forEach(creature => {
         if (creature.type === CreatureType.Hero) {
           creature.dropCurrentEffect(EffectType.HideCreature);
+          this.battleStoreService.updateCharacter(creature);
         }
       });
     }
   }
-  private heroTurn(creature: Hero) {
+
+  private heroTurn(hero: Hero) {
     console.log('heroTurn');
     this.eventsSource.next({
       state: BattleState.PlayerTurn,
-      currentCreatureId: this.currentCreature.id,
-      currentCreature: creature.convertToCreatureView(),
-      currentTargetForMonsters: this.currentTargetForMonsters,
+      currentCreatureId: hero.id,
+      currentCreature: hero.convertToCreatureView(),
+      currentTargetForMonsters: this.battleStoreService.getCurrentMonstersTarget().id,
     });
     this.battleStateSource.next(BattleState.PlayerTurn);
   }
-  private monsterTurn(creature: Monster) {
+  private monsterTurn(monster: Monster) {
     console.log('monsterTurn');
     this.eventsSource.next({
       state: BattleState.MonsterTurn,
-      currentCreatureId: this.currentCreature.id,
-      currentCreature: creature.convertToCreatureView(),
-      currentTargetForMonsters: this.currentTargetForMonsters,
+      currentCreatureId: monster.id,
+      currentCreature: monster.convertToCreatureView(),
+      currentTargetForMonsters: this.battleStoreService.getCurrentMonstersTarget().id,
     });
     this.battleStateSource.next(BattleState.MonsterTurn);
 
-    this.monsterAttack(creature);
+    this.monsterAttack(monster);
   }
-  private monsterAttack(creature: Monster) {
-    console.log('monsterAttack', creature);
+
+  private monsterAttack(monster: Monster) {
+    console.log('monsterAttack', monster);
+    let targetCreature = this.battleStoreService.getCurrentMonstersTarget();
     // проверка цели
-    if (
-      !this.creatures.find(
-        target =>
-          target.id === this.currentTargetForMonsters && target.state !== CreatureState.Alive
-      )
-    ) {
+    if (!targetCreature || targetCreature.state !== CreatureState.Alive) {
       this.setNewTargetForMonster();
+      targetCreature = this.battleStoreService.getCurrentMonstersTarget();
     }
     // берем случайную способность
-    const availableAbilities = creature.getAvailableAbilities(); // способность применяется N раз за бой
+    const availableAbilities = monster.getAvailableAbilities(); // способность применяется N раз за бой
     const currentAbility =
       availableAbilities[this.randomService.getInt(0, availableAbilities.length - 1)];
-    const targetCreature = this.creatures.find(
-      target => target.id === this.currentTargetForMonsters
-    );
+    const abilityResult = this.useAbility(monster, targetCreature, currentAbility);
 
-    const abilityResult = this.useAbility(creature, targetCreature, currentAbility);
+    this.checkBattleEnd();
+    if (
+      this.battleStateSource.value === BattleState.Win ||
+      this.battleStateSource.value === BattleState.Lose
+    ) {
+      return;
+    }
 
     this.eventsSource.next({
       state: BattleState.MonsterAbility,
-      currentCreatureId: this.currentCreature.id,
+      currentCreatureId: monster.id,
       ability: currentAbility.type,
       abilityResult,
     });
     this.battleStateSource.next(BattleState.MonsterAbility);
   }
-  private useAbility(creature: Character, targetCreature: Character, ability: Ability) {
-    const abilityResult = ability.ability(creature, targetCreature);
+
+  private useAbility(source: Character, target: Character, ability: Ability) {
+    const newSource = source.copy();
+    const newTarget = source.id === target.id ? newSource : target.copy();
+
+    const abilityResult = ability.ability(newSource, newTarget);
     if ('notCorrectTarget' in abilityResult) {
       return abilityResult;
     } else {
-      creature.lastTargetInBattle = targetCreature.id;
-      creature.usedInThisRoundAbilities.push(ability.type);
-      const countOfUses = creature.usedInThisBattleAbilities.has(ability.type)
-        ? creature.usedInThisBattleAbilities.get(ability.type)
+      newSource.lastTargetInBattle = newTarget.id;
+      newSource.usedInThisRoundAbilities.push(ability.type);
+      const countOfUses = newSource.usedInThisBattleAbilities.has(ability.type)
+        ? newSource.usedInThisBattleAbilities.get(ability.type)
         : 0;
-      creature.usedInThisBattleAbilities.set(ability.type, countOfUses + 1);
+      newSource.usedInThisBattleAbilities.set(ability.type, countOfUses + 1);
 
       if (ability.maxUseCount && ability.maxUseCount === countOfUses + 1) {
-        creature.dropCurrentAbility(ability.type);
+        newSource.dropCurrentAbility(ability.type);
       }
 
       (abilityResult as AbilityResult).isAddonAction = ability.isAddonAction;
+      this.battleStoreService.updateCharacter(newSource);
+      this.battleStoreService.updateCharacter(newTarget);
       return abilityResult;
     }
   }
 
-  private checkForStunning(creature: Character) {
-    if (creature.isExistsEffect(EffectType.Stan2)) {
-      creature.dropCurrentEffect(EffectType.Stan2);
-      creature.currentEffects.push(EffectFabric.createEffect(EffectType.Stan));
+  private checkForStunning(character: Character) {
+    if (character.isExistsEffect(EffectType.Stan2)) {
+      character.dropCurrentEffect(EffectType.Stan2);
+      character.currentEffects.push(EffectFabric.createEffect(EffectType.Stan));
       return true;
-    } else if (creature.isExistsEffect(EffectType.Stan)) {
-      creature.dropCurrentEffect(EffectType.Stan);
+    } else if (character.isExistsEffect(EffectType.Stan)) {
+      character.dropCurrentEffect(EffectType.Stan);
       return true;
     } else {
       return false;

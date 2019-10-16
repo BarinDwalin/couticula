@@ -7,11 +7,13 @@ import {
   OnDestroy,
   OnInit,
 } from '@angular/core';
-import { Subject } from 'rxjs';
-import { delay, filter, takeUntil, tap } from 'rxjs/operators';
+import { Subject, of } from 'rxjs';
+import { delay, filter, switchMap, takeUntil, tap } from 'rxjs/operators';
 
 import { CreatureView } from '@models';
 import { BattleStateService } from '@services';
+
+const animationTime = 1000;
 
 @Component({
   selector: 'creature-info-short',
@@ -22,8 +24,14 @@ import { BattleStateService } from '@services';
     trigger('flyInOutTop', [
       state('in', style({ transform: 'translate(-50%, 50%)' })),
       state('out', style({ transform: 'translate(-50%, -50%)' })),
-      transition('void => in', [style({ transform: 'translate(-50%, -50%)' }), animate(1000)]),
-      transition('void => out', [style({ transform: 'translate(-50%, 50%)' }), animate(1000)]),
+      transition('void => in', [
+        style({ transform: 'translate(-50%, -50%)' }),
+        animate(animationTime),
+      ]),
+      transition('void => out', [
+        style({ transform: 'translate(-50%, 50%)' }),
+        animate(animationTime),
+      ]),
     ]),
   ],
 })
@@ -54,11 +62,12 @@ export class CreatureInfoShortComponent implements OnInit, OnDestroy {
     this.battleStateService.creatureEffectEvents$
       .pipe(
         filter(event => event.creatureId === this.creature.id),
+        filter(event => event.diffHitpoints !== 0),
         tap(event => {
           this.hitPointDiff = event.diffHitpoints;
           this.cd.markForCheck();
         }),
-        delay(1000),
+        switchMap(event => of(event).pipe(delay(event.animationTime))),
         tap(() => {
           this.hitPointDiff = null;
           this.cd.markForCheck();

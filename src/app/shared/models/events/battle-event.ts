@@ -10,5 +10,9 @@ export interface BattleEvent {
   currentTargetForMonsters?: number;
   ability?: AbilityType;
   abilityResult?: AbilityResult | AbilityResultError;
+  effectsResult?: {
+    targetCreatureBefore: CreatureView;
+    targetCreatureAfter: CreatureView;
+  };
   target?: number;
 }

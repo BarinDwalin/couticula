@@ -33,8 +33,6 @@ export class CreaturesListComponent implements OnInit {
   @Input()
   selectedCreatureId: number;
   @Input()
-  lastCreatureInRound: number;
-  @Input()
   currentRound: number;
   @Output()
   selectCreature = new EventEmitter<number>();
