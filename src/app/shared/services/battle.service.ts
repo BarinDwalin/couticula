@@ -2,14 +2,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { delay } from 'rxjs/operators';
 
-import {
-  AbilityType,
-  BattleState,
-  CreatureState,
-  CreatureType,
-  EffectType,
-  ItemType,
-} from '@enums';
+import { AbilityType, BattleState, CreatureState, CreatureType, EffectType } from '@enums';
 import {
   Ability,
   AbilityResult,
@@ -17,7 +10,7 @@ import {
   BattleEvent,
   Bottle,
   Cell,
-  Creature,
+  CharactersStateDelta,
   Effect,
   Hero,
   Monster,
@@ -288,7 +281,8 @@ export class BattleService {
     const currentRound = 1 + this.battleStoreService.getCurrentRound();
     this.battleStoreService.setCurrentRound(currentRound);
     this.battleStateSource.next(BattleState.NewRound);
-    this.eventsSource.next({ state: BattleState.NewRound, round: currentRound });
+
+    const updatedCharacters: CharactersStateDelta[] = [];
     this.battleStoreService.getCharacters().forEach(character => {
       const newCharacter = character.copy();
       newCharacter.usedInThisRoundAbilities = [];
@@ -298,9 +292,18 @@ export class BattleService {
         EffectType.MagicProtection,
         EffectType.Suppression,
       ]);
+      updatedCharacters.push({
+        characterBefore: character.convertToCreatureView(),
+        characterAfter: newCharacter.convertToCreatureView(),
+      });
       this.battleStoreService.updateCharacter(newCharacter);
     });
 
+    this.eventsSource.next({
+      state: BattleState.NewRound,
+      round: currentRound,
+      updatedCharacters,
+    });
     this.setFirstCharacter();
     this.startTurn();
   }
@@ -348,8 +351,8 @@ export class BattleService {
       state: BattleState.NewTurn,
       currentCreatureId: newCharacter.id,
       effectsResult: {
-        targetCreatureBefore: character.convertToCreatureView(),
-        targetCreatureAfter: newCharacter.convertToCreatureView(),
+        characterBefore: character.convertToCreatureView(),
+        characterAfter: newCharacter.convertToCreatureView(),
       },
     });
     this.battleStateSource.next(BattleState.NewTurn);

@@ -12,7 +12,7 @@ import { takeUntil } from 'rxjs/operators';
 
 import { AbilityType, BattleState } from '@enums';
 import { AbilityResult, BattleStateEvent, Cell } from '@models';
-import { BattleStateService, SettingsService } from '@services';
+import { BattleStateService } from '@services';
 import { DiceComponent, DiceTargetComponent } from '@shared/components';
 
 @Component({
@@ -36,10 +36,10 @@ export class BattlePage implements OnDestroy {
     return this.battleStateService.currentRound;
   }
   get currentCreatureId() {
-    return this.battleStateService.currentCreature.id;
+    return this.battleStateService.currentCharacterId;
   }
   get selectedCreatureId() {
-    return this.battleStateService.selectedCreatureId;
+    return this.battleStateService.selectedCharacterId;
   }
   get selectedHeroAbilityType() {
     return this.battleStateService.selectedHeroAbilityType;
@@ -49,9 +49,6 @@ export class BattlePage implements OnDestroy {
       ability => ability.type === this.battleStateService.selectedHeroAbilityType
     );
   }
-  get currentCreature() {
-    return this.battleStateService.currentCreature;
-  }
   get targetHero() {
     return this.battleStateService.targetHero;
   }
@@ -60,14 +57,13 @@ export class BattlePage implements OnDestroy {
   }
 
   get liveCreatures() {
-    return this.battleStateService.liveCreatures;
+    return this.battleStateService.liveCharacters;
   }
 
   constructor(
     private cd: ChangeDetectorRef,
     public navCtrl: NavController,
-    private battleStateService: BattleStateService,
-    private settingsService: SettingsService
+    private battleStateService: BattleStateService
   ) {
     this.cell = history.state.cell; // this.params.get('cell');
 

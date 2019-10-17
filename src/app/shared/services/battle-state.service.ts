@@ -8,9 +8,9 @@ import {
   BattleEvent,
   BattleStateEvent,
   Cell,
-  CreatureBattleEffect,
+  CharacterBattleEffect,
+  CharactersStateDelta,
   CreatureView,
-  Effect,
 } from '@models';
 import { BattleService } from './battle.service';
 import { SettingsService } from './settings.service';
@@ -22,39 +22,40 @@ import { SettingsService } from './settings.service';
 export class BattleStateService {
   events$: Observable<BattleStateEvent>;
   endEvent$: Observable<Cell>;
-  creatureEffectEvents$: Observable<CreatureBattleEffect>;
+  characterEffectEvents$: Observable<CharacterBattleEffect>;
+  characterUpdateEvents$: Observable<CreatureView>;
   currentRound = 1;
-  selectedCreatureId: number;
+  selectedCharacterId: number;
   selectedHeroAbilityType: AbilityType;
-  currentCreature: { id: number; index: number };
+  currentCharacterId: number;
   targetHero: CreatureView;
   targetMonster: CreatureView;
-  liveCreatures: CreatureView[] = [];
+  liveCharacters: CreatureView[] = [];
 
-  private creatures: CreatureView[] = [];
   private eventsSource: Subject<BattleStateEvent> = new Subject<BattleStateEvent>();
   private endEventSource: Subject<Cell> = new Subject<Cell>();
-  private creatureEffectEventsSource: Subject<CreatureBattleEffect> = new Subject<
-    CreatureBattleEffect
+  private characterEffectEventsSource: Subject<CharacterBattleEffect> = new Subject<
+    CharacterBattleEffect
   >();
+  private characterUpdateEventsSource: Subject<CreatureView> = new Subject<CreatureView>();
   private stackBattleEvents: BattleEvent[] = [];
 
   constructor(private battleService: BattleService, private settingsService: SettingsService) {
     this.events$ = this.eventsSource.asObservable();
     this.endEvent$ = this.endEventSource.asObservable();
-    this.creatureEffectEvents$ = this.creatureEffectEventsSource.asObservable();
+    this.characterEffectEvents$ = this.characterEffectEventsSource.asObservable();
+    this.characterUpdateEvents$ = this.characterUpdateEventsSource.asObservable();
   }
 
   startBattle(cell: Cell) {
     this.subcribeOnBattleEvents();
 
     this.battleService.createBattle(cell);
-    this.creatures = this.battleService.getAllCharacters();
-    this.liveCreatures = this.creatures;
-    this.targetHero = this.creatures[0];
-    this.targetMonster = this.creatures[0];
-    this.currentCreature = { id: this.creatures[0].id, index: 0 };
-    this.selectedCreatureId = this.currentCreature.id;
+    this.liveCharacters = this.battleService.getAllCharacters();
+    this.targetHero = this.liveCharacters[0];
+    this.targetMonster = this.liveCharacters[0];
+    this.currentCharacterId = this.liveCharacters[0].id;
+    this.selectedCharacterId = this.currentCharacterId;
     this.battleService.startBattle();
   }
 
@@ -91,8 +92,10 @@ export class BattleStateService {
   }
 
   selectCreature(creatureId: number) {
-    this.selectedCreatureId = creatureId;
-    this.targetMonster = this.creatures.find(creature => creature.id === this.selectedCreatureId);
+    this.selectedCharacterId = creatureId;
+    this.targetMonster = this.liveCharacters.find(
+      creature => creature.id === this.selectedCharacterId
+    );
   }
 
   heroAction(selectedHeroAbilityType: AbilityType, targetMonterId: number) {
@@ -122,51 +125,33 @@ export class BattleStateService {
           return;
         case BattleState.NewRound:
           this.currentRound = event.round;
-          this.creatures = this.battleService.getAllCharacters();
+          // this.characters = this.battleService.getAllCharacters();
           break;
         case BattleState.NewTurn:
-          const effectsResult = event.effectsResult;
-          // анимация эффектов
-          setTimeout(() => {
-            this.updateCreature(effectsResult.targetCreatureAfter);
-            this.creatureEffectEventsSource.next(
-              this.getCreatureChanges(
-                effectsResult.targetCreatureBefore,
-                effectsResult.targetCreatureAfter,
-                effectsAnimationTime
-              )
-            );
-          }, eventDelay);
-          eventDelay += effectsAnimationTime;
+          this.setCurrentCharacter(event);
+          this.updateCreatureWithDelay(event.effectsResult, effectsAnimationTime, eventDelay);
           break;
         case BattleState.MonsterTurn:
-          this.startTurn(event);
           this.prepareMonsterTurn(event);
           break;
         case BattleState.ContinuationPlayerTurn:
         case BattleState.PlayerTurn:
-          this.startTurn(event);
           this.prepareHeroTurn(event);
           this.eventsSource.next(battleEvent);
           // остановка обработчика событий до выбора способности героя
           return;
         case BattleState.PlayerAbility:
         case BattleState.MonsterAbility:
+          this.setSelectedCharacter(abilityResult);
           const abilityResultAnimationTime = abilityResult.diceValue ? diceDelay : 0;
-          this.selectedCreatureId = abilityResult.targetCreatureAfter.id;
           // анимация броска
           battleEvent.delay = abilityResultAnimationTime;
           // отображение результата способности после броска
-          setTimeout(() => {
-            this.updateCreature(abilityResult.targetCreatureAfter);
-            this.creatureEffectEventsSource.next(
-              this.getCreatureChanges(
-                abilityResult.targetCreatureBefore,
-                abilityResult.targetCreatureAfter,
-                effectsAnimationTime
-              )
-            );
-          }, eventDelay + abilityResultAnimationTime);
+          this.updateCreatureWithDelay(
+            abilityResult,
+            effectsAnimationTime,
+            eventDelay + abilityResultAnimationTime
+          );
           eventDelay += abilityResultAnimationTime + effectsAnimationTime;
           break;
       }
@@ -175,68 +160,97 @@ export class BattleStateService {
       eventDelay = 300;
     }
 
-    console.log('setTimeout', eventDelay, diceDelay);
     setTimeout(this.eventHandler.bind(this), eventDelay);
   }
 
-  private startTurn(event: BattleEvent) {
-    const currentCreatureIndex = this.creatures.findIndex(
-      creature => creature.id === event.currentCreatureId
-    );
-    this.currentCreature = { id: event.currentCreatureId, index: currentCreatureIndex };
-    this.updateCreature(event.currentCreature);
+  private updateCreatureWithDelay(
+    creatureStates: CharactersStateDelta,
+    effectsAnimationTime: number,
+    eventDelay: number
+  ) {
+    setTimeout(() => {
+      this.updateCharacter(creatureStates.characterAfter);
+
+      // анимация эффектов
+      this.characterEffectEventsSource.next(
+        this.getCharacterChanges(
+          creatureStates.characterBefore,
+          creatureStates.characterAfter,
+          effectsAnimationTime
+        )
+      );
+    }, eventDelay);
+  }
+
+  private setCurrentCharacter(event: BattleEvent) {
+    this.currentCharacterId = event.currentCreatureId;
+  }
+
+  private setSelectedCharacter(abilityResult: AbilityResult) {
+    this.selectedCharacterId = abilityResult.characterAfter.id;
   }
 
   private prepareHeroTurn(event: BattleEvent) {
-    const lastTarget = this.creatures[this.currentCreature.index].lastTargetInBattle;
-    this.selectedCreatureId =
-      !!lastTarget || lastTarget === 0 ? lastTarget : this.selectedCreatureId;
-    this.targetHero = this.creatures.find(creature => creature.id === this.currentCreature.id);
+    const lastTarget = this.liveCharacters.find(
+      character => character.id === this.currentCharacterId
+    ).lastTargetInBattle;
+    this.selectedCharacterId =
+      !!lastTarget || lastTarget === 0 ? lastTarget : this.selectedCharacterId;
+    this.targetHero = this.liveCharacters.find(
+      character => character.id === this.currentCharacterId
+    );
     this.selectedHeroAbilityType = this.targetHero.availableAbilities[0].type;
-    this.targetMonster = this.creatures.find(creature => creature.id === this.selectedCreatureId);
+    this.targetMonster = this.liveCharacters.find(
+      character => character.id === this.selectedCharacterId
+    );
   }
   private prepareMonsterTurn(event: BattleEvent) {
-    this.selectedCreatureId = event.currentTargetForMonsters;
-    this.targetMonster = this.creatures.find(creature => creature.id === this.currentCreature.id);
-    this.targetHero = this.creatures.find(creature => creature.id === this.selectedCreatureId);
-  }
-
-  private updateCreature(updatedCreature: CreatureView) {
-    const creature = this.creatures.find(oldCreature => oldCreature.id === updatedCreature.id);
-    for (const key in creature) {
-      if (creature.hasOwnProperty(key) && updatedCreature.hasOwnProperty(key)) {
-        creature[key] = updatedCreature[key];
-      }
-    }
-    if (creature.state !== CreatureState.Alive) {
-      this.updateCreaturesList();
-    }
-  }
-
-  private updateCreaturesList() {
-    this.liveCreatures = [...this.creatures].filter(
-      creature => creature.state === CreatureState.Alive
+    this.selectedCharacterId = event.currentTargetForMonsters;
+    this.targetMonster = this.liveCharacters.find(
+      character => character.id === this.currentCharacterId
+    );
+    this.targetHero = this.liveCharacters.find(
+      character => character.id === this.selectedCharacterId
     );
   }
 
-  private getCreatureChanges(
-    creatureBefore: CreatureView,
-    creatureAfter: CreatureView,
+  private updateCharacter(updatedCharacter: CreatureView) {
+    const index = this.liveCharacters.findIndex(
+      oldCharacter => oldCharacter.id === updatedCharacter.id
+    );
+
+    if (updatedCharacter.state !== CreatureState.Alive) {
+      this.liveCharacters.splice(index, 1);
+    } else {
+      // this.liveCharacters[index] = updatedCharacter;
+      const creature = this.liveCharacters[index];
+      for (const key in creature) {
+        if (creature.hasOwnProperty(key) && updatedCharacter.hasOwnProperty(key)) {
+          creature[key] = updatedCharacter[key];
+        }
+      }
+    }
+    this.characterUpdateEventsSource.next(updatedCharacter);
+  }
+
+  private getCharacterChanges(
+    characterBefore: CreatureView,
+    characterAfter: CreatureView,
     animationTime: number = 0
   ) {
-    const diff: CreatureBattleEffect = {
+    const diff: CharacterBattleEffect = {
       animationTime,
-      creatureId: creatureAfter.id,
-      diffHitpoints: creatureAfter.hitPoint - creatureBefore.hitPoint,
-      addonEffects: creatureAfter.currentEffects.filter(
+      characterId: characterAfter.id,
+      diffHitpoints: characterAfter.hitPoint - characterBefore.hitPoint,
+      addonEffects: characterAfter.currentEffects.filter(
         effectAfter =>
-          !creatureBefore.currentEffects.some(
+          !characterBefore.currentEffects.some(
             effectBefore => effectBefore.effectType === effectAfter.effectType
           )
       ),
-      removedEffects: creatureBefore.currentEffects.filter(
+      removedEffects: characterBefore.currentEffects.filter(
         effectBefore =>
-          !creatureAfter.currentEffects.some(
+          !characterAfter.currentEffects.some(
             effectAfter => effectAfter.effectType === effectBefore.effectType
           )
       ),

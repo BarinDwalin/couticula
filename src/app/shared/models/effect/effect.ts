@@ -1,6 +1,6 @@
 import { EffectType } from '@enums';
-import { Creature } from './creature';
-import { EffectSettings } from './settings';
+import { Creature } from '../creature';
+import { EffectSettings } from '../settings';
 
 export class Effect implements EffectSettings {
   name: string;

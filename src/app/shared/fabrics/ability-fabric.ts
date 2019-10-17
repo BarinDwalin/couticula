@@ -278,8 +278,8 @@ function heroHealFromPoison(currentCreature: Creature, targetCreature: Creature)
   targetCreature.dropEffects([EffectType.Poison1, EffectType.Poison2, EffectType.Poison3]);
 
   const abilityResult: AbilityResult = {
-    targetCreatureBefore,
-    targetCreatureAfter: targetCreature.convertToCreatureView(),
+    characterBefore: targetCreatureBefore,
+    characterAfter: targetCreature.convertToCreatureView(),
     diceTarget: null,
     diceValue: null,
     value: null,
@@ -326,8 +326,8 @@ function heroCastDecreaseRegeneration1(currentCreature: Creature, targetCreature
   targetCreature.currentEffects.push(newEffect);
 
   const abilityResult: AbilityResult = {
-    targetCreatureBefore,
-    targetCreatureAfter: targetCreature.convertToCreatureView(),
+    characterBefore: targetCreatureBefore,
+    characterAfter: targetCreature.convertToCreatureView(),
     diceTarget: null,
     diceValue: null,
     value: null,
@@ -369,8 +369,8 @@ function heroCastImbecility(currentCreature: Creature, targetCreature: Creature)
   }
 
   const abilityResult: AbilityResult = {
-    targetCreatureBefore,
-    targetCreatureAfter: targetCreature.convertToCreatureView(),
+    characterBefore: targetCreatureBefore,
+    characterAfter: targetCreature.convertToCreatureView(),
     diceTarget: null,
     diceValue: null,
     value: null,
@@ -413,8 +413,8 @@ function heroCastMagicProtection(currentCreature: Creature, targetCreature: Crea
   targetCreature.currentEffects.push(newEffect);
 
   const abilityResult: AbilityResult = {
-    targetCreatureBefore,
-    targetCreatureAfter: targetCreature.convertToCreatureView(),
+    characterBefore: targetCreatureBefore,
+    characterAfter: targetCreature.convertToCreatureView(),
     diceTarget: null,
     diceValue: null,
     value: null,
@@ -428,8 +428,8 @@ function heroCastSlackness(currentCreature: Creature, targetCreature: Creature) 
   targetCreature.currentEffects.push(newEffect);
 
   const abilityResult: AbilityResult = {
-    targetCreatureBefore,
-    targetCreatureAfter: targetCreature.convertToCreatureView(),
+    characterBefore: targetCreatureBefore,
+    characterAfter: targetCreature.convertToCreatureView(),
     diceTarget: null,
     diceValue: null,
     value: null,
@@ -467,8 +467,8 @@ function heroCastTripleStan(currentCreature: Creature, targetCreature: Creature)
   }
 
   const abilityResult: AbilityResult = {
-    targetCreatureBefore,
-    targetCreatureAfter: targetCreature.convertToCreatureView(),
+    characterBefore: targetCreatureBefore,
+    characterAfter: targetCreature.convertToCreatureView(),
     diceTarget: null,
     diceValue: null,
     value: null,
@@ -483,8 +483,8 @@ function heroCastTurningToStone(currentCreature: Creature, targetCreature: Creat
   targetCreature.currentEffects.push(newEffect);
 
   const abilityResult: AbilityResult = {
-    targetCreatureBefore,
-    targetCreatureAfter: targetCreature.convertToCreatureView(),
+    characterBefore: targetCreatureBefore,
+    characterAfter: targetCreature.convertToCreatureView(),
     diceTarget: null,
     diceValue: null,
     value: null,
@@ -498,8 +498,8 @@ function heroCastSuppression(currentCreature: Creature, targetCreature: Creature
   targetCreature.currentEffects.push(newEffect);
 
   const abilityResult: AbilityResult = {
-    targetCreatureBefore,
-    targetCreatureAfter: targetCreature.convertToCreatureView(),
+    characterBefore: targetCreatureBefore,
+    characterAfter: targetCreature.convertToCreatureView(),
     diceTarget: null,
     diceValue: null,
     value: null,
@@ -554,8 +554,8 @@ function heroUseBottleOfPoison(currentCreature: Creature, targetCreature: Creatu
     }
 
     const abilityResult: AbilityResult = {
-      targetCreatureBefore,
-      targetCreatureAfter: targetCreature.convertToCreatureView(),
+      characterBefore: targetCreatureBefore,
+      characterAfter: targetCreature.convertToCreatureView(),
       diceTarget: null,
       diceValue: dice,
       value: null,
@@ -579,8 +579,8 @@ function heroUseBottleOfStan(currentCreature: Creature, targetCreature: Creature
     targetCreature.currentEffects.push(newEffect);
 
     const abilityResult: AbilityResult = {
-      targetCreatureBefore,
-      targetCreatureAfter: targetCreature.convertToCreatureView(),
+      characterBefore: targetCreatureBefore,
+      characterAfter: targetCreature.convertToCreatureView(),
       diceTarget: null,
       diceValue: dice,
       value: null,
@@ -674,8 +674,8 @@ function basicAttack(
   currentCreature.lastDiceValue = options.fixedDamage ? null : diceDamage;
 
   const abilityResult: AbilityResult = {
-    targetCreatureBefore,
-    targetCreatureAfter: targetCreature.convertToCreatureView(),
+    characterBefore: targetCreatureBefore,
+    characterAfter: targetCreature.convertToCreatureView(),
     diceTarget: currentCreature.lastDiceTarget,
     diceValue: currentCreature.lastDiceValue,
     value: damageValue,
@@ -716,8 +716,8 @@ function basicHeal(
 
   // TODO: Возвращать Array<AbilityResult>, для информации по нескольким существам
   const abilityResult: AbilityResult = {
-    targetCreatureBefore,
-    targetCreatureAfter: targetCreature.convertToCreatureView(),
+    characterBefore: targetCreatureBefore,
+    characterAfter: targetCreature.convertToCreatureView(),
     diceTarget: currentCreature.lastDiceTarget,
     diceValue: currentCreature.lastDiceValue,
     value: healValue,

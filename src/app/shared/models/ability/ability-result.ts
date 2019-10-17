@@ -1,9 +1,7 @@
 import { DiceTarget } from '@enums';
-import { CreatureView } from '../creature-view';
+import { CharactersStateDelta } from '../character-state-delta';
 
-export interface AbilityResult {
-  targetCreatureBefore: CreatureView;
-  targetCreatureAfter: CreatureView;
+export interface AbilityResult extends CharactersStateDelta {
   diceTarget: DiceTarget;
   diceValue: number;
   value: number;

@@ -1,8 +1,8 @@
 import { Effect } from './effect';
 
-export interface CreatureBattleEffect {
+export interface CharacterBattleEffect {
   animationTime: number;
-  creatureId: number;
+  characterId: number;
   diffHitpoints: number;
   addonEffects: Effect[];
   removedEffects: Effect[];

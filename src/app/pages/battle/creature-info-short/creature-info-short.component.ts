@@ -59,9 +59,9 @@ export class CreatureInfoShortComponent implements OnInit, OnDestroy {
   constructor(private battleStateService: BattleStateService, private cd: ChangeDetectorRef) {}
 
   ngOnInit() {
-    this.battleStateService.creatureEffectEvents$
+    this.battleStateService.characterEffectEvents$
       .pipe(
-        filter(event => event.creatureId === this.creature.id),
+        filter(event => event.characterId === this.creature.id),
         filter(event => event.diffHitpoints !== 0),
         tap(event => {
           this.hitPointDiff = event.diffHitpoints;
