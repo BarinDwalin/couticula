@@ -18,13 +18,13 @@
   <div class="shop">
     <ul class="shop__menu">
       <li class="shop__menu__button"
-          [ngClass]="{'shop__menu__button_active': equipmentPage.typePage === shopService.choosenPageType }"
+          [ngClass]="{'shop__menu__button_active': equipmentPage.typePage === choosenPageType }"
           (click)="selectTab(equipmentPage.typePage)">
         <div class="shop__menu__button__text">Снаряжение</div>
       </li>
       <li *ngFor="let page of shopAbilitiesPages.pages"
           class="shop__menu__button"
-          [ngClass]="{'shop__menu__button_active': page.typePage === shopService.choosenPageType }"
+          [ngClass]="{'shop__menu__button_active': page.typePage === choosenPageType }"
           (click)="selectTab(page.typePage)">
         <div class="shop__menu__button__text">{{page.title}}</div>
       </li>
@@ -50,7 +50,7 @@
       <div class="shop__footer__heroes">
         <heroes-info-short [heroes]="heroes"
                           [isNewHeroAvailable]="isNewHeroAvailable"
-                          (addedHero)="addHero($event)"
+                          (addedHero)="addHero()"
                           (selectedHero)="choseHero($event)"></heroes-info-short>
       </div>
     </div>

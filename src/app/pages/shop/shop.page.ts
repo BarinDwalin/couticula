@@ -46,6 +46,9 @@ export class ShopPage implements OnInit, OnDestroy {
   get selectedHero(): Hero {
     return this.shopService.choosenHero;
   }
+  get choosenPageType() {
+    return this.shopService.choosenPageType;
+  }
 
   constructor(
     public alertCtrl: AlertController,
