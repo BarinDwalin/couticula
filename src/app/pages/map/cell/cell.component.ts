@@ -32,7 +32,7 @@ export class CellComponent implements OnChanges {
     if (this.cell) {
       return this.cell.img;
     } else {
-      return 'assets/img/map/terra-incognito.jpg';
+      return 'assets/img/map/terra-incognito.svg';
     }
   }
   get existsBattleEvent(): boolean {
