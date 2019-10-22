@@ -103,13 +103,13 @@ export class EventAttackComponent implements AfterViewChecked, AfterViewInit {
   private createFrog() {
     const loader = new THREE.TextureLoader();
     loader.load('assets/img/animations/smoke-1.png', texture => {
-      const cloudGeo = new THREE.PlaneBufferGeometry(500, 500);
+      const cloudGeo = new THREE.PlaneBufferGeometry(1000, 1000);
       const cloudMaterial = new THREE.MeshLambertMaterial({
         map: texture,
         transparent: true,
       });
 
-      for (let p = 0; p < 40; p++) {
+      for (let p = 0; p < 10; p++) {
         const cloud = new THREE.Mesh(cloudGeo, cloudMaterial);
         cloud.position.set(Math.random() * 800 - 400, 500, Math.random() * 500 - 500);
         cloud.rotation.x = 1.16;

@@ -28,6 +28,9 @@ export class FieldComponent implements OnInit, OnDestroy, AfterViewInit {
 
   private subscriptions: Subscription[] = [];
 
+  get cellSizeMax() {
+    return Math.floor(80 / this.cntY);
+  }
   get cntX() {
     return this.settingsService.countCellVisibleX;
   }
@@ -77,7 +80,7 @@ export class FieldComponent implements OnInit, OnDestroy, AfterViewInit {
     setTimeout(() => {
       this.loading = false;
       this.cd.markForCheck();
-    }, 1500);
+    }, 3500);
   }
 
   onCellSelected(cell: Cell) {

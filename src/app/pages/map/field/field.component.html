@@ -1,15 +1,15 @@
 <div class="field"
      [ngStyle]="{
-        'grid-template-rows': 'repeat(' + cntY + ', minmax(auto, ' + 80 / cntY + 'vh))',
-        'grid-template-columns': 'repeat(' + cntX + ', minmax(auto, ' + 80 / cntY + 'vh))'
-     }"
-     (swipe)="swipeEvent($event)">
-  <ng-container *ngFor="let cell of visibleMap; index as i">
-    <cell [cell]="cell"
-          class="cell"
-          [ngClass]="{
-            'cell_animation': loading
-          }"
+      'grid-template-rows': 'repeat(' + cntY + ', minmax(auto, ' + 80 / cntY + 'vh))',
+      'grid-template-columns': 'repeat(' + cntX + ', minmax(auto, ' + 80 / cntY + 'vh))'
+   }"
+   (swipe)="swipeEvent($event)">
+<ng-container *ngFor="let cell of visibleMap; index as i">
+  <cell [cell]="cell"
+        class="cell"
+        [ngClass]="{
+          'cell_animation': loading
+        }"
           [ngStyle]="{
             'transform': !loading
               ? 'translate(0, 0) scale(1)'
@@ -19,7 +19,7 @@
                 + 10 * (-cntY / 2 + getFloor(i / cntX))
                 + 'vh
                 ) scale(1.1)',
-            'animation-duration': 500 + (i % 5) * 200 + 'ms',
+            'animation-duration': 1500 + (i % 5) * 400 + 'ms',
             'box-shadow': !loading
               ? 'none'
               : 20 * (0.5 - i % cntX / cntX) + 'px '
