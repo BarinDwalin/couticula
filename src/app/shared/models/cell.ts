@@ -3,7 +3,7 @@ import { Item } from './items';
 export class Cell {
   x: number;
   y: number;
-  img = 'assets/img/map/black-box.jpg';
+  img = 'assets/img/map/enemy-cell.svg';
   deep: number = null;
   isWall = true;
   ways = '?'; // debug only

@@ -1,4 +1,4 @@
-export * from './cell-settings';
+export * from './cell-settings-list';
 export * from './creatures-boss';
 export * from './creatures-level1';
 export * from './creatures-level2';

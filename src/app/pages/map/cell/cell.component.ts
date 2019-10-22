@@ -23,7 +23,7 @@ export class CellComponent implements OnChanges {
   @Output()
   clickedEvent = new EventEmitter();
 
-  imageBattleEvent = 'assets/img/map/event-attack.png';
+  imageBattleEvent = 'assets/img/map/event-attack.svg';
   imageSearchEvent = 'assets/img/map/search.png';
   imageCave = 'assets/img/map/cave.png';
   imageTreasures = 'assets/img/map/treasure.png';

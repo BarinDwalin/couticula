@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 
-import { Cell, Item } from '@models';
-import { CellSettings } from '@shared/db';
+import { Cell, CellSettings, Item } from '@models';
+import { CellSettingsList } from '@shared/db';
 import { GameMode } from '@shared/enums';
 import { EnemyGroupFabric } from '@shared/fabrics';
 
@@ -215,23 +215,34 @@ export class MapService {
   }
 
   private getCellImage(cell: Cell): string {
+    let cellSettings: CellSettings;
     if (cell.isWall) {
-      return 'assets/img/map/terra-incognito.jpg';
+      cellSettings = this.getCellSettings(false, false, false, false);
     } else if (cell.isClear) {
       const wayRight = this.doesWayExist(cell, 1, 0);
       const wayLeft = this.doesWayExist(cell, -1, 0);
       const wayTop = this.doesWayExist(cell, 0, 1);
       const wayBottom = this.doesWayExist(cell, 0, -1);
-      const cellSettings = CellSettings.find(
-        p =>
-          p.left === wayLeft && p.top === wayTop && p.right === wayRight && p.bottom === wayBottom
-      );
-      if (cellSettings) {
-        return cellSettings.img;
-      }
+      cellSettings = this.getCellSettings(wayTop, wayLeft, wayBottom, wayRight);
     }
-    return cell.img;
+    return !!cellSettings ? cellSettings.image : cell.img;
   }
+
+  private getCellSettings(
+    wayTop: boolean,
+    wayLeft: boolean,
+    wayBottom: boolean,
+    wayRight: boolean
+  ) {
+    return CellSettingsList.find(
+      settings =>
+        settings.top === wayTop &&
+        settings.right === wayRight &&
+        settings.bottom === wayBottom &&
+        settings.left === wayLeft
+    );
+  }
+
   private doesWayExist(cell: Cell, xDiff: number, yDiff: number) {
     return (
       !this.isEmptyCell(cell.x + xDiff, cell.y + yDiff) &&
