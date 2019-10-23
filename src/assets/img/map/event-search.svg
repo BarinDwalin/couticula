@@ -1,0 +1,21 @@
+<svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <ellipse cx="21.5" cy="23.5" rx="18.5" ry="23.5" fill="url(#paint0_radial)"/>
+  <path d="M72 87.5L24 38.5L32 31.5L76 84L72 87.5Z" fill="url(#paint1_linear)" stroke="black"/>
+  <path d="M23.5 41L34.5 31.5L27 21L27.5 29L21 27L22 33.5L15 33L23.5 41Z" fill="url(#paint2_linear)" stroke="black"/>
+
+  <defs>
+    <radialGradient id="paint0_radial" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(21.5 24.3103) rotate(88.5641) scale(21.094 13.7242)">
+      <stop stop-color="#FF3434" stop-opacity="0.53"/>
+      <stop offset="1" stop-color="#E6CF00" stop-opacity="0.06"/>
+    </radialGradient>
+    <linearGradient id="paint1_linear" x1="50" y1="31.5" x2="50" y2="87.5" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#5B3C3C"/>
+      <stop offset="0.88272"/>
+    </linearGradient>
+    <linearGradient id="paint2_linear" x1="22" y1="21" x2="29" y2="36.5" gradientUnits="userSpaceOnUse">
+      <stop offset="0.188931" stop-color="#C4C4C4"/>
+      <stop offset="0.9998"/>
+      <stop offset="0.9999"/>
+    </linearGradient>
+  </defs>
+</svg>
