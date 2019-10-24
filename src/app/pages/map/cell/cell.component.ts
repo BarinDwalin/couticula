@@ -25,7 +25,7 @@ export class CellComponent implements OnChanges {
 
   imageBattleEvent = 'assets/img/map/event-attack.svg';
   imageSearchEvent = 'assets/img/map/event-search.svg';
-  imageCave = 'assets/img/map/cave.png';
+  imageCave = 'assets/img/map/cave.svg';
   imageTreasures = 'assets/img/map/treasure.png';
 
   get image() {
