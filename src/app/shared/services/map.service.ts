@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 
-import { Cell, CellSettings, Item } from '@models';
-import { CellSettingsList } from '@shared/db';
+import { Cell, Item } from '@models';
 import { GameMode } from '@shared/enums';
 import { EnemyGroupFabric } from '@shared/fabrics';
 
@@ -215,32 +214,23 @@ export class MapService {
   }
 
   private getCellImage(cell: Cell): string {
-    let cellSettings: CellSettings;
     if (cell.isWall) {
-      cellSettings = this.getCellSettings(false, false, false, false);
-    } else if (cell.isClear) {
-      const wayRight = this.doesWayExist(cell, 1, 0);
-      const wayLeft = this.doesWayExist(cell, -1, 0);
-      const wayTop = this.doesWayExist(cell, 0, 1);
-      const wayBottom = this.doesWayExist(cell, 0, -1);
-      cellSettings = this.getCellSettings(wayTop, wayLeft, wayBottom, wayRight);
+      return 'assets/img/map/unwalkable-cell.svg';
+    } else if (!cell.isClear) {
+      return 'assets/img/map/enemy-cell.svg';
     }
-    return !!cellSettings ? cellSettings.image : cell.img;
-  }
 
-  private getCellSettings(
-    wayTop: boolean,
-    wayLeft: boolean,
-    wayBottom: boolean,
-    wayRight: boolean
-  ) {
-    return CellSettingsList.find(
-      settings =>
-        settings.top === wayTop &&
-        settings.right === wayRight &&
-        settings.bottom === wayBottom &&
-        settings.left === wayLeft
-    );
+    const wayRight = this.doesWayExist(cell, 1, 0);
+    const wayLeft = this.doesWayExist(cell, -1, 0);
+    const wayTop = this.doesWayExist(cell, 0, 1);
+    const wayBottom = this.doesWayExist(cell, 0, -1);
+    cell.paths = {
+      right: wayRight,
+      left: wayLeft,
+      top: wayTop,
+      bottom: wayBottom,
+    };
+    return 'assets/img/map/way.svg';
   }
 
   private doesWayExist(cell: Cell, xDiff: number, yDiff: number) {

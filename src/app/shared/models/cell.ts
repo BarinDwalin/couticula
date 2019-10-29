@@ -3,7 +3,7 @@ import { Item } from './items';
 export class Cell {
   x: number;
   y: number;
-  img = 'assets/img/map/enemy-cell.svg';
+  img: string;
   deep: number = null;
   isWall = true;
   ways = '?'; // debug only
@@ -14,6 +14,12 @@ export class Cell {
   mosterLevel1Count = 0;
   mosterLevel2Count = 0;
   treasures: Item[] = [];
+  paths?: {
+    right: boolean;
+    left: boolean;
+    top: boolean;
+    bottom: boolean;
+  };
 
   constructor(x: number, y: number) {
     this.x = x;

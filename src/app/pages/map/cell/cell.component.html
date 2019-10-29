@@ -1,7 +1,13 @@
 <div class="cell">
-  <img src="{{image}}"
-       class="cell__background"
-       (click)="click()">
+  <div class="cell__background"
+      [inlineSVG]="image"
+      [ngClass]="{
+        'top-way_enabled': cell?.paths?.top,
+        'right-way_enabled': cell?.paths?.right,
+        'bottom-way_enabled': cell?.paths?.bottom,
+        'left-way_enabled': cell?.paths?.left
+      }"
+      (click)="click()"></div>
   <img *ngIf="existsBattleEvent"
        src="{{imageBattleEvent}}"
        class="cell__battle-event"

@@ -1,6 +1,5 @@
 export * from './ability';
 export * from './cell';
-export * from './cell-settings';
 export * from './character-battle-effect';
 export * from './character-state-delta';
 export * from './creature';

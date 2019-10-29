@@ -3,6 +3,27 @@
   height: 100%;
   width: 100%;
 
+  &__background {
+    & ::ng-deep {
+      .top, .right, .bottom, .left {
+        display: none;
+      }
+    }
+
+    &.top-way_enabled ::ng-deep .top {
+      display: block;
+    }
+    &.right-way_enabled ::ng-deep .right {
+      display: block;
+    }
+    &.bottom-way_enabled ::ng-deep .bottom {
+      display: block;
+    }
+    &.left-way_enabled ::ng-deep .left {
+      display: block;
+    }
+  }
+
   &__battle-event, &__search-event, &__treasures, &__cave, &__info {
     position: absolute;
     top: 0;
