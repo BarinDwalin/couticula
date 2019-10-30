@@ -8,6 +8,7 @@ import { RouteReuseStrategy } from '@angular/router';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
+import { IonicStorageModule } from '@ionic/storage';
 import { InlineSVGModule } from 'ng-inline-svg';
 
 import { SharedModule } from '@shared/shared.module';
@@ -29,6 +30,10 @@ import { AppComponent } from './app.component';
       // tabsPlacement: 'bottom',
       scrollPadding: false,
       scrollAssist: false,
+    }),
+    IonicStorageModule.forRoot({
+      name: '__mydb',
+      driverOrder: ['indexeddb', 'sqllite', 'websql'],
     }),
     SharedModule,
   ],

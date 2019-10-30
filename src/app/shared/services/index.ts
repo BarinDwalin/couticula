@@ -8,4 +8,6 @@ export * from './player.service';
 export * from './random.service';
 export * from './settings.service';
 export * from './shop.service';
+export * from './statistic.service';
+export * from './storage.service';
 export * from './treasure.service';
