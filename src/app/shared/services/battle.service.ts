@@ -20,6 +20,7 @@ import { BattleStoreService } from './battle-store.service';
 import { HeroService } from './hero.service';
 import { RandomService } from './random.service';
 import { SettingsService } from './settings.service';
+import { StatisticService } from './statistic.service';
 
 type Character = Hero | Monster;
 
@@ -39,7 +40,8 @@ export class BattleService {
     private battleStoreService: BattleStoreService,
     private heroService: HeroService,
     private settingsService: SettingsService,
-    private randomService: RandomService
+    private randomService: RandomService,
+    private statisticService: StatisticService
   ) {
     this.events$ = this.eventsSource.asObservable();
 
@@ -141,12 +143,21 @@ export class BattleService {
 
   private winBattle() {
     this.prepareHeroAfterWin();
+    this.updateStatisctics();
     this.eventsSource.next({ state: BattleState.Win });
     this.battleStateSource.next(BattleState.Win);
   }
   private loseBattle() {
+    this.updateStatisctics();
     this.eventsSource.next({ state: BattleState.Lose });
     this.battleStateSource.next(BattleState.Lose);
+  }
+
+  private updateStatisctics() {
+    const monsters = this.battleStoreService
+      .getCharacters()
+      .filter(character => character.type === CreatureType.Monster);
+    this.statisticService.updateStatistic(monsters);
   }
 
   private setCharacters() {

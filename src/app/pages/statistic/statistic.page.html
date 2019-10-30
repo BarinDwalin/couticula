@@ -1,0 +1,18 @@
+<ion-content class="settings" forceOverscroll="false">
+    <ion-toolbar class="settings__header">
+        <ion-title class="settings__header__name">Статистика</ion-title>
+        <ion-buttons slot="end">
+            <ion-button fill="outline" color="light" (click)="close()">
+                Закрыть
+            </ion-button>
+        </ion-buttons>
+    </ion-toolbar>
+    <ion-list *ngFor="let creatureStat of statistic">
+        <ion-item>
+            <ion-label>
+                <h2>{{creatureStat.creatureName}} </h2>
+                <h3>Смертей: {{creatureStat.kills}} </h3>
+            </ion-label>
+        </ion-item>
+    </ion-list>
+</ion-content>

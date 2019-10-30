@@ -70,8 +70,6 @@ export class BattleStateService {
         takeUntil(this.endEvent$)
       )
       .subscribe(event => {
-        console.log(BattleState[event.state], event);
-
         switch (event.state) {
           case BattleState.Begin:
             this.eventHandler();

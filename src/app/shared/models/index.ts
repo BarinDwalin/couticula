@@ -12,3 +12,4 @@ export * from './items';
 export * from './monster';
 export * from './settings';
 export * from './shop';
+export * from './statistic';

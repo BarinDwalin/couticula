@@ -15,4 +15,7 @@ export class MapPage {
   openInventory() {
     this.router.navigateByUrl('/inventory');
   }
+  openStatistic() {
+    this.router.navigateByUrl('/statistic');
+  }
 }
