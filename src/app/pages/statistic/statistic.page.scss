@@ -1,28 +1,12 @@
-.settings {
-    --background: url('assets/img/backgrounds/todo.jpg') no-repeat center center fixed;
-    -webkit-background-size: cover;
-    -moz-background-size: cover;
-    -o-background-size: cover;
-    background-size: cover;
-  
-    &__header {
-      min-height: auto;
-      --background: transparent;
-      color: white;
-  
-      &__name {
-        font-weight: bold;
-      }
-    }
-  
-    &__list {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      grid-column-gap: 2vh;
-      justify-content: space-around;
-      padding: 5vh;
-      background: transparent;
-      color: white;
-    }
+@import "theme/mixins.scss";
+
+.content {
+  @include default-background;
+
+  .title {
+    min-height: 15vh;
+    max-height: 15vh;
+    color: white;
+    --background: transparent;
   }
-  
+}

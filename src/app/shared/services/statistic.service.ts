@@ -7,7 +7,9 @@ import { StorageService } from './storage.service';
 
 import { CreaturesBoss, CreaturesLevel1, CreaturesLevel2 } from '@shared/db';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root',
+})
 export class StatisticService {
   public allStatistics: Statistic[] = [];
 
