@@ -19,9 +19,11 @@
       "@assets/*": ["assets/*"],
       "@pages": ["app/pages"],
       "@shared/*": ["app/shared/*"],
-      "@enums": ["app/shared/enums"],
-      "@models": ["app/shared/models"],
-      "@services": ["app/shared/services"]
+      "@db": ["app/core/db"],
+      "@enums": ["app/core/enums"],
+      "@fabrics": ["app/core/fabrics"],
+      "@models": ["app/core/models"],
+      "@services": ["app/core/services"]
     }
   },
   "compileOnSave": false

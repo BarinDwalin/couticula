@@ -2,8 +2,7 @@ import { Component, OnDestroy } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { NavController } from '@ionic/angular';
 
-import { GameMode } from '@shared/enums';
-
+import { GameMode } from '@enums';
 import { SettingsService } from '@services';
 
 @Component({
