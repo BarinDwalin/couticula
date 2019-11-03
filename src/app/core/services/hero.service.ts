@@ -3,8 +3,8 @@ import { Observable, of } from 'rxjs';
 
 import { HeroTypes } from '@db';
 import { HeroClass, ItemType } from '@enums';
-import { Hero, HeroSettings, Item, Shield } from '@models';
 import { CreatureFabric } from '@fabrics';
+import { Hero, HeroSettings, Item, Shield } from '@models';
 
 import { PlayerService } from './player.service';
 import { RandomService } from './random.service';

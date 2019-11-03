@@ -1,7 +1,7 @@
-import { Creature, Effect, EffectSettings } from '@models';
-import { RandomService } from '@services';
 import { Effects } from '@db';
 import { EffectType } from '@enums';
+import { Creature, Effect, EffectSettings } from '@models';
+import { RandomService } from '@services';
 
 export class EffectFabric {
   static randomService: RandomService;
