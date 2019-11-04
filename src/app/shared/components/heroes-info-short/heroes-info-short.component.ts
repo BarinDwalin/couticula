@@ -20,16 +20,15 @@ export class HeroesInfoShortComponent implements OnInit {
   selectedHero = new EventEmitter<Hero>();
 
   private currentHero: Hero;
+  private newHeroImage = 'assets/img/menu/new-hero.svg';
+
   get newHeroButtons() {
     const buttons = [];
     buttons.length = maxHeroCount - this.heroes.length;
     buttons.fill(null);
     return buttons;
   }
-  /*
-  constructor() {
-    this.currentHero = this.heroes[0];
-  } */
+
   ngOnInit() {
     this.currentHero = this.heroes[0];
   }

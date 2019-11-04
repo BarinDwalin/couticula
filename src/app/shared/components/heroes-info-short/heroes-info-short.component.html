@@ -8,7 +8,7 @@
   <div *ngFor="let i of newHeroButtons"
         class="heroes-info-short__new-hero"
         [ngClass]="{ 'heroes-info-short__new-hero_not-available': !isNewHeroAvailable }"
-        [ngStyle]="{ 'backgroundImage': 'url(assets/img/new-hero.jpg)' }"
+        [ngStyle]="{ 'backgroundImage': 'url(' + newHeroImage + ')' }"
         (click)="addHero()">
   </div>
 </div>

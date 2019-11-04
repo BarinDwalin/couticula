@@ -12,8 +12,4 @@ export class HeroInfoShortComponent {
   hero: Hero;
   @Input()
   isSelected: boolean;
-
-  get isBigValueHitPoints() {
-    return this.hero.hitPoint >= 100;
-  }
 }
