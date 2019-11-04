@@ -47,6 +47,14 @@ export class BattleService {
 
     this.events$.pipe(delay(100)).subscribe(event => {
       if (event.state === BattleState.PlayerAbility || event.state === BattleState.MonsterAbility) {
+        this.checkBattleEnd();
+        if (
+          this.battleStateSource.value === BattleState.Win ||
+          this.battleStateSource.value === BattleState.Lose
+        ) {
+          return;
+        }
+
         if (
           'notCorrectTarget' in event.abilityResult ||
           (event.abilityResult as AbilityResult).isAddonAction
@@ -122,14 +130,6 @@ export class BattleService {
       return;
     }
     const abilityResult = this.useAbility(currentCreature, targetCharacter, currentAbility);
-
-    this.checkBattleEnd();
-    if (
-      this.battleStateSource.value === BattleState.Win ||
-      this.battleStateSource.value === BattleState.Lose
-    ) {
-      return;
-    }
 
     this.eventsSource.next({
       state: BattleState.PlayerAbility,
@@ -458,14 +458,6 @@ export class BattleService {
     const currentAbility =
       availableAbilities[this.randomService.getInt(0, availableAbilities.length - 1)];
     const abilityResult = this.useAbility(monster, targetCreature, currentAbility);
-
-    this.checkBattleEnd();
-    if (
-      this.battleStateSource.value === BattleState.Win ||
-      this.battleStateSource.value === BattleState.Lose
-    ) {
-      return;
-    }
 
     this.eventsSource.next({
       state: BattleState.MonsterAbility,
