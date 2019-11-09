@@ -18,4 +18,7 @@ export class MapPage {
   openStatistic() {
     this.router.navigateByUrl('/statistic');
   }
+  openSettings() {
+    this.router.navigateByUrl('/settings');
+  }
 }
