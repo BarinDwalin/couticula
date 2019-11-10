@@ -6,6 +6,7 @@ import {
   Component,
   ElementRef,
   NgZone,
+  OnDestroy,
   Renderer2,
   ViewChild,
 } from '@angular/core';
@@ -21,15 +22,20 @@ import { Cell } from '@models';
   styleUrls: ['event-attack.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class EventAttackComponent implements AfterViewChecked, AfterViewInit {
+export class EventAttackComponent implements AfterViewChecked, AfterViewInit, OnDestroy {
   @ViewChild('background', { static: true })
   background: ElementRef;
   cell: Cell;
 
-  private scene;
-  private camera;
-  private renderer;
-  private cloudParticles = [];
+  private animationId: number;
+  private scene: THREE.Scene;
+  private camera: THREE.PerspectiveCamera;
+  private renderer: THREE.WebGLRenderer;
+  private cloudParticles: THREE.Mesh[] = [];
+  private monsterLevel1Image = 'assets/img/map/event-attack-monster-1.png';
+  private monsterLevel2Image = 'assets/img/map/event-attack-monster-2.png';
+  private monsterBossImage = 'assets/img/map/event-attack-monster-boss.png';
+  private frogImage = 'assets/img/animations/smoke-1.png';
 
   get monstersLevel1(): string[] {
     return Array<string>(Math.min(5, this.cell.mosterLevel1Count)).fill(this.monsterLevel1Image);
@@ -40,15 +46,7 @@ export class EventAttackComponent implements AfterViewChecked, AfterViewInit {
   get existsBoss(): boolean {
     return this.cell.doesBossExists;
   }
-  private get monsterLevel1Image(): string {
-    return 'assets/img/map/event-attack-monster-1.png';
-  }
-  private get monsterLevel2Image(): string {
-    return 'assets/img/map/event-attack-monster-2.png';
-  }
-  private get monsterBossImage(): string {
-    return 'assets/img/map/event-attack-monster-boss.png';
-  }
+
   constructor(
     private cd: ChangeDetectorRef,
     private ngZone: NgZone,
@@ -68,6 +66,10 @@ export class EventAttackComponent implements AfterViewChecked, AfterViewInit {
 
   ngAfterViewChecked() {
     this.resizeCanvasToDisplaySize();
+  }
+
+  ngOnDestroy() {
+    cancelAnimationFrame(this.animationId);
   }
 
   private init() {
@@ -91,18 +93,19 @@ export class EventAttackComponent implements AfterViewChecked, AfterViewInit {
   }
 
   private render() {
+    console.log('render');
     this.cloudParticles.forEach(p => {
       p.rotation.z -= 0.003;
     });
     this.renderer.render(this.scene, this.camera);
-    requestAnimationFrame(() => {
+    this.animationId = requestAnimationFrame(() => {
       this.render();
     });
   }
 
   private createFrog() {
     const loader = new THREE.TextureLoader();
-    loader.load('assets/img/animations/smoke-1.png', texture => {
+    loader.load(this.frogImage, texture => {
       const cloudGeo = new THREE.PlaneBufferGeometry(1000, 1000);
       const cloudMaterial = new THREE.MeshLambertMaterial({
         map: texture,
