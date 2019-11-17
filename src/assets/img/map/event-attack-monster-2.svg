@@ -1,9 +1,13 @@
-<svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <g fill="black" filter="url(#filter0_f)">
-    <ellipse cx="50" cy="68" rx="25" ry="30"/>
-    <ellipse cx="49" cy="30" rx="18" ry="15"/>
-    <path d="M29.5 12C34.3 8.4 41.1667 13.5 44 16.5H53.5C56.3333 13.5 63.2 8.4 68 12C65 12.5 59.4 15 61 21H36.5C38.1 15 32.5 12.5 29.5 12Z"/>
-    <path d="M31.5 49.5L49 46L68.5 49.5L83.5 51L88 68C85 64 79 57.5 74 58L49 54.5C46.3333 54.5 25.0324 58 21.5 58C15.5 58 15 63 13 68L8.5 56.5L15.5 51L31.5 49.5Z"/>
+<svg viewBox="0 0 108 108" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <g filter="url(#filter0_f)">
+    <g fill="black">
+      <ellipse cx="54" cy="69" rx="25" ry="29"/>
+      <ellipse cx="53" cy="32" rx="18" ry="15"/>
+      <path d="M33.5 14C38.3 10.4 45.1667 15.5 48 18.5H57.5C60.3333 15.5 67.2 10.4 72 14C69 14.5 63.4 17 65 23H40.5C42.1 17 36.5 14.5 33.5 14Z"/>
+      <path d="M35.5 51.5L53 48L72.5 51.5L87.5 53L92 70C89 66 83 59.5 78 60L53 56.5C50.3333 56.5 29.0324 60 25.5 60C19.5 60 19 65 17 70L12.5 58.5L19.5 53L35.5 51.5Z"/>
+    </g>
+    <path d="M54.5 29L44 26V31.5L54.5 29Z" fill="#C00000"/>
+    <path d="M51 29L61.5 26V31.5L51 29Z" fill="#C00000"/>
   </g>
   <defs>
     <filter id="filter0_f" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
