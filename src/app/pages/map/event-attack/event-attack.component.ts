@@ -32,9 +32,9 @@ export class EventAttackComponent implements AfterViewChecked, AfterViewInit, On
   private camera: THREE.PerspectiveCamera;
   private renderer: THREE.WebGLRenderer;
   private cloudParticles: THREE.Mesh[] = [];
-  private monsterLevel1Image = 'assets/img/map/event-attack-monster-1.png';
-  private monsterLevel2Image = 'assets/img/map/event-attack-monster-2.png';
-  private monsterBossImage = 'assets/img/map/event-attack-monster-boss.png';
+  private monsterLevel1Image = 'assets/img/map/event-attack-monster-1.svg';
+  private monsterLevel2Image = 'assets/img/map/event-attack-monster-2.svg';
+  private monsterBossImage = 'assets/img/map/event-attack-monster-boss.svg';
   private frogImage = 'assets/img/animations/smoke-1.png';
 
   get monstersLevel1(): string[] {
