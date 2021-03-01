@@ -76,7 +76,7 @@
     "prettier": "1.14.2",
     "protractor": "~5.4.0",
     "puppeteer": "chrome-76",
-    "three": "^0.108.0",
+    "three": "^0.125.0",
     "ts-node": "~7.0.0",
     "tslint": "~5.15.0",
     "typescript": "~3.4.3"
